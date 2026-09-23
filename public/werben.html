@@ -53,6 +53,16 @@ h2::before{content:"";flex:0 0 8px;height:1.1em;background:var(--pink);border:2p
 .pk ul{margin:6px 0 0;padding-left:0;list-style:none}
 .pk li{margin:6px 0;padding-left:26px;position:relative}
 .pk li::before{content:"✅";position:absolute;left:0;top:0;font-size:15px}
+.pk .badge{position:absolute;top:-13px;right:14px;background:var(--yellow);color:#000;border:2px solid var(--line);border-radius:20px;padding:2px 12px;font-size:12.5px;font-weight:800;box-shadow:2px 2px 0 var(--line)}
+.pk .then{color:#000;background:var(--yellow);border:1.5px solid var(--line)}
+.offer{display:grid;gap:14px;align-items:start;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin:0 0 22px}
+.of{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);border-left:8px solid var(--yellow)}
+.of.gp{border-left-color:var(--green)}
+.of b{display:block;font-size:17px;font-weight:800;margin-bottom:4px}
+.of p{margin:0 0 10px;color:var(--muted);font-size:15px}
+.of p:last-child{margin-bottom:0}
+.btn.gpbtn{background:var(--green);text-decoration:none;font-size:14px;padding:8px 14px}
+.btn.gpbtn::before{content:none}
 .note{border:2px dashed var(--pink);border-radius:12px;background:var(--card);padding:12px 14px;margin-top:18px;max-width:70ch}
 form{display:grid;gap:12px;max-width:640px;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
 label{display:grid;gap:4px;font-weight:700;font-size:14px}
@@ -90,10 +100,14 @@ footer a{color:var(--muted)}
   </section>
 
   <h2 data-i="h_pk"></h2>
+  <div class="offer">
+    <div class="of"><b data-i="offer_h"></b><p data-i="offer_txt"></p></div>
+    <div class="of gp"><b data-i="gp_h"></b><p data-i="gp_txt"></p><a class="btn gpbtn" href="#f" data-i="gp_btn"></a></div>
+  </div>
   <div class="grid">
-    <div class="pk"><h3 data-i="s"></h3><p class="size" data-i="s_size"></p><div class="price">19 €<small data-i="pm"></small></div><p class="then"><span data-i="intro"></span> 49 €<span data-i="pm"></span></p><ul><li data-i="f_top"></li><li data-i="f_mark"></li><li data-i="f_coupon"></li></ul></div>
-    <div class="pk hl"><h3 data-i="m"></h3><p class="size" data-i="m_size"></p><div class="price">19 €<small data-i="pm"></small></div><p class="then"><span data-i="intro"></span> 69 €<span data-i="pm"></span></p><ul><li data-i="f_all_s"></li><li data-i="f_berlin"></li></ul></div>
-    <div class="pk"><h3 data-i="l"></h3><p class="size" data-i="l_size"></p><div class="price">19 €<small data-i="pm"></small></div><p class="then"><span data-i="intro"></span> 89 €<span data-i="pm"></span></p><ul><li data-i="f_all_m"></li><li data-i="f_sponsor"></li></ul></div>
+    <div class="pk"><h3 data-i="s"></h3><p class="size" data-i="s_size"></p><div class="price">29 €<small data-i="pm"></small></div><p class="then" data-i="start"></p><ul><li data-i="f_top"></li><li data-i="f_mark"></li><li data-i="f_coupon"></li></ul></div>
+    <div class="pk hl"><span class="badge" data-i="rec"></span><h3 data-i="m"></h3><p class="size" data-i="m_size"></p><div class="price">49 €<small data-i="pm"></small></div><p class="then" data-i="start"></p><ul><li data-i="f_all_s"></li><li data-i="f_berlin"></li></ul></div>
+    <div class="pk"><h3 data-i="l"></h3><p class="size" data-i="l_size"></p><div class="price">89 €<small data-i="pm"></small></div><p class="then" data-i="start"></p><ul><li data-i="f_all_m"></li><li data-i="f_sponsor"></li></ul></div>
   </div>
   <p class="note" data-i="self"></p>
 
@@ -116,8 +130,8 @@ footer a{color:var(--muted)}
         <label><span data-i="l_email"></span><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
         <label><span data-i="l_phone"></span><input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
       </div>
-      <label><span data-i="l_size"></span><select name="size">
-        <option value="s" data-i="o_s"></option><option value="m" data-i="o_m"></option><option value="l" data-i="o_l"></option><option value="banner" data-i="o_b"></option></select></label>
+      <label><span data-i="l_interest"></span><select name="size">
+        <option value="s" data-i="o_s"></option><option value="m" data-i="o_m"></option><option value="l" data-i="o_l"></option><option value="banner" data-i="o_b"></option><option value="gp" data-i="o_gp"></option></select></label>
       <label><span data-i="l_msg"></span><textarea name="message" maxlength="1000"></textarea></label>
       <div class="hp" aria-hidden="true"><input name="hp" tabindex="-1" autocomplete="off"></div>
       <label class="chk"><input type="checkbox" name="consent" required><span id="consent"></span></label>
@@ -134,40 +148,40 @@ footer a{color:var(--muted)}
 </footer>
 <script>
 var T = {
-de:{h1:"Mehr Kunden aus deinem Kiez",lead:"Berliner Kiez-Check zeigt Berliner Betriebe nach Kiez und Kategorie – auf Deutsch, Türkisch und Englisch. Die ersten 3 Monate kostet jedes Paket 19 € pro Monat, danach richtet sich der Preis nach der Größe deines Betriebs. Monatlich kündbar.",
- h_pk:"Pakete für Betriebe",s:"Klein",m:"Mittel",l:"Groß",s_size:"bis 5 Mitarbeitende",m_size:"6–20 Mitarbeitende",l_size:"über 20 Mitarbeitende oder mehrere Filialen",pm:"/Monat",intro:"3 Monate, danach",
+de:{h1:"Mehr Kunden aus deinem Kiez",lead:"Berliner Kiez-Check zeigt Berliner Betriebe nach Kiez und Kategorie – auf Deutsch, Türkisch und Englisch. Der Grundeintrag ist immer kostenlos. Wer mehr Kunden will, wird mit einem Paket ganz oben angezeigt – monatlich kündbar, ohne Mindestlaufzeit.",
+ h_pk:"Pakete für Betriebe",s:"Klein",m:"Mittel",l:"Groß",s_size:"Sichtbar in deinem Kiez",m_size:"Mehr Kunden aus ganz Berlin",l_size:"Maximale Sichtbarkeit",start:"🎉 Start: 3 Monate nur 19 €/Monat",rec:"Empfohlen",offer_h:"🎉 Startangebot",offer_txt:"Alle Pakete die ersten 3 Monate für nur 19 €/Monat. Danach 29, 49 oder 89 €/Monat – jederzeit monatlich kündbar.",gp_h:"🤝 Gründungspartner: die ersten 20 Betriebe 3 Monate kostenlos",gp_txt:"Als Dankeschön teilst du uns einmal auf Instagram oder hängst unser kleines QR-Plakat in deinem Laden auf. Danach gilt das Startangebot. Kein Abo, keine Kosten während der Gratiszeit.",gp_btn:"Platz anfragen",o_gp:"Gründungspartner (3 Monate kostenlos)",pm:"/Monat",intro:"3 Monate, danach",
  f_top:"Ganz oben in deinem Kiez und deiner Kategorie",f_mark:"Gelb markiert, als Anzeige gekennzeichnet",f_coupon:"Eigener Gutschein im Bereich „Gutscheine“",f_all_s:"Alles aus Klein",f_berlin:"Zusätzlich oben in der Berlin-weiten Liste",f_all_m:"Alles aus Mittel",f_sponsor:"Zusätzlich als Sponsor-Karte auf der Startseite und im Listenfluss",
  self:"So geht's: Eintrag kostenlos anlegen, nach der Prüfung über den Bearbeitungslink ein Paket wählen und per Karte zahlen. Die Hervorhebung startet sofort, eine Rechnung kommt automatisch per E-Mail.",
- h_banner:"Banner-Sponsoring",banner_txt:"Für Marken, Lieferdienste und Online-Angebote: dein Banner mit direktem Link, WhatsApp- oder Anruf-Button. Gleiche Preisstaffel: 3 Monate 19 €/Monat, danach 49–89 €/Monat je nach Unternehmensgröße und Umfang.",
+ h_banner:"Banner-Sponsoring",banner_txt:"Für Marken, Lieferdienste und Online-Angebote: dein Banner mit direktem Link, WhatsApp- oder Anruf-Button. Gleiche Preise: zum Start 3 Monate 19 €/Monat, danach 29–89 €/Monat je nach Platzierung und Umfang.",
  b_where:"Wo erscheint dein Banner?",b1:"Sponsor-Leiste auf der Startseite",b2:"Zwischen den Einträgen",b3:"Gezielt in passenden Kiezen und Kategorien",b4:"Im Kiez-Quiz",
  b_report:"Monatlicher Bericht",b_report_txt:"Du bekommst jeden Monat, wie oft dein Banner gesehen und angeklickt wurde. Wir zählen anonym, ohne Cookies.",
  b_jobs:"Job „Dringend“",b_jobs_txt:"Job-Anzeigen sind kostenlos. Für 29 € steht deine Anzeige 30 Tage ganz oben, markiert als „Dringend“.",
- h_form:"Anfrage senden",l_company:"Betrieb / Firma",l_person:"Ansprechperson",l_email:"E-Mail",l_phone:"Telefon",l_size:"Interesse an",l_msg:"Nachricht (optional)",
- o_s:"Paket Klein (bis 5 Mitarbeitende)",o_m:"Paket Mittel (6–20 Mitarbeitende)",o_l:"Paket Groß (über 20 / mehrere Filialen)",o_b:"Banner-Sponsoring",
+ h_form:"Anfrage senden",l_company:"Betrieb / Firma",l_person:"Ansprechperson",l_email:"E-Mail",l_phone:"Telefon",l_interest:"Interesse an",l_msg:"Nachricht (optional)",
+ o_s:"Paket Klein – 29 €/Monat",o_m:"Paket Mittel – 49 €/Monat",o_l:"Paket Groß – 89 €/Monat",o_b:"Banner-Sponsoring",
  consent:"Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage gespeichert werden ({ds}).",ds_word:"Datenschutzerklärung",send:"Anfrage senden",
  ok:"Danke! Wir melden uns innerhalb von zwei Werktagen.",err:"Bitte Firma und eine gültige E-Mail angeben.",err_rate:"Zu viele Anfragen. Bitte schreib uns per E-Mail.",err_net:"Keine Verbindung. Bitte schreib uns per E-Mail.",or_mail:"Oder per E-Mail:",imp:"Impressum",ds:"Datenschutz"},
-tr:{h1:"Mahallenden daha fazla müşteri",lead:"Berliner Kiez-Check, Berlin'deki işletmeleri mahalle ve kategoriye göre Almanca, Türkçe ve İngilizce gösterir. Her paket ilk 3 ay aylık 19 €, sonrasında fiyat işletmenin büyüklüğüne göre belirlenir. Aylık iptal edilebilir.",
- h_pk:"İşletme paketleri",s:"Küçük",m:"Orta",l:"Büyük",s_size:"5 çalışana kadar",m_size:"6–20 çalışan",l_size:"20'den fazla çalışan veya birden çok şube",pm:"/ay",intro:"3 ay, sonra",
+tr:{h1:"Mahallenden daha fazla müşteri",lead:"Berliner Kiez-Check, Berlin'deki işletmeleri mahalle ve kategoriye göre Almanca, Türkçe ve İngilizce gösterir. Temel kayıt her zaman ücretsizdir. Daha fazla müşteri isteyenler bir paketle en üstte görünür – aylık iptal edilebilir, asgari süre yok.",
+ h_pk:"İşletme paketleri",s:"Küçük",m:"Orta",l:"Büyük",s_size:"Mahallende görün",m_size:"Tüm Berlin'den müşteri",l_size:"En yüksek görünürlük",start:"🎉 Başlangıç: ilk 3 ay sadece 19 €/ay",rec:"Önerimiz",offer_h:"🎉 Başlangıç teklifi",offer_txt:"Tüm paketler ilk 3 ay aylık sadece 19 €. Sonra aylık 29, 49 veya 89 € – her ay iptal edilebilir.",gp_h:"🤝 Kurucu ortak: ilk 20 işletmeye 3 ay ücretsiz",gp_txt:"Teşekkür olarak bizi bir kez Instagram'da paylaşırsın veya küçük QR afişimizi dükkanına asarsın. Sonrasında başlangıç teklifi geçerli olur. Ücretsiz dönemde abonelik ve ücret yok.",gp_btn:"Yer iste",o_gp:"Kurucu ortak (3 ay ücretsiz)",pm:"/ay",intro:"3 ay, sonra",
  f_top:"Mahallende ve kategorinde en üstte",f_mark:"Sarı işaretli, reklam olarak etiketli",f_coupon:"„Kuponlar“ bölümünde kendi kuponun",f_all_s:"Küçük paketteki her şey",f_berlin:"Ek olarak tüm Berlin listesinde üstte",f_all_m:"Orta paketteki her şey",f_sponsor:"Ek olarak ana sayfada ve liste arasında sponsor kartı",
  self:"Nasıl işler: Kaydını ücretsiz oluştur, onaydan sonra düzenleme bağlantısından paket seç ve kartla öde. Öne çıkarma hemen başlar, fatura otomatik e-postayla gelir.",
- h_banner:"Banner sponsorluğu",banner_txt:"Markalar, teslimat servisleri ve online hizmetler için: doğrudan link, WhatsApp veya arama butonlu banner. Aynı fiyat yapısı: ilk 3 ay aylık 19 €, sonra firma büyüklüğü ve kapsama göre aylık 49–89 €.",
+ h_banner:"Banner sponsorluğu",banner_txt:"Markalar, teslimat servisleri ve online hizmetler için: doğrudan link, WhatsApp veya arama butonlu banner. Aynı fiyatlar: başlangıçta ilk 3 ay aylık 19 €, sonra yerleşim ve kapsama göre aylık 29–89 €.",
  b_where:"Banner'ın nerede görünür?",b1:"Ana sayfadaki sponsor şeridi",b2:"Kayıtların arasında",b3:"Uygun mahalle ve kategorilerde hedefli",b4:"Kiez Quiz'de",
  b_report:"Aylık rapor",b_report_txt:"Her ay banner'ının kaç kez görüldüğünü ve tıklandığını bildiririz. Anonim sayıyoruz, çerez kullanmadan.",
  b_jobs:"„Acil“ iş ilanı",b_jobs_txt:"İş ilanları ücretsizdir. 29 € ile ilanın 30 gün boyunca en üstte, „Acil“ işaretiyle görünür.",
- h_form:"Talep gönder",l_company:"İşletme / firma",l_person:"İletişim kişisi",l_email:"E-posta",l_phone:"Telefon",l_size:"İlgilendiğin",l_msg:"Mesaj (isteğe bağlı)",
- o_s:"Küçük paket (5 çalışana kadar)",o_m:"Orta paket (6–20 çalışan)",o_l:"Büyük paket (20+ / birden çok şube)",o_b:"Banner sponsorluğu",
+ h_form:"Talep gönder",l_company:"İşletme / firma",l_person:"İletişim kişisi",l_email:"E-posta",l_phone:"Telefon",l_interest:"İlgilendiğin",l_msg:"Mesaj (isteğe bağlı)",
+ o_s:"Küçük paket – 29 €/ay",o_m:"Orta paket – 49 €/ay",o_l:"Büyük paket – 89 €/ay",o_b:"Banner sponsorluğu",
  consent:"Bilgilerimin talebin işlenmesi için saklanmasını kabul ediyorum ({ds}).",ds_word:"Gizlilik politikası",send:"Talebi gönder",
  ok:"Teşekkürler! İki iş günü içinde sana döneceğiz.",err:"Lütfen firma adı ve geçerli bir e-posta gir.",err_rate:"Çok fazla talep. Lütfen e-posta ile yaz.",err_net:"Bağlantı yok. Lütfen e-posta ile yaz.",or_mail:"Veya e-posta ile:",imp:"Künye",ds:"Gizlilik"},
-en:{h1:"More customers from your Kiez",lead:"Berliner Kiez-Check shows Berlin businesses by Kiez and category – in German, Turkish and English. Every package costs €19 per month for the first 3 months, then the price depends on the size of your business. Cancel monthly.",
- h_pk:"Packages for businesses",s:"Small",m:"Medium",l:"Large",s_size:"up to 5 staff",m_size:"6–20 staff",l_size:"over 20 staff or several branches",pm:"/month",intro:"3 months, then",
+en:{h1:"More customers from your Kiez",lead:"Berliner Kiez-Check shows Berlin businesses by Kiez and category – in German, Turkish and English. The basic listing is always free. If you want more customers, a package puts you at the top – cancel monthly, no minimum term.",
+ h_pk:"Packages for businesses",s:"Small",m:"Medium",l:"Large",s_size:"Get seen in your Kiez",m_size:"Customers from all over Berlin",l_size:"Maximum visibility",start:"🎉 Launch offer: first 3 months only €19/month",rec:"Recommended",offer_h:"🎉 Launch offer",offer_txt:"All packages only €19/month for the first 3 months. Then €29, €49 or €89/month – cancel any month.",gp_h:"🤝 Founding partners: the first 20 businesses get 3 months free",gp_txt:"As a thank-you, share us once on Instagram or put our small QR poster up in your shop. After that the launch offer applies. No subscription and no costs during the free period.",gp_btn:"Request a spot",o_gp:"Founding partner (3 months free)",pm:"/month",intro:"3 months, then",
  f_top:"Top of your Kiez and category",f_mark:"Highlighted, labelled as an ad",f_coupon:"Your own coupon under “Coupons”",f_all_s:"Everything in Small",f_berlin:"Plus top of the Berlin-wide list",f_all_m:"Everything in Medium",f_sponsor:"Plus a sponsor card on the home page and between listings",
  self:"How it works: add your listing for free, pick a package via your edit link once it's approved, and pay by card. The promotion starts right away and the invoice arrives by email.",
- h_banner:"Banner sponsorship",banner_txt:"For brands, delivery services and online offers: your banner with a direct link, WhatsApp or call button. Same pricing: €19/month for 3 months, then €49–89/month depending on company size and reach.",
+ h_banner:"Banner sponsorship",banner_txt:"For brands, delivery services and online offers: your banner with a direct link, WhatsApp or call button. Same prices: €19/month for the first 3 months, then €29–89/month depending on placement and reach.",
  b_where:"Where does your banner appear?",b1:"Sponsor strip on the home page",b2:"Between listings",b3:"Targeted to matching Kieze and categories",b4:"In the Kiez quiz",
  b_report:"Monthly report",b_report_txt:"Every month you get how often your banner was seen and clicked. We count anonymously, without cookies.",
  b_jobs:"“Urgent” job ad",b_jobs_txt:"Job ads are free. For €29 your ad stays at the top for 30 days, marked “Urgent”.",
- h_form:"Send a request",l_company:"Business / company",l_person:"Contact person",l_email:"Email",l_phone:"Phone",l_size:"Interested in",l_msg:"Message (optional)",
- o_s:"Small package (up to 5 staff)",o_m:"Medium package (6–20 staff)",o_l:"Large package (20+ / several branches)",o_b:"Banner sponsorship",
+ h_form:"Send a request",l_company:"Business / company",l_person:"Contact person",l_email:"Email",l_phone:"Phone",l_interest:"Interested in",l_msg:"Message (optional)",
+ o_s:"Small package – €29/month",o_m:"Medium package – €49/month",o_l:"Large package – €89/month",o_b:"Banner sponsorship",
  consent:"I agree that my details are stored to handle this request ({ds}).",ds_word:"privacy policy",send:"Send request",
  ok:"Thank you! We'll get back to you within two working days.",err:"Please enter a company name and a valid email.",err_rate:"Too many requests. Please email us.",err_net:"No connection. Please email us.",or_mail:"Or by email:",imp:"Legal notice",ds:"Privacy"}
 };
@@ -213,6 +227,8 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.se
   if (mq && mq.addEventListener) mq.addEventListener('change', paint);
   paint();
 })();
+/* Gründungspartner-Button: Formular mit passender Auswahl öffnen */
+document.querySelectorAll('.gpbtn').forEach(function (b) { b.addEventListener('click', function () { var f = document.getElementById('f'); if (f && f.elements.size) f.elements.size.value = 'gp'; }); });
 </script>
 </body>
 </html>
