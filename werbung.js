@@ -3,9 +3,9 @@
 
 /* Pakete: 3 Monate Einführungspreis 19 €/Monat, danach nach Betriebsgröße */
 export const SUBS = {
-  s: { amount: 4900, label: 'Berliner Kiez-Check Paket S (kleiner Betrieb)' },
-  m: { amount: 6900, label: 'Berliner Kiez-Check Paket M (mittlerer Betrieb)' },
-  l: { amount: 8900, label: 'Berliner Kiez-Check Paket L (großer Betrieb)' }
+  s: { amount: 2900, label: 'Berliner Kiez-Check Paket Klein' },
+  m: { amount: 4900, label: 'Berliner Kiez-Check Paket Mittel' },
+  l: { amount: 8900, label: 'Berliner Kiez-Check Paket Groß' }
 };
 export const INTRO = { amount: 1900, months: 3 };
 export const JOB_URGENT = { amount: 2900, days: 30, label: 'Berliner Kiez-Check Job-Anzeige „Dringend" 30 Tage' };
@@ -82,7 +82,7 @@ export async function adRequest(req, env) {
   if (b.hp) return J({ ok: true });
   const r = {
     company: clean(b.company, 120), person: clean(b.person, 80), email: clean(b.email, 120).toLowerCase(),
-    phone: phoneClean(b.phone), size: ['s', 'm', 'l', 'banner'].includes(b.size) ? b.size : 's', message: cleanMulti(b.message, 1000)
+    phone: phoneClean(b.phone), size: ['s', 'm', 'l', 'banner', 'gp'].includes(b.size) ? b.size : 's', message: cleanMulti(b.message, 1000)
   };
   if (r.company.length < 2) return J({ error: 'field', field: 'company' }, 400);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email)) return J({ error: 'field', field: 'email' }, 400);
@@ -176,8 +176,8 @@ async function stripe(env, path, params) {
 }
 
 async function ensureIntroCoupon(env, plan) {
-  const id = 'kc_intro_' + plan;
   const off = SUBS[plan].amount - INTRO.amount;
+  const id = 'kc_intro_' + plan + '_' + off; // Betrag in der ID: bei Preisänderung entsteht automatisch ein neuer Gutschein
   const c = await stripe(env, 'coupons', {
     id, amount_off: String(off), currency: 'eur', duration: 'repeating',
     duration_in_months: String(INTRO.months), name: `Einführungspreis ${INTRO.months} Monate 19 €`
