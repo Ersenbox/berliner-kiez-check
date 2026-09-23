@@ -1,0 +1,26 @@
+name = "kiezcheck"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kiezcheck"
+database_id = "HIER_DATABASE_ID_EINTRAGEN"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "kiezcheck-photos"
+
+[vars]
+# "1" = von der KI als unbedenklich eingestufte Einträge gehen sofort online
+AUTO_APPROVE = "1"
+# AdSense für die SEO-Seiten (/k/...), leer lassen = keine Werbung
+ADSENSE_CLIENT = ""
+ADSENSE_SLOT = ""
+
+# Secrets (NICHT hier eintragen, sondern per `wrangler secret put NAME`):
+# ADMIN_TOKEN, ANTHROPIC_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
