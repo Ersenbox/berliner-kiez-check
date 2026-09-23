@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Werben auf Berliner Kiez-Check – Pakete für Betriebe</title>
+<meta name="description" content="Mehr Kunden aus deinem Berliner Kiez: 3 Monate für 19 € pro Monat, danach 49–89 € je nach Betriebsgröße. Banner, Hervorhebung, Gutscheine und Jobs.">
+<link rel="canonical" href="https://berliner-kiez-check.bakiciersen.workers.dev/werben.html">
+<meta name="theme-color" content="#0078BF">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:Archivo;font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(/vendor/fonts/archivo-latin-ext-wdth-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Archivo;font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(/vendor/fonts/archivo-latin-wdth-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--paper:#EEF0EC;--ink:#1C2B39;--pink:#FF48B0;--blue:#0078BF;--yellow:#FFE800;--muted:#4A5866;--card:#fff;--blend:multiply}
+@media (prefers-color-scheme:dark){:root{--paper:#141B22;--ink:#E9ECE6;--muted:#A9B3BC;--card:#1C252E;--blend:screen}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Archivo,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--paper);border-bottom:2px solid var(--ink)}
+.logo{font-weight:900;font-stretch:125%;font-size:clamp(16px,4vw,23px);text-decoration:none;color:var(--blue);margin-right:auto;text-shadow:.045em .035em 0 var(--pink)}
+.langs{display:flex;border:2px solid var(--ink)}
+.langs button{background:none;border:0;padding:4px 8px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;color:inherit}
+.langs button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+main{max-width:1100px;margin:0 auto;padding:30px 16px 60px}
+h1{font-weight:900;font-stretch:125%;font-size:clamp(36px,7vw,78px);line-height:.95;letter-spacing:-.02em;margin:0 0 14px;color:var(--blue);text-shadow:.045em .035em 0 var(--pink);max-width:14ch}
+.lead{color:var(--muted);font-size:18px;max-width:58ch;margin:0 0 30px}
+h2{font-stretch:112%;font-weight:900;font-size:26px;margin:44px 0 12px;border-top:2px solid var(--ink);padding-top:18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.pk{border:2px solid var(--ink);background:var(--card);padding:18px;display:flex;flex-direction:column;gap:8px}
+.pk.hl{box-shadow:6px 6px 0 var(--pink)}
+.pk h3{margin:0;font-stretch:125%;font-weight:900;font-size:24px}
+.pk .size{color:var(--muted);font-size:14px;margin:0}
+.pk .price{font-stretch:125%;font-weight:900;font-size:40px;line-height:1;color:var(--blue)}
+.pk .price small{font-size:15px;font-stretch:100%}
+.pk .then{font-size:15px;margin:0}
+.pk ul{margin:6px 0 0;padding-left:18px}
+.pk li{margin:3px 0}
+.note{border:2px dashed var(--pink);padding:12px 14px;margin-top:16px;max-width:70ch}
+form{display:grid;gap:12px;max-width:640px}
+label{display:grid;gap:4px;font-weight:700;font-size:14px}
+input,select,textarea{font:inherit;color:inherit;border:2px solid var(--ink);background:var(--card);padding:9px 10px;width:100%}
+textarea{min-height:100px}
+.two{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media (max-width:560px){.two{grid-template-columns:1fr}}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400}
+.chk input{width:20px;height:20px;flex:0 0 20px;margin-top:2px}
+.hp{position:absolute;left:-9999px}
+.btn{background:var(--pink);color:#1C2B39;border:2px solid #1C2B39;padding:10px 18px;font:inherit;font-weight:800;cursor:pointer;box-shadow:3px 3px 0 var(--blue);justify-self:start}
+.ok{border:2px solid var(--ink);background:var(--yellow);color:#1C2B39;padding:14px;font-weight:700}
+footer{max-width:1100px;margin:0 auto;padding:22px 16px 30px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 18px}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/">Berliner Kiez-Check</a>
+  <div class="langs" role="group" aria-label="Sprache"><button data-l="de">DE</button><button data-l="tr">TR</button><button data-l="en">EN</button></div>
+</header>
+<main>
+  <h1 data-i="h1"></h1>
+  <p class="lead" data-i="lead"></p>
+
+  <h2 data-i="h_pk"></h2>
+  <div class="grid">
+    <div class="pk"><h3 data-i="s"></h3><p class="size" data-i="s_size"></p><div class="price">19 €<small data-i="pm"></small></div><p class="then"><span data-i="intro"></span> 49 €<span data-i="pm"></span></p><ul><li data-i="f_top"></li><li data-i="f_mark"></li><li data-i="f_coupon"></li></ul></div>
+    <div class="pk hl"><h3 data-i="m"></h3><p class="size" data-i="m_size"></p><div class="price">19 €<small data-i="pm"></small></div><p class="then"><span data-i="intro"></span> 69 €<span data-i="pm"></span></p><ul><li data-i="f_all_s"></li><li data-i="f_berlin"></li></ul></div>
+    <div class="pk"><h3 data-i="l"></h3><p class="size" data-i="l_size"></p><div class="price">19 €<small data-i="pm"></small></div><p class="then"><span data-i="intro"></span> 89 €<span data-i="pm"></span></p><ul><li data-i="f_all_m"></li><li data-i="f_sponsor"></li></ul></div>
+  </div>
+  <p class="note" data-i="self"></p>
+
+  <h2 data-i="h_banner"></h2>
+  <p data-i="banner_txt" style="max-width:70ch"></p>
+  <div class="grid">
+    <div class="pk"><h3 data-i="b_where"></h3><ul><li data-i="b1"></li><li data-i="b2"></li><li data-i="b3"></li><li data-i="b4"></li></ul></div>
+    <div class="pk"><h3 data-i="b_report"></h3><p style="margin:0" data-i="b_report_txt"></p></div>
+    <div class="pk"><h3 data-i="b_jobs"></h3><div class="price">29 €</div><p style="margin:0" data-i="b_jobs_txt"></p></div>
+  </div>
+
+  <h2 data-i="h_form"></h2>
+  <div id="formBox">
+    <form id="f" novalidate>
+      <div class="two">
+        <label><span data-i="l_company"></span><input name="company" required maxlength="120" autocomplete="organization"></label>
+        <label><span data-i="l_person"></span><input name="person" maxlength="80" autocomplete="name"></label>
+      </div>
+      <div class="two">
+        <label><span data-i="l_email"></span><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
+        <label><span data-i="l_phone"></span><input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
+      </div>
+      <label><span data-i="l_size"></span><select name="size">
+        <option value="s" data-i="o_s"></option><option value="m" data-i="o_m"></option><option value="l" data-i="o_l"></option><option value="banner" data-i="o_b"></option></select></label>
+      <label><span data-i="l_msg"></span><textarea name="message" maxlength="1000"></textarea></label>
+      <div class="hp" aria-hidden="true"><input name="hp" tabindex="-1" autocomplete="off"></div>
+      <label class="chk"><input type="checkbox" name="consent" required><span id="consent"></span></label>
+      <button class="btn" type="submit" data-i="send"></button>
+    </form>
+  </div>
+  <p style="margin-top:18px"><span data-i="or_mail"></span> <a id="mail" href="mailto:info@deindigitalerhelfer.com">info@deindigitalerhelfer.com</a></p>
+</main>
+<footer>
+  <span>© 2026 DeindigitalerhelferCenter</span>
+  <a id="imp" href="https://deindigitalerhelfer.com/impressum" data-i="imp"></a>
+  <a id="ds" href="https://deindigitalerhelfer.com/datenschutz" data-i="ds"></a>
+  <a href="/">Berliner Kiez-Check</a><a href="/quiz/">Kiez-Quiz</a>
+</footer>
+<script>
+var T = {
+de:{h1:"Mehr Kunden aus deinem Kiez",lead:"Berliner Kiez-Check zeigt Berliner Betriebe nach Kiez und Kategorie – auf Deutsch, Türkisch und Englisch. Die ersten 3 Monate kostet jedes Paket 19 € pro Monat, danach richtet sich der Preis nach der Größe deines Betriebs. Monatlich kündbar.",
+ h_pk:"Pakete für Betriebe",s:"Klein",m:"Mittel",l:"Groß",s_size:"bis 5 Mitarbeitende",m_size:"6–20 Mitarbeitende",l_size:"über 20 Mitarbeitende oder mehrere Filialen",pm:"/Monat",intro:"3 Monate, danach",
+ f_top:"Ganz oben in deinem Kiez und deiner Kategorie",f_mark:"Gelb markiert, als Anzeige gekennzeichnet",f_coupon:"Eigener Gutschein im Bereich „Gutscheine“",f_all_s:"Alles aus Klein",f_berlin:"Zusätzlich oben in der Berlin-weiten Liste",f_all_m:"Alles aus Mittel",f_sponsor:"Zusätzlich als Sponsor-Karte auf der Startseite und im Listenfluss",
+ self:"So geht's: Eintrag kostenlos anlegen, nach der Prüfung über den Bearbeitungslink ein Paket wählen und per Karte zahlen. Die Hervorhebung startet sofort, eine Rechnung kommt automatisch per E-Mail.",
+ h_banner:"Banner-Sponsoring",banner_txt:"Für Marken, Lieferdienste und Online-Angebote: dein Banner mit direktem Link, WhatsApp- oder Anruf-Button. Gleiche Preisstaffel: 3 Monate 19 €/Monat, danach 49–89 €/Monat je nach Unternehmensgröße und Umfang.",
+ b_where:"Wo erscheint dein Banner?",b1:"Sponsor-Leiste auf der Startseite",b2:"Zwischen den Einträgen",b3:"Gezielt in passenden Kiezen und Kategorien",b4:"Im Kiez-Quiz",
+ b_report:"Monatlicher Bericht",b_report_txt:"Du bekommst jeden Monat, wie oft dein Banner gesehen und angeklickt wurde. Wir zählen anonym, ohne Cookies.",
+ b_jobs:"Job „Dringend“",b_jobs_txt:"Job-Anzeigen sind kostenlos. Für 29 € steht deine Anzeige 30 Tage ganz oben, markiert als „Dringend“.",
+ h_form:"Anfrage senden",l_company:"Betrieb / Firma",l_person:"Ansprechperson",l_email:"E-Mail",l_phone:"Telefon",l_size:"Interesse an",l_msg:"Nachricht (optional)",
+ o_s:"Paket Klein (bis 5 Mitarbeitende)",o_m:"Paket Mittel (6–20 Mitarbeitende)",o_l:"Paket Groß (über 20 / mehrere Filialen)",o_b:"Banner-Sponsoring",
+ consent:"Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage gespeichert werden ({ds}).",ds_word:"Datenschutzerklärung",send:"Anfrage senden",
+ ok:"Danke! Wir melden uns innerhalb von zwei Werktagen.",err:"Bitte Firma und eine gültige E-Mail angeben.",err_rate:"Zu viele Anfragen. Bitte schreib uns per E-Mail.",err_net:"Keine Verbindung. Bitte schreib uns per E-Mail.",or_mail:"Oder per E-Mail:",imp:"Impressum",ds:"Datenschutz"},
+tr:{h1:"Mahallenden daha fazla müşteri",lead:"Berliner Kiez-Check, Berlin'deki işletmeleri mahalle ve kategoriye göre Almanca, Türkçe ve İngilizce gösterir. Her paket ilk 3 ay aylık 19 €, sonrasında fiyat işletmenin büyüklüğüne göre belirlenir. Aylık iptal edilebilir.",
+ h_pk:"İşletme paketleri",s:"Küçük",m:"Orta",l:"Büyük",s_size:"5 çalışana kadar",m_size:"6–20 çalışan",l_size:"20'den fazla çalışan veya birden çok şube",pm:"/ay",intro:"3 ay, sonra",
+ f_top:"Mahallende ve kategorinde en üstte",f_mark:"Sarı işaretli, reklam olarak etiketli",f_coupon:"„Kuponlar“ bölümünde kendi kuponun",f_all_s:"Küçük paketteki her şey",f_berlin:"Ek olarak tüm Berlin listesinde üstte",f_all_m:"Orta paketteki her şey",f_sponsor:"Ek olarak ana sayfada ve liste arasında sponsor kartı",
+ self:"Nasıl işler: Kaydını ücretsiz oluştur, onaydan sonra düzenleme bağlantısından paket seç ve kartla öde. Öne çıkarma hemen başlar, fatura otomatik e-postayla gelir.",
+ h_banner:"Banner sponsorluğu",banner_txt:"Markalar, teslimat servisleri ve online hizmetler için: doğrudan link, WhatsApp veya arama butonlu banner. Aynı fiyat yapısı: ilk 3 ay aylık 19 €, sonra firma büyüklüğü ve kapsama göre aylık 49–89 €.",
+ b_where:"Banner'ın nerede görünür?",b1:"Ana sayfadaki sponsor şeridi",b2:"Kayıtların arasında",b3:"Uygun mahalle ve kategorilerde hedefli",b4:"Kiez Quiz'de",
+ b_report:"Aylık rapor",b_report_txt:"Her ay banner'ının kaç kez görüldüğünü ve tıklandığını bildiririz. Anonim sayıyoruz, çerez kullanmadan.",
+ b_jobs:"„Acil“ iş ilanı",b_jobs_txt:"İş ilanları ücretsizdir. 29 € ile ilanın 30 gün boyunca en üstte, „Acil“ işaretiyle görünür.",
+ h_form:"Talep gönder",l_company:"İşletme / firma",l_person:"İletişim kişisi",l_email:"E-posta",l_phone:"Telefon",l_size:"İlgilendiğin",l_msg:"Mesaj (isteğe bağlı)",
+ o_s:"Küçük paket (5 çalışana kadar)",o_m:"Orta paket (6–20 çalışan)",o_l:"Büyük paket (20+ / birden çok şube)",o_b:"Banner sponsorluğu",
+ consent:"Bilgilerimin talebin işlenmesi için saklanmasını kabul ediyorum ({ds}).",ds_word:"Gizlilik politikası",send:"Talebi gönder",
+ ok:"Teşekkürler! İki iş günü içinde sana döneceğiz.",err:"Lütfen firma adı ve geçerli bir e-posta gir.",err_rate:"Çok fazla talep. Lütfen e-posta ile yaz.",err_net:"Bağlantı yok. Lütfen e-posta ile yaz.",or_mail:"Veya e-posta ile:",imp:"Künye",ds:"Gizlilik"},
+en:{h1:"More customers from your Kiez",lead:"Berliner Kiez-Check shows Berlin businesses by Kiez and category – in German, Turkish and English. Every package costs €19 per month for the first 3 months, then the price depends on the size of your business. Cancel monthly.",
+ h_pk:"Packages for businesses",s:"Small",m:"Medium",l:"Large",s_size:"up to 5 staff",m_size:"6–20 staff",l_size:"over 20 staff or several branches",pm:"/month",intro:"3 months, then",
+ f_top:"Top of your Kiez and category",f_mark:"Highlighted, labelled as an ad",f_coupon:"Your own coupon under “Coupons”",f_all_s:"Everything in Small",f_berlin:"Plus top of the Berlin-wide list",f_all_m:"Everything in Medium",f_sponsor:"Plus a sponsor card on the home page and between listings",
+ self:"How it works: add your listing for free, pick a package via your edit link once it's approved, and pay by card. The promotion starts right away and the invoice arrives by email.",
+ h_banner:"Banner sponsorship",banner_txt:"For brands, delivery services and online offers: your banner with a direct link, WhatsApp or call button. Same pricing: €19/month for 3 months, then €49–89/month depending on company size and reach.",
+ b_where:"Where does your banner appear?",b1:"Sponsor strip on the home page",b2:"Between listings",b3:"Targeted to matching Kieze and categories",b4:"In the Kiez quiz",
+ b_report:"Monthly report",b_report_txt:"Every month you get how often your banner was seen and clicked. We count anonymously, without cookies.",
+ b_jobs:"“Urgent” job ad",b_jobs_txt:"Job ads are free. For €29 your ad stays at the top for 30 days, marked “Urgent”.",
+ h_form:"Send a request",l_company:"Business / company",l_person:"Contact person",l_email:"Email",l_phone:"Phone",l_size:"Interested in",l_msg:"Message (optional)",
+ o_s:"Small package (up to 5 staff)",o_m:"Medium package (6–20 staff)",o_l:"Large package (20+ / several branches)",o_b:"Banner sponsorship",
+ consent:"I agree that my details are stored to handle this request ({ds}).",ds_word:"privacy policy",send:"Send request",
+ ok:"Thank you! We'll get back to you within two working days.",err:"Please enter a company name and a valid email.",err_rate:"Too many requests. Please email us.",err_net:"No connection. Please email us.",or_mail:"Or by email:",imp:"Legal notice",ds:"Privacy"}
+};
+var lang = (function () { var l = new URLSearchParams(location.search).get('lang'); try { l = l || localStorage.getItem('kc_lang'); } catch (e) { } l = l || (navigator.language || 'de').slice(0, 2); return T[l] ? l : 'de'; })();
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function apply() {
+  var d = T[lang]; document.documentElement.lang = lang;
+  try { localStorage.setItem('kc_lang', lang); } catch (e) { }
+  document.querySelectorAll('[data-i]').forEach(function (el) { el.textContent = d[el.getAttribute('data-i')]; });
+  document.querySelectorAll('.langs button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.l === lang); });
+  document.getElementById('consent').innerHTML = esc(d.consent).replace('{ds}', '<a href="' + document.getElementById('ds').href + '" target="_blank" rel="noopener">' + esc(d.ds_word) + '</a>');
+}
+document.querySelectorAll('.langs button').forEach(function (b) { b.onclick = function () { lang = b.dataset.l; apply(); }; });
+document.getElementById('f').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var f = e.target, g = function (k) { return f.elements[k].value.trim(); };
+  if (!f.elements.consent.checked || !f.reportValidity()) return;
+  var btn = f.querySelector('button'); btn.disabled = true;
+  fetch('/api/werben', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ company: g('company'), person: g('person'), email: g('email'), phone: g('phone'), size: g('size'), message: g('message'), hp: g('hp') }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (j.ok) document.getElementById('formBox').innerHTML = '<p class="ok">' + esc(T[lang].ok) + '</p>';
+      else { alert(j.error === 'rate' ? T[lang].err_rate : T[lang].err); btn.disabled = false; }
+    }).catch(function () { alert(T[lang].err_net); btn.disabled = false; });
+});
+var pre = new URLSearchParams(location.search).get('size'); if (pre) document.querySelector('select[name=size]').value = pre;
+apply();
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('/sw.js').catch(function () { });
+</script>
+</body>
+</html>

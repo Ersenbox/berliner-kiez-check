@@ -1,0 +1,20 @@
+{
+  "name": "Berliner Kiez-Check",
+  "short_name": "Kiez-Check",
+  "description": "Cafés, Frühstück, Barber und Märkte in deinem Berliner Kiez.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#EEF0EC",
+  "theme_color": "#0078BF",
+  "lang": "de",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Kiez-Quiz", "url": "/quiz/", "icons": [{ "src": "/icon.svg", "sizes": "any" }] },
+    { "name": "Gutscheine", "url": "/?view=coupons", "icons": [{ "src": "/icon.svg", "sizes": "any" }] },
+    { "name": "Jobs", "url": "/?view=jobs", "icons": [{ "src": "/icon.svg", "sizes": "any" }] }
+  ]
+}

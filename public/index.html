@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Berliner Kiez-Check – Was gibt's in deinem Kiez?</title>
+<meta name="description" content="Cafés, Frühstück, Barber, Märkte und mehr in deinem Berliner Kiez. Betriebe tragen sich selbst ein – kostenlos. Deutsch, Türkçe, English.">
+<meta name="theme-color" content="#0078BF">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon.svg">
+<style>
+@font-face{font-family:Archivo;font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(/vendor/fonts/archivo-latin-ext-wdth-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Archivo;font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(/vendor/fonts/archivo-latin-wdth-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<style>
+:root{--paper:#EEF0EC;--ink:#1C2B39;--pink:#FF48B0;--blue:#0078BF;--yellow:#FFE800;--muted:#4A5866;--card:#FFFFFF;--blend:multiply}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#141B22;--ink:#E9ECE6;--muted:#A9B3BC;--card:#1C252E;--blend:screen}}
+:root[data-theme=dark]{--paper:#141B22;--ink:#E9ECE6;--muted:#A9B3BC;--card:#1C252E;--blend:screen}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(64px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Archivo,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;padding-bottom:env(safe-area-inset-bottom,0px)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.08;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:var(--blue)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.riso{position:relative;color:var(--blue);display:inline-block}
+.riso::after{content:attr(data-t);position:absolute;inset:0;color:var(--pink);mix-blend-mode:var(--blend);transform:translate(.045em,.035em);pointer-events:none}
+
+.top{position:sticky;top:0;z-index:600;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--paper);border-bottom:2px solid var(--ink)}
+.logo{font-weight:900;font-stretch:125%;font-size:23px;letter-spacing:-.02em;text-decoration:none;margin-right:auto}
+@media (max-width:520px){.logo{font-size:16px;letter-spacing:-.03em}.top .btn{padding:6px 9px;font-size:13px}}
+.langs{display:flex;border:2px solid var(--ink)}
+.langs button{background:none;border:0;padding:4px 8px;font-weight:700;font-size:13px;cursor:pointer}
+.langs button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.btn{background:var(--pink);color:#1C2B39;border:2px solid #1C2B39;padding:8px 14px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:3px 3px 0 var(--blue)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--blue)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--ink);box-shadow:none}
+
+.hero{max-width:1200px;margin:0 auto;padding:34px 16px 18px}
+.hero h1{font-weight:900;font-stretch:125%;font-size:clamp(40px,8.2vw,96px);line-height:.93;letter-spacing:-.025em;margin:0 0 14px;max-width:12ch}
+.hero p{margin:0 0 22px;color:var(--muted);max-width:52ch;font-size:17px}
+.pick{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.pick select{appearance:none;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230078BF' stroke-width='2.5' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;border:2px solid var(--ink);padding:10px 38px 10px 12px;font-weight:800;font-stretch:112%;font-size:18px;min-width:220px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:thin}
+.chips button{flex:0 0 auto;border:1.5px solid var(--ink);background:transparent;padding:6px 12px;font-size:14px;cursor:pointer;white-space:nowrap}
+.chips button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px 40px}
+.bar{display:flex;justify-content:space-between;align-items:center;border-top:2px solid var(--ink);padding:10px 0;gap:10px}
+.bar #count{font-weight:700}
+.seg{display:flex;border:2px solid var(--ink)}
+.seg button{background:none;border:0;padding:5px 12px;font-weight:700;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.cols{display:block}
+#mapbox{display:none;height:65vh;border:2px solid var(--ink)}
+#map{height:100%;width:100%}
+.v-map #list{display:none}.v-map #mapbox{display:block}
+@media (min-width:920px){
+  .seg{display:none}
+  .cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+  #mapbox,.v-map #mapbox{display:block;position:sticky;top:calc(76px + env(safe-area-inset-top,0px));height:calc(100vh - 110px)}
+  .v-map #list{display:block}
+}
+.demo{background:var(--yellow);color:#1C2B39;border:2px solid #1C2B39;padding:8px 12px;font-size:14px;margin:6px 0 12px}
+
+.it{display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;padding:16px 0;border-top:1.5px solid var(--ink);position:relative}
+.it:first-child{border-top:0}
+.it.feat{padding-left:14px;background:linear-gradient(90deg,var(--yellow) 6px,transparent 6px)}
+.it.hl{animation:hl 1.6s ease-out}
+@keyframes hl{from{background-color:rgba(255,72,176,.25)}to{background-color:transparent}}
+.it img,.ph{width:88px;height:88px;object-fit:cover;border:2px solid var(--ink);display:block}
+.ph{display:grid;place-items:center;background:var(--blue);color:var(--pink);font-weight:900;font-stretch:125%;font-size:42px;line-height:1}
+.it h3{margin:0 0 2px;font-size:19px;font-stretch:112%;line-height:1.2}
+.it .m{color:var(--muted);font-size:14px;margin:0}
+.it p{margin:6px 0 0;max-width:60ch}
+.acts{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:14px;font-weight:700}
+.acts a{text-decoration:none}
+.tag{background:var(--yellow);color:#1C2B39;font-size:12px;padding:0 6px;border:1.5px solid #1C2B39;font-weight:800;margin-left:6px;vertical-align:2px}
+.ad{border-top:1.5px dashed var(--muted);padding:12px 0;min-height:100px}
+.ad small{color:var(--muted);display:block;margin-bottom:4px}
+.empty{padding:34px 0;border-top:1.5px solid var(--ink)}
+.empty h3{font-stretch:112%;margin:0 0 8px}
+
+dialog{border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:0;width:min(640px,calc(100% - 24px));max-height:calc(100% - 32px);overflow:auto;overscroll-behavior:contain;box-shadow:8px 8px 0 var(--pink)}
+dialog::backdrop{background:rgba(28,43,57,.55)}
+.dlg{padding:20px 20px 24px}
+.dlg h2{font-stretch:125%;font-weight:900;font-size:28px;line-height:1;margin:0 0 6px;color:var(--blue)}
+.dlg .hint{color:var(--muted);font-size:14px;margin:0 0 16px}
+.f{display:grid;gap:12px}
+.f label{display:grid;gap:4px;font-weight:700;font-size:14px}
+.f label small{font-weight:400;color:var(--muted)}
+.f input,.f select,.f textarea{border:2px solid var(--ink);background:var(--card);padding:9px 10px;font-size:16px;width:100%}
+.f textarea{min-height:90px;resize:vertical}
+.two{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media (max-width:520px){.two{grid-template-columns:1fr}}
+.chk{display:flex!important;grid-template-columns:none;gap:10px!important;align-items:flex-start;font-weight:400!important}
+.chk input{width:20px;height:20px;flex:0 0 20px;margin-top:2px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.status{border:2px solid var(--ink);padding:10px 12px;background:var(--card);margin-bottom:14px;font-size:15px}
+.status b{font-stretch:112%}
+.linkbox{display:flex;gap:8px;margin:10px 0 18px}
+.linkbox input{flex:1;min-width:0;border:2px solid var(--ink);background:var(--card);padding:8px;font-size:13px}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.plans button{border:2px solid var(--ink);background:var(--card);padding:14px 10px;cursor:pointer;text-align:left}
+.plans button strong{display:block;font-stretch:125%;font-size:26px;font-weight:900;color:var(--blue)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;font-weight:700;z-index:9000;max-width:90vw;display:none}
+
+footer{max-width:1200px;margin:0 auto;padding:22px 16px 30px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 18px}
+footer a{color:var(--muted)}
+/* === Werbung, Tabs, Gutscheine, Jobs, Merkliste, Notruf === */
+.spons{max-width:1200px;margin:0 auto;padding:0 16px 8px}
+.spons-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 10px;scrollbar-width:thin}
+.spons-track .spc{flex:0 0 min(420px,86%);scroll-snap-align:start}
+.spc{position:relative;border:2px solid var(--ink);background:var(--card);display:flex;flex-direction:column}
+.spc img.img{display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:contain;background:#fff;border-bottom:2px solid var(--ink)}
+.it h3{padding-right:34px}
+.spc .ph-sp{display:grid;place-items:center;aspect-ratio:1200/630;background:var(--blue);color:var(--pink);font-weight:900;font-stretch:125%;font-size:72px;border-bottom:2px solid var(--ink)}
+.spc.native .ph-sp{flex:0 0 38%;aspect-ratio:auto;min-height:140px;border-bottom:0;border-right:2px solid var(--ink)}
+@media (max-width:560px){.spc.native .ph-sp{aspect-ratio:1200/630;border-right:0;border-bottom:2px solid var(--ink)}}
+.spc .b{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.spc .n{font-weight:800;font-stretch:112%;font-size:15px}
+.spc .h{font-size:14px;color:var(--muted);margin:0}
+.spc .ctas{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:4px}
+.spc .ctas a{border:2px solid #1C2B39;background:var(--yellow);color:#1C2B39;padding:5px 10px;font-weight:800;font-size:13px;text-decoration:none}
+.spc .ctas a.wa{background:#25D366}
+.spc .ctas a.sec{background:var(--card);color:var(--ink);border-color:var(--ink)}
+.spc .adtag{position:absolute;top:8px;left:8px;background:var(--yellow);color:#1C2B39;border:1.5px solid #1C2B39;font-size:11px;font-weight:800;padding:0 6px}
+.spc.native{margin:14px 0;flex-direction:row}
+.spc.native img.img{flex:0 0 38%;width:38%;aspect-ratio:auto;min-height:140px;border-bottom:0;border-right:2px solid var(--ink)}
+@media (max-width:560px){.spc.native{flex-direction:column}.spc.native img.img{width:100%;aspect-ratio:1200/630;border-right:0;border-bottom:2px solid var(--ink)}}
+.tabs{max-width:1200px;margin:0 auto;padding:6px 16px 12px;display:flex;gap:6px;overflow-x:auto}
+.tabs button,.tabs a{flex:0 0 auto;border:2px solid var(--ink);background:var(--card);color:var(--ink);padding:7px 12px;font-weight:800;font-size:14px;cursor:pointer;text-decoration:none}
+.tabs [aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.tabs a.hl{background:var(--pink);color:#1C2B39}
+.view{max-width:1200px;margin:0 auto;padding:0 16px 40px}
+.view h2{font-stretch:125%;font-weight:900;font-size:clamp(26px,4vw,40px);line-height:1;margin:6px 0 8px;color:var(--blue)}
+.view .lead{color:var(--muted);margin:0 0 14px;max-width:60ch}
+.coupon{margin-top:8px;border:2px dashed var(--pink);padding:8px 10px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:14px}
+.coupon code{font-size:16px;font-weight:900;letter-spacing:.06em;background:var(--yellow);color:#1C2B39;padding:1px 8px}
+.coupon button{border:1.5px solid var(--ink);background:var(--card);padding:2px 8px;font-weight:700;cursor:pointer;font-size:13px}
+.fav{position:absolute;top:14px;right:0;border:0;background:none;font-size:22px;cursor:pointer;line-height:1;color:var(--pink);padding:4px}
+.it .fav{right:0}
+.job{border-top:1.5px solid var(--ink);padding:14px 0;position:relative}
+.job.urgent{padding-left:14px;background:linear-gradient(90deg,var(--pink) 6px,transparent 6px)}
+.job h3{margin:0;font-size:18px;font-stretch:112%}
+.job .m{color:var(--muted);font-size:14px;margin:2px 0}
+.job .pills{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.job .pills span{border:1.5px solid var(--ink);padding:0 7px;font-size:13px}
+.job .acts a{margin-right:14px;font-weight:800;text-decoration:none}
+.sos{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.sos a{display:block;border:2px solid var(--ink);background:var(--card);color:var(--ink);text-decoration:none;padding:12px 14px}
+.sos a strong{display:block;font-stretch:125%;font-weight:900;font-size:26px;color:var(--blue)}
+.sos a.red strong{color:#D7263D}
+.leaflet-popup-content{font-family:Archivo,system-ui,sans-serif}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo riso" data-t="Berliner Kiez-Check" href="/">Berliner Kiez-Check</a>
+  <div class="langs" role="group" aria-label="Sprache">
+    <button data-l="de">DE</button><button data-l="tr">TR</button><button data-l="en">EN</button>
+  </div>
+  <button class="btn" id="addBtn" data-i="add"></button>
+</header>
+
+<section class="hero">
+  <h1 class="riso" id="heroH" data-t=""></h1>
+  <p data-i="sub"></p>
+  <div class="pick"><select id="kiez" aria-label="Kiez"></select></div>
+  <div class="chips" id="cats" role="group"></div>
+</section>
+
+<section class="spons" id="spons" hidden aria-label="Anzeigen"><div class="spons-track" id="sponsTrack"></div></section>
+<nav class="tabs" id="tabs" aria-label="Bereiche">
+  <button data-tab="places" aria-pressed="true" data-i="t_places"></button>
+  <button data-tab="coupons" data-i="t_coupons"></button>
+  <button data-tab="jobs" data-i="t_jobs"></button>
+  <button data-tab="favs" data-i="t_favs"></button>
+  <button data-tab="sos" data-i="t_sos"></button>
+  <a href="/quiz/" data-i="t_quiz"></a>
+  <a href="/werben.html" class="hl" data-i="t_werben"></a>
+</nav>
+
+<main class="wrap" id="wrap">
+  <div class="bar">
+    <span id="count" aria-live="polite"></span>
+    <div class="seg" role="group"><button data-v="list" data-i="list"></button><button data-v="map" data-i="map"></button></div>
+  </div>
+  <div id="demoNote" class="demo" hidden data-i="demo_note"></div>
+  <div class="cols">
+    <div id="list"></div>
+    <div id="mapbox"><div id="map"></div></div>
+  </div>
+</main>
+
+<section class="view" id="v-coupons" hidden>
+  <h2 data-i="t_coupons"></h2><p class="lead" data-i="coupons_lead"></p>
+  <div id="couponList"></div>
+</section>
+<section class="view" id="v-jobs" hidden>
+  <h2 data-i="t_jobs"></h2><p class="lead" data-i="jobs_lead"></p>
+  <div class="row" style="margin-bottom:12px"><button class="btn" id="jobAddBtn" data-i="job_add"></button></div>
+  <div id="jobOwn"></div>
+  <div id="jobList"></div>
+</section>
+<section class="view" id="v-favs" hidden>
+  <h2 data-i="t_favs"></h2><p class="lead" data-i="favs_lead"></p>
+  <div id="favList"></div>
+</section>
+<section class="view" id="v-sos" hidden>
+  <h2 data-i="t_sos"></h2><p class="lead" data-i="sos_lead"></p>
+  <div class="sos">
+    <a class="red" href="tel:110"><strong>110</strong><span data-i="sos_110"></span></a>
+    <a class="red" href="tel:112"><strong>112</strong><span data-i="sos_112"></span></a>
+    <a href="tel:116117"><strong>116 117</strong><span data-i="sos_116"></span></a>
+    <a href="tel:03019240"><strong>030 19240</strong><span data-i="sos_gift"></span></a>
+    <a href="tel:08001110111"><strong>0800 111 0 111</strong><span data-i="sos_seel"></span></a>
+    <a href="tel:+903122922929"><strong>+90 312 292 29 29</strong><span data-i="sos_kons"></span></a>
+    <a href="https://berlin-bk.mfa.gov.tr" target="_blank" rel="noopener"><strong>T.C. Berlin BK</strong><span data-i="sos_bk"></span></a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 DeindigitalerhelferCenter</span>
+  <a id="impLink" href="#" data-i="impressum"></a>
+  <a id="dsLink" href="#" data-i="datenschutz"></a>
+  <a href="/quiz/" data-i="t_quiz"></a>
+  <a href="/werben.html" data-i="t_werben"></a>
+  <span data-i="footer_ads"></span>
+</footer>
+
+<dialog id="dlg">
+  <div class="dlg">
+    <div id="formView">
+      <h2 id="fTitle"></h2>
+      <p class="hint" data-i="f_hint"></p>
+      <div id="ownStatus"></div>
+      <form class="f" id="form" novalidate>
+        <label><span data-i="f_name"></span><input name="name" required maxlength="80" autocomplete="organization"></label>
+        <div class="two">
+          <label><span data-i="f_kiez"></span><select name="kiez" required></select></label>
+          <label><span data-i="f_cat"></span><select name="category" required></select></label>
+        </div>
+        <label><span data-i="f_addr"></span><input name="address" required maxlength="160" placeholder="Sonnenallee 12, 12045 Berlin" autocomplete="street-address"></label>
+        <label><span data-i="f_desc"></span><small data-i="f_desc_hint"></small><textarea name="desc" maxlength="600"></textarea></label>
+        <div class="two">
+          <label><span data-i="f_phone"></span><input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
+          <label><span data-i="f_hours"></span><input name="hours" maxlength="160" placeholder="Mo–Sa 8–20"></label>
+        </div>
+        <div class="two">
+          <label><span data-i="f_web"></span><input name="website" type="url" maxlength="200" placeholder="www.…"></label>
+          <label><span data-i="f_insta"></span><input name="instagram" maxlength="60" placeholder="@…"></label>
+        </div>
+        <label><span data-i="f_wa"></span><input name="whatsapp" type="tel" maxlength="40" placeholder="+49 151 …"></label>
+        <fieldset style="border:2px dashed var(--pink);padding:10px;margin:0;display:grid;gap:10px">
+          <legend style="font-weight:800;padding:0 6px" data-i="f_coupon"></legend>
+          <small style="color:var(--muted)" data-i="f_coupon_hint"></small>
+          <div class="two">
+            <label><span data-i="f_ccode"></span><input name="coupon_code" maxlength="30" placeholder="KIEZ10"></label>
+            <label><span data-i="f_cuntil"></span><input name="coupon_until" type="date"></label>
+          </div>
+          <label><span data-i="f_ctext"></span><input name="coupon_text" maxlength="120" placeholder="10 % auf alle Getränke"></label>
+        </fieldset>
+        <label><span data-i="f_email"></span><small data-i="f_email_hint"></small><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
+        <label><span data-i="f_photo"></span><input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+        <div class="hp" aria-hidden="true"><input name="website_url_hp" tabindex="-1" autocomplete="off"></div>
+        <label class="chk"><input type="checkbox" name="auth" value="1" required><span data-i="f_auth"></span></label>
+        <label class="chk"><input type="checkbox" name="consent" value="1" required><span id="consentTxt"></span></label>
+        <div class="row">
+          <button class="btn" type="submit" id="sendBtn"></button>
+          <button class="btn ghost" type="button" data-close data-i="f_cancel"></button>
+        </div>
+      </form>
+    </div>
+    <div id="doneView" hidden></div>
+  </div>
+</dialog>
+<dialog id="jobDlg">
+  <div class="dlg">
+    <div id="jobFormView">
+      <h2 data-i="job_add"></h2>
+      <p class="hint" data-i="job_hint"></p>
+      <form class="f" id="jobForm" novalidate>
+        <label><span data-i="j_title"></span><input name="title" required maxlength="100" placeholder="Barista (m/w/d)"></label>
+        <div class="two">
+          <label><span data-i="j_company"></span><input name="company" required maxlength="100"></label>
+          <label><span data-i="f_kiez"></span><select name="kiez" required></select></label>
+        </div>
+        <div class="two">
+          <label><span data-i="j_type"></span><select name="jobtype" required>
+            <option value="vollzeit">Vollzeit</option><option value="teilzeit">Teilzeit</option><option value="minijob">Minijob</option><option value="ausbildung">Ausbildung</option></select></label>
+          <label><span data-i="j_salary"></span><input name="salary" maxlength="60" placeholder="14 €/Std."></label>
+        </div>
+        <label><span data-i="j_lang"></span><input name="languages" maxlength="100" placeholder="Deutsch, Türkisch"></label>
+        <label><span data-i="j_desc"></span><textarea name="description" maxlength="1500"></textarea></label>
+        <div class="two">
+          <label><span data-i="f_wa"></span><input name="whatsapp" type="tel" maxlength="40"></label>
+          <label><span data-i="f_phone"></span><input name="phone" type="tel" maxlength="40"></label>
+        </div>
+        <label><span data-i="f_email"></span><small data-i="f_email_hint"></small><input name="email" type="email" required maxlength="120"></label>
+        <div class="hp" aria-hidden="true"><input name="hp" tabindex="-1" autocomplete="off"></div>
+        <label class="chk"><input type="checkbox" name="agg" required><span data-i="j_agg"></span></label>
+        <label class="chk"><input type="checkbox" name="consent" required><span id="jobConsentTxt"></span></label>
+        <div class="row"><button class="btn" type="submit" data-i="job_send"></button><button class="btn ghost" type="button" data-jclose data-i="f_cancel"></button></div>
+      </form>
+    </div>
+    <div id="jobDoneView" hidden></div>
+  </div>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script>
+/* ===== Konfiguration ===== */
+var CFG = {
+  API: '',                                  // leer = gleiche Domain (Worker)
+  ADSENSE_CLIENT: '',                       // z.B. 'ca-pub-XXXXXXXXXXXXXXXX' – leer = keine Werbung
+  ADSENSE_SLOT: '',                         // Anzeigenblock-ID aus AdSense
+  AD_EVERY: 6,                              // nach jedem n-ten Eintrag eine Anzeige
+  IMPRESSUM: 'https://deindigitalerhelfer.com/impressum',
+  DATENSCHUTZ: 'https://deindigitalerhelfer.com/datenschutz',
+  PRICE_30: '19 €', PRICE_90: '49 €',
+  ADMOB_BANNER: '',                         // nur Android-App: 'ca-app-pub-XXXX/YYYY' – leer = kein Banner
+  PRICE_INTRO: '19 €', PRICE_S: '49 €', PRICE_M: '69 €', PRICE_L: '89 €', PRICE_JOB: '29 €'
+};
+
+var KIEZE = {"neukoelln":["Neukölln",52.4811,13.435],"kreuzberg":["Kreuzberg",52.4986,13.403],"wedding":["Wedding",52.5496,13.3526],"gesundbrunnen":["Gesundbrunnen",52.5507,13.3905],"moabit":["Moabit",52.5302,13.342],"tiergarten":["Tiergarten",52.5145,13.3501],"mitte":["Mitte",52.52,13.405],"friedrichshain":["Friedrichshain",52.5156,13.4541],"prenzlauer-berg":["Prenzlauer Berg",52.5388,13.4244],"schoeneberg":["Schöneberg",52.483,13.353],"tempelhof":["Tempelhof",52.4664,13.385],"charlottenburg":["Charlottenburg",52.5163,13.304],"spandau":["Spandau",52.5354,13.199],"reinickendorf":["Reinickendorf",52.587,13.329],"steglitz":["Steglitz",52.456,13.322],"lichtenberg":["Lichtenberg",52.513,13.499],"pankow":["Pankow",52.569,13.402],"treptow":["Treptow",52.49,13.47],"britz":["Britz",52.443,13.433],"koepenick":["Köpenick",52.445,13.576],"marzahn":["Marzahn",52.545,13.564]};
+var CATS = {"fruehstueck":{"de":"Frühstück","tr":"Kahvaltı","en":"Breakfast"},"cafe":{"de":"Café","tr":"Kafe","en":"Café"},"restaurant":{"de":"Restaurant","tr":"Restoran","en":"Restaurant"},"imbiss":{"de":"Imbiss & Döner","tr":"Büfe & Döner","en":"Takeaway"},"baeckerei":{"de":"Bäckerei","tr":"Fırın & Pastane","en":"Bakery"},"markt":{"de":"Supermarkt & Markt","tr":"Market","en":"Grocery"},"friseur":{"de":"Friseur & Barber","tr":"Kuaför & Berber","en":"Barber & hair"},"beauty":{"de":"Kosmetik & Nails","tr":"Güzellik","en":"Beauty"},"service":{"de":"Dienstleistung","tr":"Hizmet","en":"Services"},"shop":{"de":"Einkaufen","tr":"Alışveriş","en":"Shopping"}};
+
+var I18N = {
+de:{hero:"Was gibt's in deinem Kiez?",sub:"Cafés, Frühstück, Barber und Märkte in Berlin – eingetragen von den Betrieben selbst.",kiez_all:"Ganz Berlin",cat_all:"Alles",add:"Betrieb eintragen",list:"Liste",map:"Karte",count:function(n){return n+(n===1?" Eintrag":" Einträge")},empty:"Hier ist noch nichts eingetragen.",empty_txt:"Du hast hier einen Laden? Trag ihn kostenlos ein – in zwei Minuten ist er online.",ad:"Anzeige",call:"Anrufen",route:"Route",sample:"Beispiel",
+f_title:"Betrieb kostenlos eintragen",f_edit:"Eintrag bearbeiten",f_hint:"Pflichtfelder: Name, Kiez, Kategorie, Adresse, E-Mail. Wir prüfen jeden Eintrag, bevor er erscheint.",f_name:"Name des Betriebs",f_kiez:"Kiez",f_cat:"Kategorie",f_addr:"Adresse",f_desc:"Kurzbeschreibung",f_desc_hint:"Auf Deutsch oder Türkisch. Wir übersetzen automatisch in drei Sprachen.",f_phone:"Telefon",f_hours:"Öffnungszeiten",f_web:"Website",f_insta:"Instagram",f_email:"E-Mail",f_email_hint:"Wird nicht angezeigt. Nur für Rückfragen und Rechnungen.",f_photo:"Foto (optional)",f_auth:"Ich bin Inhaber:in oder berechtigt, diesen Betrieb einzutragen, und habe die Rechte am Foto.",f_consent:"Ich habe die {ds} gelesen und bin einverstanden.",f_send:"Eintrag absenden",f_save:"Änderungen speichern",f_cancel:"Abbrechen",
+done_title:"Danke!",done_pending:"Dein Eintrag wird geprüft und erscheint meist innerhalb von 24 Stunden.",done_approved:"Dein Eintrag ist online.",done_link:"Speichere diesen Link. Damit kannst du deinen Eintrag später bearbeiten oder hervorheben:",copy:"Kopieren",copied:"Link kopiert",close:"Schließen",view:"Eintrag ansehen",
+boost_title:"Oben in deinem Kiez erscheinen",boost_txt:"Dein Eintrag steht in deinem Kiez und deiner Kategorie ganz oben, gelb markiert und als Anzeige gekennzeichnet. Einmalzahlung, kein Abo.",days30:"30 Tage",days90:"90 Tage",
+st:"Status",st_pending:"wird geprüft",st_approved:"online",st_rejected:"abgelehnt – bitte Angaben prüfen und neu speichern",feat_until:"Hervorgehoben bis",paid:"Zahlung erhalten. Die Hervorhebung ist in wenigen Sekunden aktiv.",boost_wait:"Hervorheben ist möglich, sobald der Eintrag online ist.",
+e_rate:"Zu viele Einträge in kurzer Zeit. Bitte später erneut versuchen.",e_consent:"Bitte beide Häkchen setzen.",e_photo:"Foto muss JPG, PNG oder WebP und kleiner als 2,5 MB sein.",e_field:"Bitte prüfe das Feld: ",e_auth:"Dieser Bearbeitungslink ist ungültig.",e_net:"Keine Verbindung zum Server. Bitte später erneut versuchen.",e_stripe:"Zahlung ist gerade nicht verfügbar.",
+demo_note:"Vorschau mit Beispieldaten – ohne Server-Verbindung. Nach dem Deployment erscheinen hier echte Einträge.",impressum:"Impressum",datenschutz:"Datenschutz",ds_word:"Datenschutzerklärung",footer_ads:"Hervorgehobene Einträge sind als Anzeige gekennzeichnet.",sending:"Wird gesendet …"},
+tr:{hero:"Mahallende neler var?",sub:"Berlin'de kafeler, kahvaltı, berberler ve marketler – işletmelerin kendisi ekliyor.",kiez_all:"Tüm Berlin",cat_all:"Hepsi",add:"İşletme ekle",list:"Liste",map:"Harita",count:function(n){return n+" kayıt"},empty:"Burada henüz kayıt yok.",empty_txt:"Burada bir dükkânın mı var? Ücretsiz ekle – iki dakikada yayında.",ad:"Reklam",call:"Ara",route:"Yol tarifi",sample:"Örnek",
+f_title:"İşletmeni ücretsiz ekle",f_edit:"Kaydı düzenle",f_hint:"Zorunlu alanlar: isim, mahalle, kategori, adres, e-posta. Her kaydı yayına almadan önce kontrol ediyoruz.",f_name:"İşletme adı",f_kiez:"Mahalle (Kiez)",f_cat:"Kategori",f_addr:"Adres",f_desc:"Kısa açıklama",f_desc_hint:"Türkçe veya Almanca yazabilirsin. Otomatik olarak üç dile çeviriyoruz.",f_phone:"Telefon",f_hours:"Çalışma saatleri",f_web:"Web sitesi",f_insta:"Instagram",f_email:"E-posta",f_email_hint:"Gösterilmez. Sadece sorular ve faturalar için.",f_photo:"Fotoğraf (isteğe bağlı)",f_auth:"İşletmenin sahibiyim veya eklemeye yetkiliyim, fotoğrafın haklarına sahibim.",f_consent:"{ds} metnini okudum ve kabul ediyorum.",f_send:"Kaydı gönder",f_save:"Değişiklikleri kaydet",f_cancel:"Vazgeç",
+done_title:"Teşekkürler!",done_pending:"Kaydın kontrol ediliyor, genellikle 24 saat içinde yayında olur.",done_approved:"Kaydın yayında.",done_link:"Bu bağlantıyı kaydet. Kaydını daha sonra düzenlemek veya öne çıkarmak için lazım:",copy:"Kopyala",copied:"Bağlantı kopyalandı",close:"Kapat",view:"Kaydı gör",
+boost_title:"Mahallende en üstte görün",boost_txt:"Kaydın, mahallende ve kategorinde en üstte, sarı işaretli ve reklam etiketiyle görünür. Tek seferlik ödeme, abonelik yok.",days30:"30 gün",days90:"90 gün",
+st:"Durum",st_pending:"kontrol ediliyor",st_approved:"yayında",st_rejected:"reddedildi – bilgileri kontrol edip tekrar kaydet",feat_until:"Öne çıkarma bitişi",paid:"Ödeme alındı. Öne çıkarma birkaç saniye içinde aktif olur.",boost_wait:"Kayıt yayına girince öne çıkarabilirsin.",
+e_rate:"Kısa sürede çok fazla kayıt. Lütfen sonra tekrar dene.",e_consent:"Lütfen iki kutucuğu da işaretle.",e_photo:"Fotoğraf JPG, PNG veya WebP olmalı ve 2,5 MB'tan küçük olmalı.",e_field:"Lütfen bu alanı kontrol et: ",e_auth:"Bu düzenleme bağlantısı geçersiz.",e_net:"Sunucuya bağlanılamadı. Lütfen sonra tekrar dene.",e_stripe:"Ödeme şu anda kullanılamıyor.",
+demo_note:"Örnek verilerle önizleme – sunucu bağlantısı yok. Yayına alındıktan sonra burada gerçek kayıtlar görünür.",impressum:"Künye",datenschutz:"Gizlilik",ds_word:"Gizlilik politikası",footer_ads:"Öne çıkarılan kayıtlar reklam olarak işaretlenmiştir.",sending:"Gönderiliyor …"},
+en:{hero:"What's in your Kiez?",sub:"Cafés, breakfast, barbers and markets across Berlin – listed by the businesses themselves.",kiez_all:"All of Berlin",cat_all:"Everything",add:"Add your business",list:"List",map:"Map",count:function(n){return n+(n===1?" listing":" listings")},empty:"Nothing listed here yet.",empty_txt:"Run a shop here? Add it for free – it's online in two minutes.",ad:"Ad",call:"Call",route:"Directions",sample:"Sample",
+f_title:"Add your business for free",f_edit:"Edit listing",f_hint:"Required: name, Kiez, category, address, email. We check every listing before it appears.",f_name:"Business name",f_kiez:"Kiez",f_cat:"Category",f_addr:"Address",f_desc:"Short description",f_desc_hint:"German, Turkish or English. We translate it into all three automatically.",f_phone:"Phone",f_hours:"Opening hours",f_web:"Website",f_insta:"Instagram",f_email:"Email",f_email_hint:"Not shown publicly. Only for questions and invoices.",f_photo:"Photo (optional)",f_auth:"I own this business or am allowed to list it, and I hold the rights to the photo.",f_consent:"I have read the {ds} and agree.",f_send:"Submit listing",f_save:"Save changes",f_cancel:"Cancel",
+done_title:"Thank you!",done_pending:"Your listing is being checked and usually goes live within 24 hours.",done_approved:"Your listing is live.",done_link:"Save this link. You need it to edit or promote your listing later:",copy:"Copy",copied:"Link copied",close:"Close",view:"View listing",
+boost_title:"Appear at the top of your Kiez",boost_txt:"Your listing shows first in your Kiez and category, highlighted in yellow and labelled as an ad. One-time payment, no subscription.",days30:"30 days",days90:"90 days",
+st:"Status",st_pending:"being checked",st_approved:"live",st_rejected:"rejected – please check your details and save again",feat_until:"Promoted until",paid:"Payment received. Your promotion goes live in a few seconds.",boost_wait:"You can promote your listing once it's live.",
+e_rate:"Too many submissions in a short time. Please try again later.",e_consent:"Please tick both boxes.",e_photo:"Photo must be JPG, PNG or WebP and under 2.5 MB.",e_field:"Please check this field: ",e_auth:"This edit link is not valid.",e_net:"Can't reach the server. Please try again later.",e_stripe:"Payments are unavailable right now.",
+demo_note:"Preview with sample data – no server connection. Real listings appear here once deployed.",impressum:"Legal notice",datenschutz:"Privacy",ds_word:"privacy policy",footer_ads:"Promoted listings are labelled as ads.",sending:"Sending …"}
+};
+
+/* ===== Texte für Werbung, Tabs, Gutscheine, Jobs, Merkliste, Notruf ===== */
+Object.assign(I18N.de, {t_places:"Betriebe",t_coupons:"Gutscheine",t_jobs:"Jobs",t_favs:"Merkliste",t_sos:"Notruf",t_quiz:"Kiez-Quiz",t_werben:"Werben",
+ coupons_lead:"Aktuelle Rabatte von Betrieben aus deinem Kiez. Code an der Kasse zeigen.",coupons_empty:"Gerade keine Gutscheine in dieser Auswahl.",
+ favs_lead:"Deine gemerkten Betriebe – nur auf diesem Gerät gespeichert.",favs_empty:"Noch nichts gemerkt. Tippe bei einem Betrieb auf ♡.",
+ sos_lead:"Im Notfall direkt anrufen. Die Nummern gelten in ganz Deutschland, wenn nicht anders angegeben.",sos_110:"Polizei",sos_112:"Feuerwehr & Rettungsdienst",sos_116:"Ärztlicher Bereitschaftsdienst (außerhalb der Sprechzeiten)",sos_gift:"Giftnotruf Berlin",sos_seel:"TelefonSeelsorge, kostenlos, rund um die Uhr",sos_kons:"Türkisches Konsularisches Callcenter, 24/7",sos_bk:"Türkisches Generalkonsulat Berlin – Kontakt & Termine",
+ jobs_lead:"Jobs in Berliner Kiezen – direkt bei den Betrieben bewerben.",jobs_empty:"Gerade keine Jobs in dieser Auswahl.",job_add:"Job kostenlos inserieren",job_hint:"Die Anzeige ist 30 Tage online. Wir prüfen jede Anzeige vorher.",job_send:"Job-Anzeige absenden",
+ j_title:"Stellenbezeichnung (m/w/d)",j_company:"Betrieb",j_type:"Art",j_salary:"Lohn / Gehalt",j_lang:"Sprachen",j_desc:"Beschreibung",j_agg:"Die Anzeige ist diskriminierungsfrei (AGG): kein Alter, kein Geschlecht außer (m/w/d), keine Herkunft oder Religion als Bedingung.",
+ j_apply_wa:"Per WhatsApp bewerben",j_call:"Anrufen",j_urgent:"Dringend",j_done_title:"Danke!",j_done:"Deine Anzeige wird geprüft und ist dann 30 Tage online.",j_done_ok:"Deine Anzeige ist online (30 Tage).",
+ j_link:"Speichere diesen Link, um die Anzeige später als „Dringend“ hervorzuheben:",j_boost:"Als „Dringend“ hervorheben – ganz oben, 30 Tage",j_wa_text:"Hallo, ich bewerbe mich auf Ihre Anzeige bei Berliner Kiez-Check: ",
+ f_wa:"WhatsApp-Nummer",f_coupon:"Gutschein (optional)",f_coupon_hint:"Dein Gutschein erscheint unter „Gutscheine“ und in deinem Eintrag, solange dein Eintrag mit einem Paket hervorgehoben ist.",f_ccode:"Code",f_cuntil:"Gültig bis",f_ctext:"Was gibt es?",
+ c_valid:"gültig bis",c_copy:"Code kopieren",fav_add:"Merken",fav_rm:"Nicht mehr merken",wa:"WhatsApp",
+ pk_title:"Mehr Kunden aus deinem Kiez",pk_txt:"Die ersten 3 Monate 19 € pro Monat, danach nach Betriebsgröße. Monatlich kündbar. Hervorgehobene Einträge sind als Anzeige gekennzeichnet.",
+ pk_s:"Klein",pk_s_d:"bis 5 Mitarbeitende: ganz oben im eigenen Kiez und in deiner Kategorie, gelb markiert, mit Gutschein",
+ pk_m:"Mittel",pk_m_d:"6–20 Mitarbeitende: wie Klein, zusätzlich oben in der Berlin-weiten Liste",
+ pk_l:"Groß",pk_l_d:"über 20 Mitarbeitende oder mehrere Filialen: wie Mittel, zusätzlich als Sponsor-Karte auf der Startseite",
+ pk_then:"danach",pk_month:"/Monat",pk_intro:"3 Monate",sp_more:"Mehr",sp_title:"Anzeige"});
+Object.assign(I18N.tr, {t_places:"İşletmeler",t_coupons:"Kuponlar",t_jobs:"İş ilanları",t_favs:"Kaydedilenler",t_sos:"Acil",t_quiz:"Kiez Quiz",t_werben:"Reklam ver",
+ coupons_lead:"Mahallendeki işletmelerden güncel indirimler. Kodu kasada göster.",coupons_empty:"Bu seçimde şu an kupon yok.",
+ favs_lead:"Kaydettiğin işletmeler – sadece bu cihazda saklanır.",favs_empty:"Henüz bir şey kaydetmedin. Bir işletmede ♡ işaretine dokun.",
+ sos_lead:"Acil durumda doğrudan ara. Aksi belirtilmedikçe numaralar tüm Almanya'da geçerlidir.",sos_110:"Polis",sos_112:"İtfaiye ve ambulans",sos_116:"Nöbetçi doktor (mesai saatleri dışında)",sos_gift:"Berlin zehir danışma hattı",sos_seel:"TelefonSeelsorge (psikolojik destek), ücretsiz, 7/24",sos_kons:"Konsolosluk Çağrı Merkezi, 7/24",sos_bk:"T.C. Berlin Başkonsolosluğu – iletişim ve randevu",
+ jobs_lead:"Berlin mahallelerinde iş ilanları – doğrudan işletmeye başvur.",jobs_empty:"Bu seçimde şu an iş ilanı yok.",job_add:"Ücretsiz iş ilanı ver",job_hint:"İlan 30 gün yayında kalır. Her ilanı önceden kontrol ediyoruz.",job_send:"İlanı gönder",
+ j_title:"Pozisyon (m/w/d)",j_company:"İşletme",j_type:"Çalışma türü",j_salary:"Ücret",j_lang:"Diller",j_desc:"Açıklama",j_agg:"İlan ayrımcılık içermiyor (AGG): yaş, cinsiyet ((m/w/d) hariç), köken veya din şart olarak yok.",
+ j_apply_wa:"WhatsApp ile başvur",j_call:"Ara",j_urgent:"Acil",j_done_title:"Teşekkürler!",j_done:"İlanın kontrol ediliyor, sonra 30 gün yayında kalır.",j_done_ok:"İlanın yayında (30 gün).",
+ j_link:"İlanı daha sonra „Acil“ olarak öne çıkarmak için bu bağlantıyı kaydet:",j_boost:"„Acil“ olarak öne çıkar – en üstte, 30 gün",j_wa_text:"Merhaba, Berliner Kiez-Check'teki ilanınız için başvuruyorum: ",
+ f_wa:"WhatsApp numarası",f_coupon:"Kupon (isteğe bağlı)",f_coupon_hint:"Kaydın bir paketle öne çıkarıldığı sürece kuponun „Kuponlar“ bölümünde ve kaydında görünür.",f_ccode:"Kod",f_cuntil:"Geçerlilik",f_ctext:"Ne indirim var?",
+ c_valid:"son gün",c_copy:"Kodu kopyala",fav_add:"Kaydet",fav_rm:"Kayıttan çıkar",wa:"WhatsApp",
+ pk_title:"Mahallenden daha fazla müşteri",pk_txt:"İlk 3 ay aylık 19 €, sonra işletme büyüklüğüne göre. Aylık iptal edilebilir. Öne çıkan kayıtlar reklam olarak işaretlenir.",
+ pk_s:"Küçük",pk_s_d:"5 çalışana kadar: kendi mahallende ve kategorinde en üstte, sarı işaretli, kuponlu",
+ pk_m:"Orta",pk_m_d:"6–20 çalışan: Küçük paket + tüm Berlin listesinde üstte",
+ pk_l:"Büyük",pk_l_d:"20'den fazla çalışan veya birden çok şube: Orta paket + ana sayfada sponsor kartı",
+ pk_then:"sonra",pk_month:"/ay",pk_intro:"3 ay",sp_more:"Daha fazla",sp_title:"Reklam"});
+Object.assign(I18N.en, {t_places:"Businesses",t_coupons:"Coupons",t_jobs:"Jobs",t_favs:"Saved",t_sos:"Emergency",t_quiz:"Kiez quiz",t_werben:"Advertise",
+ coupons_lead:"Current deals from businesses in your Kiez. Show the code at the till.",coupons_empty:"No coupons in this selection right now.",
+ favs_lead:"Businesses you saved – stored on this device only.",favs_empty:"Nothing saved yet. Tap ♡ on a business.",
+ sos_lead:"In an emergency, call directly. Numbers work across Germany unless noted.",sos_110:"Police",sos_112:"Fire brigade & ambulance",sos_116:"On-call doctor (outside office hours)",sos_gift:"Poison control Berlin",sos_seel:"TelefonSeelsorge crisis line, free, 24/7",sos_kons:"Turkish consular call centre, 24/7",sos_bk:"Turkish Consulate General Berlin – contact & appointments",
+ jobs_lead:"Jobs in Berlin's Kieze – apply directly to the business.",jobs_empty:"No jobs in this selection right now.",job_add:"Post a job for free",job_hint:"Your ad stays online for 30 days. We check every ad first.",job_send:"Submit job ad",
+ j_title:"Job title (m/f/d)",j_company:"Business",j_type:"Type",j_salary:"Pay",j_lang:"Languages",j_desc:"Description",j_agg:"The ad is non-discriminatory (AGG): no age, gender other than (m/f/d), origin or religion as a requirement.",
+ j_apply_wa:"Apply via WhatsApp",j_call:"Call",j_urgent:"Urgent",j_done_title:"Thank you!",j_done:"Your ad is being checked and will then be online for 30 days.",j_done_ok:"Your ad is live (30 days).",
+ j_link:"Save this link to promote the ad as “Urgent” later:",j_boost:"Promote as “Urgent” – top of the list, 30 days",j_wa_text:"Hello, I'm applying for your job ad on Berliner Kiez-Check: ",
+ f_wa:"WhatsApp number",f_coupon:"Coupon (optional)",f_coupon_hint:"Your coupon shows under “Coupons” and in your listing while your listing is promoted with a package.",f_ccode:"Code",f_cuntil:"Valid until",f_ctext:"What's the deal?",
+ c_valid:"valid until",c_copy:"Copy code",fav_add:"Save",fav_rm:"Remove",wa:"WhatsApp",
+ pk_title:"More customers from your Kiez",pk_txt:"First 3 months €19 per month, then by business size. Cancel monthly. Promoted listings are labelled as ads.",
+ pk_s:"Small",pk_s_d:"up to 5 staff: top of your Kiez and category, highlighted, with coupon",
+ pk_m:"Medium",pk_m_d:"6–20 staff: like Small, plus top of the Berlin-wide list",
+ pk_l:"Large",pk_l_d:"over 20 staff or several branches: like Medium, plus a sponsor card on the home page",
+ pk_then:"then",pk_month:"/month",pk_intro:"3 months",sp_more:"More",sp_title:"Ad"});
+
+var DEMO_SP = [
+ {id:"berlin-handel",name:"Berlin Handel",image:"/assets/sponsors/berlin-handel.webp",headline_de:"Getränke-Lieferservice für Berlin & Umgebung – Bestellung per WhatsApp",headline_tr:"Berlin ve çevresine içecek teslimatı – WhatsApp ile sipariş",headline_en:"Drinks delivery in Berlin & surroundings – order via WhatsApp",cta_de:"WhatsApp bestellen",cta_tr:"WhatsApp ile sipariş",cta_en:"Order on WhatsApp",link_wa:"https://wa.me/4915126509586",link_tel:"tel:+4915126509586",kind:"sponsor"},
+ {id:"the-visit",name:"The Visit Coffee Roastery",image:"/assets/sponsors/the-visit.webp",headline_de:"Kaffeerösterei in Kreuzberg",headline_tr:"Kreuzberg'de kahve kavurma evi",headline_en:"Coffee roastery in Kreuzberg",cta_de:"Website ansehen",cta_tr:"Siteye git",cta_en:"Visit website",link_web:"https://thevisitcoffeeroastery.pages.dev/",kind:"sponsor"},
+ {id:"tek-getraenke",name:"Terra Verde TEK Getränke",image:"/assets/sponsors/tek-getraenke.webp",headline_de:"Getränke, Lebensmittel & Verpackung im Großhandel – privat und gewerblich",headline_tr:"İçecek, gıda ve ambalajda toptan satış – bireysel ve işletmelere",headline_en:"Wholesale drinks, food & packaging – private and business",cta_de:"Sortiment ansehen",cta_tr:"Ürünleri gör",cta_en:"See products",link_web:"https://www.tekgetraenke.de",link_ig:"https://www.instagram.com/terraverdegetraenke/",kind:"sponsor"},
+ {id:"deindigitalerhelfer",name:"Dein Digitaler Helfer",image:"/assets/sponsors/deindigitalerhelfer.webp",headline_de:"Behördenbriefe verstehen, Anträge vorbereiten",headline_tr:"Resmi yazıları anla, başvuruları hazırla",headline_en:"Understand official letters, prepare applications",cta_de:"Kostenlos starten",cta_tr:"Ücretsiz başla",cta_en:"Start for free",link_web:"https://deindigitalerhelfer.com",kind:"sponsor"},
+ {id:"it-rechtbox",name:"IT-Rechtbox",image:"/assets/sponsors/it-rechtbox.webp",headline_de:"Website prüfen: Impressum, Datenschutz, Cookies",headline_tr:"Web siteni kontrol et: Impressum, Datenschutz, çerezler",headline_en:"Check your website: imprint, privacy, cookies",cta_de:"Website prüfen",cta_tr:"Siteyi kontrol et",cta_en:"Check website",link_web:"https://it-rechtbox.pages.dev",kind:"sponsor"},
+ {id:"deinfinanzenhelfer",name:"Dein Finanzen Helfer",image:"/assets/sponsors/deinfinanzenhelfer.webp",headline_de:"Finanzamt-Brief verstehen, Steuererklärung online",headline_tr:"Finanzamt mektubunu anla, vergi beyannamesi online",headline_en:"Understand tax office letters, file online",cta_de:"Anfrage starten",cta_tr:"Başvur",cta_en:"Get started",link_web:"https://deinfinanzenhelfer.com",kind:"sponsor"},
+ {id:"ersenbox",name:"ErsenBox",image:"/assets/sponsors/ersenbox.webp",headline_de:"Dokumente verstehen, Risiken erkennen",headline_tr:"Belgeleri anla, riskleri gör",headline_en:"Understand documents, spot risks",cta_de:"Mehr erfahren",cta_tr:"Keşfet",cta_en:"Learn more",link_web:"https://ersenbox.com",kind:"sponsor"}
+];
+
+var DEMO = [
+ {id:"demo00000001",name:"Frühstückshaus Anatolia",kiez:"neukoelln",category:"fruehstueck",address:"Sonnenallee 50, 12045 Berlin",lat:52.4830,lng:13.4330,desc_de:"Türkisches Frühstück mit Simit, Menemen und Tee.",desc_tr:"Simit, menemen ve çayla Türk kahvaltısı.",desc_en:"Turkish breakfast with simit, menemen and tea.",phone:"030 1234567",website:"",instagram:"",hours:"Täglich 8–15",photo_key:null,featured_until:9e15,created_at:3},
+ {id:"demo00000002",name:"Barber Kiez 44",kiez:"neukoelln",category:"friseur",address:"Karl-Marx-Straße 100, 12043 Berlin",lat:52.4790,lng:13.4390,desc_de:"Haarschnitt und Bartpflege, ohne Termin.",desc_tr:"Randevusuz saç ve sakal tıraşı.",desc_en:"Haircuts and beard trims, walk-ins welcome.",phone:"030 7654321",website:"",instagram:"",hours:"Mo–Sa 10–20",photo_key:null,featured_until:0,created_at:2},
+ {id:"demo00000003",name:"Café Görlitzer Eck",kiez:"kreuzberg",category:"cafe",address:"Wiener Straße 20, 10999 Berlin",lat:52.4975,lng:13.4320,desc_de:"Kleines Café mit Filterkaffee und Kuchen.",desc_tr:"Filtre kahve ve kek sunan küçük bir kafe.",desc_en:"Small café with filter coffee and cake.",phone:"",website:"",instagram:"",hours:"Di–So 9–18",photo_key:null,featured_until:0,created_at:1},
+ {id:"demo00000004",name:"Markt am Leopoldplatz",kiez:"wedding",category:"markt",address:"Müllerstraße 150, 13353 Berlin",lat:52.5465,lng:13.3590,desc_de:"Obst, Gemüse und türkische Spezialitäten.",desc_tr:"Meyve, sebze ve Türk ürünleri.",desc_en:"Fruit, vegetables and Turkish specialities.",phone:"",website:"",instagram:"",hours:"Mo–Sa 7–21",photo_key:null,featured_until:0,created_at:0}
+];
+
+/* ===== Zustand ===== */
+var qs = new URLSearchParams(location.search);
+var S = {
+  lang: pickLang(), kiez: KIEZE[qs.get('kiez')] ? qs.get('kiez') : '', cat: CATS[qs.get('cat')] ? qs.get('cat') : '',
+  items: [], demo: false, loading: true, view: 'list', own: null, focusId: qs.get('id') || ''
+};
+var isApp = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+var map = null, layer = null, adsLoaded = false;
+var $ = function (s) { return document.querySelector(s); };
+
+function pickLang() {
+  var l = qs.get('lang');
+  if (!l) { try { l = localStorage.getItem('kc_lang'); } catch (e) { } }
+  if (!l) l = (navigator.language || 'de').slice(0, 2);
+  return I18N[l] ? l : 'de';
+}
+function t(k) { return I18N[S.lang][k]; }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function toast(msg) { var el = $('#toast'); el.textContent = msg; el.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(function () { el.style.display = 'none'; }, 3200); }
+function api(p) { return CFG.API + p; }
+
+/* ===== Texte / Sprache ===== */
+function applyLang() {
+  document.documentElement.lang = S.lang;
+  try { localStorage.setItem('kc_lang', S.lang); } catch (e) { }
+  document.querySelectorAll('[data-i]').forEach(function (el) { var v = t(el.getAttribute('data-i')); if (typeof v === 'string') el.textContent = v; });
+  document.querySelectorAll('.langs button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.l === S.lang); });
+  var h = $('#heroH'); h.textContent = t('hero'); h.setAttribute('data-t', t('hero'));
+  $('#impLink').href = CFG.IMPRESSUM; $('#dsLink').href = CFG.DATENSCHUTZ;
+  $('#consentTxt').innerHTML = esc(t('f_consent')).replace('{ds}', '<a href="' + esc(CFG.DATENSCHUTZ) + '" target="_blank" rel="noopener">' + esc(t('ds_word')) + '</a>');
+  fillSelects(); renderCats(); render();
+}
+
+function fillSelects() {
+  var ks = Object.keys(KIEZE).sort(function (a, b) { return KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
+  var opt = function (v, l, sel) { return '<option value="' + v + '"' + (sel ? ' selected' : '') + '>' + esc(l) + '</option>'; };
+  $('#kiez').innerHTML = opt('', t('kiez_all'), !S.kiez) + ks.map(function (k) { return opt(k, KIEZE[k][0], k === S.kiez); }).join('');
+  var f = $('#form');
+  var fk = f.kiez.value || S.kiez, fc = f.category.value || S.cat;
+  f.kiez.innerHTML = opt('', '–', !fk) + ks.map(function (k) { return opt(k, KIEZE[k][0], k === fk); }).join('');
+  f.category.innerHTML = opt('', '–', !fc) + Object.keys(CATS).map(function (c) { return opt(c, CATS[c][S.lang], c === fc); }).join('');
+}
+
+function renderCats() {
+  var html = '<button data-c="" aria-pressed="' + (!S.cat) + '">' + esc(t('cat_all')) + '</button>';
+  Object.keys(CATS).forEach(function (c) { html += '<button data-c="' + c + '" aria-pressed="' + (S.cat === c) + '">' + esc(CATS[c][S.lang]) + '</button>'; });
+  $('#cats').innerHTML = html;
+}
+
+/* ===== Daten laden ===== */
+function syncUrl() {
+  var p = new URLSearchParams();
+  if (S.kiez) p.set('kiez', S.kiez); if (S.cat) p.set('cat', S.cat); if (S.lang !== 'de') p.set('lang', S.lang);
+  history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
+}
+
+function load() {
+  var p = new URLSearchParams(); if (S.kiez) p.set('kiez', S.kiez); if (S.cat) p.set('cat', S.cat);
+  return fetch(api('/api/listings?' + p), { headers: { accept: 'application/json' } })
+    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (j) { if (!j || !j.items) throw 0; S.items = j.items; S.demo = false; })
+    .catch(function () {
+      S.demo = true;
+      S.items = DEMO.filter(function (d) { return (!S.kiez || d.kiez === S.kiez) && (!S.cat || d.category === S.cat); });
+    })
+    .then(function () { S.loading = false; render(); });
+}
+
+/* ===== Darstellung ===== */
+function render() {
+  var now = Date.now(), items = S.items;
+  if (S.loading) { $('#count').textContent = ''; return; }
+  $('#count').textContent = t('count')(items.length);
+  $('#demoNote').hidden = !S.demo;
+  $('#wrap').classList.toggle('v-map', S.view === 'map');
+  document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === S.view); });
+  var showAds = CFG.ADSENSE_CLIENT && CFG.ADSENSE_SLOT && !isApp && !S.demo;
+  S.spIdx = 0;
+  var out = '';
+  if (!items.length) {
+    out = '<div class="empty"><h3>' + esc(t('empty')) + '</h3><p>' + esc(t('empty_txt')) + '</p><button class="btn" data-add>' + esc(t('add')) + '</button></div>';
+  }
+  items.forEach(function (it, i) {
+    var feat = it.featured_until > now;
+    var d = it['desc_' + S.lang] || it.desc_de || '';
+    var acts = '';
+    if (it.phone) acts += '<a href="tel:' + esc(it.phone.replace(/\s/g, '')) + '">' + esc(t('call')) + '</a>';
+    if (it.website) acts += '<a href="' + esc(it.website) + '" target="_blank" rel="noopener nofollow ugc">Website</a>';
+    if (it.instagram) acts += '<a href="https://instagram.com/' + esc(it.instagram) + '" target="_blank" rel="noopener nofollow ugc">Instagram</a>';
+    acts += extraActs(it);
+    if (it.lat) acts += '<a href="https://www.google.com/maps/dir/?api=1&destination=' + it.lat + ',' + it.lng + '" target="_blank" rel="noopener">' + esc(t('route')) + '</a>';
+    out += '<article class="it' + (feat ? ' feat' : '') + '" id="it-' + esc(it.id) + '" data-id="' + esc(it.id) + '">' +
+      (it.photo_key ? '<img src="' + api('/img/' + esc(it.photo_key)) + '?v=' + (it.updated_at || 0) + '" alt="" loading="lazy" width="88" height="88">' : '<div class="ph" aria-hidden="true">' + esc(it.name.charAt(0)) + '</div>') +
+      '<div><h3>' + esc(it.name) + (feat ? '<span class="tag">' + esc(t('ad')) + '</span>' : '') + (S.demo ? '<span class="tag">' + esc(t('sample')) + '</span>' : '') + '</h3>' +
+      '<p class="m">' + esc(CATS[it.category] ? CATS[it.category][S.lang] : '') + ', ' + esc(KIEZE[it.kiez] ? KIEZE[it.kiez][0] : '') + ' – ' + esc(it.address) + '</p>' +
+      (d ? '<p>' + esc(d) + '</p>' : '') + (it.hours ? '<p class="m">' + esc(it.hours) + '</p>' : '') +
+      (acts ? '<div class="acts">' + acts + '</div>' : '') + couponHtml(it) + '</div>' + favBtn(it) + '</article>';
+    if ((i + 1) % CFG.AD_EVERY === 0 && i < items.length - 1) {
+      var spn = nextNative();
+      if (spn) out += sponsorCard(spn, 'native');
+      else if (showAds) out += '<div class="ad"><small>' + esc(t('ad')) + '</small><ins class="adsbygoogle" style="display:block" data-ad-client="' + esc(CFG.ADSENSE_CLIENT) + '" data-ad-slot="' + esc(CFG.ADSENSE_SLOT) + '" data-ad-format="auto" data-full-width-responsive="true"></ins></div>';
+    } else if (items.length < CFG.AD_EVERY && i === Math.min(1, items.length - 1)) {
+      var spn2 = nextNative();
+      if (spn2) out += sponsorCard(spn2, 'native');
+    }
+  });
+  $('#list').innerHTML = out;
+  observeSponsors();
+  if (showAds) pushAds();
+  drawMap();
+  if (S.focusId) {
+    var el = document.getElementById('it-' + S.focusId);
+    if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('hl'); }
+    S.focusId = '';
+  }
+}
+
+function pushAds() {
+  if (!adsLoaded) {
+    adsLoaded = true;
+    var s = document.createElement('script'); s.async = true; s.crossOrigin = 'anonymous';
+    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(CFG.ADSENSE_CLIENT);
+    document.head.appendChild(s);
+  }
+  document.querySelectorAll('ins.adsbygoogle:not([data-pushed])').forEach(function (el) {
+    el.setAttribute('data-pushed', '1');
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+  });
+}
+
+function drawMap() {
+  if (!window.L) return;
+  var wide = window.matchMedia('(min-width:920px)').matches;
+  if (!wide && S.view !== 'map') return;
+  if (!map) {
+    map = L.map('map', { scrollWheelZoom: false }).setView([52.51, 13.40], 11);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+    layer = L.layerGroup().addTo(map);
+  }
+  layer.clearLayers();
+  var pts = [], now = Date.now();
+  S.items.forEach(function (it) {
+    if (it.lat == null) return;
+    var feat = it.featured_until > now;
+    L.circleMarker([it.lat, it.lng], { radius: feat ? 11 : 8, color: '#1C2B39', weight: 2, fillColor: feat ? '#FFE800' : '#FF48B0', fillOpacity: .95 })
+      .bindPopup('<b>' + esc(it.name) + '</b><br>' + esc(it.address) + '<br><a href="#it-' + esc(it.id) + '" data-jump="' + esc(it.id) + '">↓</a>')
+      .addTo(layer);
+    pts.push([it.lat, it.lng]);
+  });
+  setTimeout(function () {
+    map.invalidateSize();
+    if (pts.length) map.fitBounds(pts, { padding: [36, 36], maxZoom: 15 });
+    else if (S.kiez) map.setView([KIEZE[S.kiez][1], KIEZE[S.kiez][2]], 14);
+    else map.setView([52.51, 13.40], 11);
+  }, 60);
+}
+
+/* ===== Formular ===== */
+function openForm(own) {
+  S.own = own || null;
+  var f = $('#form'); f.reset();
+  $('#formView').hidden = false; $('#doneView').hidden = true;
+  $('#fTitle').textContent = own ? t('f_edit') : t('f_title');
+  $('#sendBtn').textContent = own ? t('f_save') : t('f_send');
+  fillSelects();
+  if (own) {
+    var it = own.item;
+    ['name', 'address', 'phone', 'website', 'instagram', 'hours', 'email', 'whatsapp', 'coupon_code', 'coupon_text', 'coupon_until'].forEach(function (k) { f[k].value = it[k] || ''; });
+    f.kiez.value = it.kiez; f.category.value = it.category; f.desc.value = it.desc_de || '';
+    f.auth.checked = true; f.consent.checked = true;
+    $('#ownStatus').innerHTML = statusBox(it) + boostBox(it);
+  } else {
+    $('#ownStatus').innerHTML = '';
+    if (S.kiez) f.kiez.value = S.kiez; if (S.cat) f.category.value = S.cat;
+  }
+  var d = $('#dlg'); if (!d.open) d.showModal();
+}
+
+function statusBox(it) {
+  var html = '<div class="status"><b>' + esc(t('st')) + ':</b> ' + esc(t('st_' + it.status));
+  if (it.featured_until > Date.now()) html += '<br><b>' + esc(t('feat_until')) + ':</b> ' + new Date(it.featured_until).toLocaleDateString(S.lang);
+  return html + '</div>';
+}
+function boostBox(it) {
+  if (it.status !== 'approved') return '<p class="hint">' + esc(t('boost_wait')) + '</p>';
+  var pk = function (k, price) {
+    return '<button type="button" data-plan="' + k + '" style="display:grid;gap:4px"><span style="font-weight:800">' + esc(t('pk_' + k)) + '</span>' +
+      '<strong>' + esc(CFG.PRICE_INTRO) + '<small style="font-size:13px">' + esc(t('pk_month')) + '</small></strong>' +
+      '<span style="font-size:13px">' + esc(t('pk_intro')) + ', ' + esc(t('pk_then')) + ' ' + esc(price) + esc(t('pk_month')) + '</span>' +
+      '<span class="hint" style="font-size:12.5px">' + esc(t('pk_' + k + '_d')) + '</span></button>';
+  };
+  return '<div class="status"><b>' + esc(t('pk_title')) + '</b><br><span class="hint">' + esc(t('pk_txt')) + '</span>' +
+    '<div class="plans" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">' + pk('s', CFG.PRICE_S) + pk('m', CFG.PRICE_M) + pk('l', CFG.PRICE_L) + '</div></div>';
+}
+
+function compress(file) {
+  return new Promise(function (res) {
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function () {
+      var s = Math.min(1, 1200 / Math.max(img.width, img.height));
+      var c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(function (b) { res(b); }, 'image/jpeg', 0.82);
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); res(null); };
+    img.src = url;
+  });
+}
+
+function errMsg(j) {
+  if (!j) return t('e_net');
+  if (j.error === 'field') return t('e_field') + (t('f_' + ({ category: 'cat', address: 'addr', kiez: 'kiez', name: 'name', email: 'email' }[j.field] || j.field)) || j.field);
+  var m = { rate: 'e_rate', consent: 'e_consent', photo: 'e_photo', auth: 'e_auth', stripe: 'e_stripe', stripe_missing: 'e_stripe', not_approved: 'boost_wait' }[j.error];
+  return m ? t(m) : t('e_net');
+}
+
+$('#form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var f = e.target;
+  if (!f.auth.checked || !f.consent.checked) { toast(t('e_consent')); return; }
+  if (!f.reportValidity()) return;
+  var btn = $('#sendBtn'); btn.disabled = true; btn.textContent = t('sending');
+  var fd = new FormData(f); fd.delete('photo');
+  var file = f.photo.files[0];
+  (file ? compress(file) : Promise.resolve(null)).then(function (blob) {
+    if (blob) fd.append('photo', blob, 'photo.jpg');
+    if (S.demo) return { ok: true, id: 'demo', token: 'demo', status: 'pending' };
+    var url = '/api/submit';
+    if (S.own) { url = '/api/listing/' + S.own.item.id; fd.append('token', S.own.token); }
+    return fetch(api(url), { method: 'POST', body: fd }).then(function (r) { return r.json(); });
+  }).then(function (j) {
+    if (!j || !j.ok) { toast(errMsg(j)); return; }
+    var token = S.own ? S.own.token : j.token;
+    showDone(j.id, token, j.status);
+    load();
+  }).catch(function () { toast(t('e_net')); })
+    .then(function () { btn.disabled = false; btn.textContent = S.own ? t('f_save') : t('f_send'); });
+});
+
+function showDone(id, token, status) {
+  var link = location.origin + location.pathname + '?edit=' + id + '&token=' + encodeURIComponent(token);
+  $('#formView').hidden = true;
+  var v = $('#doneView'); v.hidden = false;
+  v.innerHTML = '<h2 class="riso" data-t="' + esc(t('done_title')) + '">' + esc(t('done_title')) + '</h2>' +
+    '<p>' + esc(status === 'approved' ? t('done_approved') : t('done_pending')) + '</p>' +
+    '<p class="hint">' + esc(t('done_link')) + '</p>' +
+    '<div class="linkbox"><input readonly value="' + esc(link) + '" id="ownLink"><button class="btn ghost" type="button" id="copyBtn">' + esc(t('copy')) + '</button></div>' +
+    (status === 'approved' && id !== 'demo' ? boostBox({ status: 'approved' }) : '') +
+    '<div id="afterSp"></div>' +
+    '<div class="row"><button class="btn ghost" type="button" data-close>' + esc(t('close')) + '</button></div>';
+  S.own = { item: { id: id, status: status }, token: token };
+  loadAfterSubmit();
+}
+
+function boost(plan) {
+  if (!S.own) return;
+  fetch(api('/api/checkout'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: S.own.item.id, token: S.own.token, plan: plan }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (j.url) location.href = j.url; else toast(errMsg(j)); })
+    .catch(function () { toast(t('e_net')); });
+}
+
+function openEdit(id, token, paid) {
+  fetch(api('/api/listing/' + encodeURIComponent(id) + '?token=' + encodeURIComponent(token)))
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j.item) { toast(t('e_auth')); return; }
+      openForm({ item: j.item, token: token });
+      if (paid) toast(t('paid'));
+    }).catch(function () { toast(t('e_net')); });
+}
+
+/* ===== Events ===== */
+document.addEventListener('click', function (e) {
+  var el = e.target.closest('button, a');
+  if (!el) return;
+  if (el.dataset.l) { S.lang = el.dataset.l; applyLang(); syncUrl(); return; }
+  if (el.id === 'addBtn' || el.hasAttribute('data-add')) { openForm(null); return; }
+  if (el.dataset.c !== undefined && el.closest('#cats')) { S.cat = el.dataset.c; renderCats(); syncUrl(); load(); return; }
+  if (el.dataset.v) { S.view = el.dataset.v; render(); return; }
+  if (el.hasAttribute('data-close')) { $('#dlg').close(); return; }
+  if (el.dataset.plan) { boost(el.dataset.plan); return; }
+  if (el.dataset.jump) { S.view = 'list'; S.focusId = el.dataset.jump; e.preventDefault(); render(); return; }
+  if (el.id === 'copyBtn') {
+    var inp = $('#ownLink'); inp.select();
+    (navigator.clipboard ? navigator.clipboard.writeText(inp.value) : Promise.reject()).then(function () { toast(t('copied')); }, function () { document.execCommand('copy'); toast(t('copied')); });
+  }
+});
+$('#kiez').addEventListener('change', function (e) { S.kiez = e.target.value; syncUrl(); load(); });
+
+/* ===== Werbung, Gutscheine, Merkliste, Jobs, Tabs ===== */
+var JT = {
+  de: { vollzeit: 'Vollzeit', teilzeit: 'Teilzeit', minijob: 'Minijob', ausbildung: 'Ausbildung' },
+  tr: { vollzeit: 'Tam zamanlı', teilzeit: 'Yarı zamanlı', minijob: 'Minijob', ausbildung: 'Meslek eğitimi (Ausbildung)' },
+  en: { vollzeit: 'Full-time', teilzeit: 'Part-time', minijob: 'Mini-job', ausbildung: 'Apprenticeship' }
+};
+var DEMO_JOBS = [{ id: 'demojob00001', title: 'Barista (m/w/d)', company: 'Café Görlitzer Eck', kiez: 'kreuzberg', jobtype: 'teilzeit', salary: '14 €/Std.', languages: 'Deutsch, Türkisch', description: 'Beispielanzeige.', whatsapp: '', phone: '', urgent_until: 0 }];
+
+function fmtDate(d) { var x = new Date(d); return isNaN(x) ? d : x.toLocaleDateString(S.lang); }
+function waNum(n) { n = String(n || '').replace(/[^\d+]/g, ''); if (n.indexOf('+') === 0) return n.slice(1); if (n.indexOf('00') === 0) return n.slice(2); if (n.indexOf('0') === 0) return '49' + n.slice(1); return n; }
+function beacon(u, d) {
+  try { if (navigator.sendBeacon && navigator.sendBeacon(api(u), new Blob([JSON.stringify(d)], { type: 'application/json' }))) return; } catch (e) { }
+  fetch(api(u), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d), keepalive: true }).catch(function () { });
+}
+
+/* --- Einträge: WhatsApp, Gutschein, Merken --- */
+function extraActs(it) { return it.whatsapp ? '<a href="https://wa.me/' + esc(waNum(it.whatsapp)) + '" target="_blank" rel="noopener">' + esc(t('wa')) + '</a>' : ''; }
+function couponValid(it) {
+  if (!(it.featured_until > Date.now()) || !it.coupon_code) return false;
+  return !(it.coupon_until && it.coupon_until < new Date().toISOString().slice(0, 10));
+}
+function couponHtml(it) {
+  if (!couponValid(it)) return '';
+  return '<div class="coupon"><span>' + esc(it.coupon_text || '') + '</span><code>' + esc(it.coupon_code) + '</code>' +
+    (it.coupon_until ? '<small>' + esc(t('c_valid')) + ' ' + esc(fmtDate(it.coupon_until)) + '</small>' : '') +
+    '<button type="button" data-copy="' + esc(it.coupon_code) + '">' + esc(t('c_copy')) + '</button></div>';
+}
+function getFavs() { try { return JSON.parse(localStorage.getItem('kc_favs') || '{}') || {}; } catch (e) { return {}; } }
+function setFavs(f) { try { localStorage.setItem('kc_favs', JSON.stringify(f)); } catch (e) { } }
+function favBtn(it) {
+  var on = !!getFavs()[it.id];
+  return '<button class="fav" type="button" data-fav="' + esc(it.id) + '" aria-pressed="' + on + '" aria-label="' + esc(t(on ? 'fav_rm' : 'fav_add')) + '" title="' + esc(t(on ? 'fav_rm' : 'fav_add')) + '">' + (on ? '♥' : '♡') + '</button>';
+}
+function toggleFav(id) {
+  var f = getFavs();
+  if (f[id]) delete f[id];
+  else {
+    var src = (S.items || []).concat(S.couponItems || []).filter(function (x) { return x.id === id; })[0];
+    if (!src) return;
+    var snap = {};
+    ['id', 'name', 'kiez', 'category', 'address', 'lat', 'lng', 'desc_de', 'desc_tr', 'desc_en', 'phone', 'website', 'instagram', 'whatsapp', 'hours', 'photo_key', 'updated_at'].forEach(function (k) { snap[k] = src[k]; });
+    snap.featured_until = 0;
+    f[id] = snap;
+  }
+  setFavs(f);
+  document.querySelectorAll('[data-fav="' + id + '"]').forEach(function (b) {
+    var on = !!f[id]; b.setAttribute('aria-pressed', on); b.textContent = on ? '♥' : '♡'; b.title = t(on ? 'fav_rm' : 'fav_add');
+  });
+  if (S.tab === 'favs') renderFavs();
+}
+function cardHtml(it) {
+  var feat = it.featured_until > Date.now(), d = it['desc_' + S.lang] || it.desc_de || '', acts = '';
+  if (it.phone) acts += '<a href="tel:' + esc(String(it.phone).replace(/\s/g, '')) + '">' + esc(t('call')) + '</a>';
+  if (it.website) acts += '<a href="' + esc(it.website) + '" target="_blank" rel="noopener nofollow ugc">Website</a>';
+  acts += extraActs(it);
+  if (it.lat) acts += '<a href="https://www.google.com/maps/dir/?api=1&destination=' + it.lat + ',' + it.lng + '" target="_blank" rel="noopener">' + esc(t('route')) + '</a>';
+  return '<article class="it' + (feat ? ' feat' : '') + '">' +
+    (it.photo_key ? '<img src="' + api('/img/' + esc(it.photo_key)) + '?v=' + (it.updated_at || 0) + '" alt="" loading="lazy" width="88" height="88">' : '<div class="ph" aria-hidden="true">' + esc(String(it.name).charAt(0)) + '</div>') +
+    '<div><h3>' + esc(it.name) + (feat ? '<span class="tag">' + esc(t('ad')) + '</span>' : '') + '</h3>' +
+    '<p class="m">' + esc(CATS[it.category] ? CATS[it.category][S.lang] : '') + ', ' + esc(KIEZE[it.kiez] ? KIEZE[it.kiez][0] : '') + ' – ' + esc(it.address) + '</p>' +
+    (d ? '<p>' + esc(d) + '</p>' : '') + (it.hours ? '<p class="m">' + esc(it.hours) + '</p>' : '') +
+    (acts ? '<div class="acts">' + acts + '</div>' : '') + couponHtml(it) + '</div>' + favBtn(it) + '</article>';
+}
+function renderFavs() {
+  var f = getFavs(), ids = Object.keys(f);
+  $('#favList').innerHTML = ids.length ? ids.map(function (id) { return cardHtml(f[id]); }).join('') : '<div class="empty"><p>' + esc(t('favs_empty')) + '</p></div>';
+}
+function loadCoupons() {
+  var p = new URLSearchParams({ coupon: '1' }); if (S.kiez) p.set('kiez', S.kiez); if (S.cat) p.set('cat', S.cat);
+  fetch(api('/api/listings?' + p)).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (j) { S.couponItems = j.items || []; })
+    .catch(function () { S.couponItems = DEMO.filter(function (d) { return couponValid(d) && (!S.kiez || d.kiez === S.kiez) && (!S.cat || d.category === S.cat); }); })
+    .then(function () {
+      $('#couponList').innerHTML = S.couponItems.length ? S.couponItems.map(cardHtml).join('') : '<div class="empty"><p>' + esc(t('coupons_empty')) + '</p><button class="btn" data-add>' + esc(t('add')) + '</button></div>';
+    });
+}
+
+/* --- Sponsoren: Slider, Karten im Listenfluss, nach dem Eintragen --- */
+function spText(sp, k) { return sp[k + '_' + S.lang] || sp[k + '_de'] || ''; }
+function sponsorCard(sp, variant) {
+  var tr = ' data-spc="' + esc(sp.id) + '"', links = '', cta = spText(sp, 'cta');
+  if (sp.kind === 'listing') links += '<a href="?id=' + esc(sp.listing_id) + '&kiez=' + esc(sp.kiez) + '"' + tr + '>' + esc(cta) + '</a>';
+  if (sp.link_wa) links += '<a class="wa" href="' + esc(sp.link_wa) + '" target="_blank" rel="sponsored noopener"' + tr + '>' + esc(cta) + '</a>';
+  if (sp.link_web) links += '<a' + (sp.link_wa ? ' class="sec"' : '') + ' href="' + esc(sp.link_web) + '" target="_blank" rel="sponsored noopener"' + tr + '>' + esc(sp.link_wa ? 'Website' : cta) + '</a>';
+  if (sp.link_tel) links += '<a class="sec" href="' + esc(sp.link_tel) + '"' + tr + '>' + esc(t('call')) + '</a>';
+  if (sp.link_ig) links += '<a class="sec" href="' + esc(sp.link_ig) + '" target="_blank" rel="sponsored noopener"' + tr + '>Instagram</a>';
+  return '<article class="spc' + (variant === 'native' ? ' native' : '') + '" data-sp="' + esc(sp.id) + '">' +
+    '<span class="adtag">' + esc(t('sp_title')) + '</span>' +
+    (sp.image ? '<img class="img" src="' + esc(sp.image) + '" alt="' + esc(sp.name) + '" loading="lazy" width="1200" height="630">' : '<div class="img ph-sp" aria-hidden="true">' + esc(String(sp.name || '?').charAt(0)) + '</div>') +
+    '<div class="b"><div class="n">' + esc(sp.name) + '</div><p class="h">' + esc(spText(sp, 'headline')) + '</p><div class="ctas">' + links + '</div></div></article>';
+}
+function nextNative() {
+  var l = (S.sp && S.sp.native) || [];
+  if (!l.length || S.spIdx >= l.length) return null;
+  return l[S.spIdx++];
+}
+function renderSlider() {
+  var items = (S.sp && S.sp.slider) || [];
+  $('#spons').hidden = !items.length;
+  $('#sponsTrack').innerHTML = items.map(function (sp) { return sponsorCard(sp, 'slide'); }).join('');
+  observeSponsors();
+  startAuto();
+}
+function startAuto() {
+  clearInterval(startAuto.t);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var tr = $('#sponsTrack');
+  if (!startAuto.bound) { startAuto.bound = 1; tr.addEventListener('touchstart', function () { tr.dataset.touch = '1'; }, { passive: true }); }
+  startAuto.t = setInterval(function () {
+    if (tr.matches(':hover') || document.hidden || tr.dataset.touch || !tr.firstElementChild) return;
+    var w = tr.firstElementChild.getBoundingClientRect().width + 14;
+    if (tr.scrollLeft + tr.clientWidth >= tr.scrollWidth - 5) tr.scrollTo({ left: 0, behavior: 'smooth' });
+    else tr.scrollBy({ left: w, behavior: 'smooth' });
+  }, 6000);
+}
+function loadSponsors() {
+  var q = '&kiez=' + encodeURIComponent(S.kiez) + '&cat=' + encodeURIComponent(S.cat);
+  var get = function (place) {
+    return fetch(api('/api/sponsors?place=' + place + q)).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (j) { if (!j || !j.items) throw 0; return j.items; });
+  };
+  return Promise.all([get('slider'), get('native')])
+    .then(function (a) { S.sp = { slider: a[0], native: a[1] }; S.spDemo = false; })
+    .catch(function () { S.sp = { slider: DEMO_SP.slice(), native: DEMO_SP.slice().reverse() }; S.spDemo = true; })
+    .then(function () { renderSlider(); if (!S.loading) render(); });
+}
+function loadAfterSubmit() {
+  fetch(api('/api/sponsors?place=after_submit')).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (j) { return j.items || []; })
+    .catch(function () { return DEMO_SP.filter(function (x) { return x.id === 'it-rechtbox'; }); })
+    .then(function (items) { var el = $('#afterSp'); if (el && items[0]) { el.innerHTML = sponsorCard(items[0], 'native'); observeSponsors(); } });
+}
+/* Anonyme Zählung: Einblendung (mind. 50 % sichtbar) und Klick */
+var spSeen = {}, spQueue = [], spObs = null;
+function queueImp(id) {
+  if (!id || spSeen[id] || S.spDemo) return;
+  spSeen[id] = 1; spQueue.push(id);
+  clearTimeout(queueImp.t); queueImp.t = setTimeout(flushImp, 1500);
+}
+function flushImp() { while (spQueue.length) beacon('/api/sp/imp', { ids: spQueue.splice(0, 20) }); }
+function observeSponsors() {
+  var els = document.querySelectorAll('[data-sp]:not([data-obs])');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.setAttribute('data-obs', '1'); queueImp(el.dataset.sp); }); return; }
+  if (!spObs) spObs = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { queueImp(e.target.dataset.sp); spObs.unobserve(e.target); } });
+  }, { threshold: 0.5 });
+  els.forEach(function (el) { el.setAttribute('data-obs', '1'); spObs.observe(el); });
+}
+
+/* --- Jobs --- */
+function loadJobs() {
+  fetch(api('/api/jobs' + (S.kiez ? '?kiez=' + encodeURIComponent(S.kiez) : ''))).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (j) { S.jobs = j.items || []; S.jobsDemo = false; })
+    .catch(function () { S.jobs = DEMO_JOBS.filter(function (x) { return !S.kiez || x.kiez === S.kiez; }); S.jobsDemo = true; })
+    .then(renderJobs);
+}
+function renderJobs() {
+  var now = Date.now(), jt = JT[S.lang];
+  $('#jobList').innerHTML = (S.jobs || []).length ? S.jobs.map(function (j) {
+    var urgent = j.urgent_until > now, acts = '';
+    if (j.whatsapp) acts += '<a href="https://wa.me/' + esc(waNum(j.whatsapp)) + '?text=' + encodeURIComponent(t('j_wa_text') + j.title) + '" target="_blank" rel="noopener">' + esc(t('j_apply_wa')) + '</a>';
+    if (j.phone) acts += '<a href="tel:' + esc(String(j.phone).replace(/\s/g, '')) + '">' + esc(t('j_call')) + '</a>';
+    return '<article class="job' + (urgent ? ' urgent' : '') + '"><h3>' + esc(j.title) +
+      (urgent ? ' <span class="tag">' + esc(t('j_urgent')) + '</span><span class="tag">' + esc(t('ad')) + '</span>' : '') +
+      (S.jobsDemo ? '<span class="tag">' + esc(t('sample')) + '</span>' : '') + '</h3>' +
+      '<p class="m">' + esc(j.company) + ', ' + esc(KIEZE[j.kiez] ? KIEZE[j.kiez][0] : '') + '</p>' +
+      '<div class="pills"><span>' + esc(jt[j.jobtype] || j.jobtype) + '</span>' + (j.salary ? '<span>' + esc(j.salary) + '</span>' : '') + (j.languages ? '<span>' + esc(j.languages) + '</span>' : '') + '</div>' +
+      (j.description ? '<p>' + esc(j.description) + '</p>' : '') + (acts ? '<div class="acts">' + acts + '</div>' : '') + '</article>';
+  }).join('') : '<div class="empty"><p>' + esc(t('jobs_empty')) + '</p></div>';
+}
+function jobErr(j) {
+  if (j && j.error === 'field') { var f = j.field === 'whatsapp' ? 'f_wa' : (I18N[S.lang]['j_' + j.field] ? 'j_' + j.field : 'f_' + j.field); return t('e_field') + (t(f) || j.field); }
+  return errMsg(j);
+}
+function jobLink(id, token) { return location.origin + location.pathname + '?view=jobs&job=' + id + '&token=' + encodeURIComponent(token); }
+function jobBoostHtml(id, token) {
+  return '<div class="status"><b>' + esc(t('j_boost')) + '</b><div class="plans" style="grid-template-columns:1fr"><button type="button" data-jboost="' + esc(id) + '" data-jtoken="' + esc(token) + '"><strong>' + esc(CFG.PRICE_JOB) + '</strong>30 ' + (S.lang === 'tr' ? 'gün' : S.lang === 'en' ? 'days' : 'Tage') + '</button></div></div>';
+}
+function jobDone(id, token, status) {
+  $('#jobFormView').hidden = true;
+  var v = $('#jobDoneView'); v.hidden = false;
+  v.innerHTML = '<h2 class="riso" data-t="' + esc(t('j_done_title')) + '">' + esc(t('j_done_title')) + '</h2><p>' + esc(status === 'approved' ? t('j_done_ok') : t('j_done')) + '</p>' +
+    '<p class="hint">' + esc(t('j_link')) + '</p><div class="linkbox"><input readonly value="' + esc(jobLink(id, token)) + '"><button class="btn ghost" type="button" data-jcopy>' + esc(t('copy')) + '</button></div>' +
+    (status === 'approved' && id !== 'demojob' ? jobBoostHtml(id, token) : '') +
+    '<div class="row"><button class="btn ghost" type="button" data-jclose>' + esc(t('close')) + '</button></div>';
+  loadJobs();
+}
+function openJobOwn(id, token, paid) {
+  fetch(api('/api/job/' + encodeURIComponent(id) + '?token=' + encodeURIComponent(token))).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j.item) { toast(t('e_auth')); return; }
+      var it = j.item;
+      $('#jobOwn').innerHTML = '<div class="status"><b>' + esc(it.title) + '</b><br>' + esc(t('st')) + ': ' + esc(t('st_' + it.status)) +
+        (it.urgent_until > Date.now() ? '<br><b>' + esc(t('j_urgent')) + ':</b> ' + new Date(it.urgent_until).toLocaleDateString(S.lang) : '') + '</div>' +
+        (it.status === 'approved' ? jobBoostHtml(id, token) : '');
+      if (paid) toast(t('paid'));
+    }).catch(function () { toast(t('e_net')); });
+}
+function openJobForm() {
+  var f = $('#jobForm'); f.reset();
+  $('#jobFormView').hidden = false; $('#jobDoneView').hidden = true;
+  if (S.kiez) f.elements.kiez.value = S.kiez;
+  $('#jobDlg').showModal();
+}
+$('#jobForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var f = e.target, g = function (k) { return f.elements[k].value.trim(); };
+  if (!f.elements.agg.checked || !f.elements.consent.checked) { toast(t('e_consent')); return; }
+  if (!f.reportValidity()) return;
+  if (!g('whatsapp') && !g('phone')) { toast(t('e_field') + t('f_wa')); return; }
+  if (S.jobsDemo) { jobDone('demojob', 'demo', 'pending'); return; }
+  var d = { title: g('title'), company: g('company'), kiez: g('kiez'), jobtype: g('jobtype'), salary: g('salary'), languages: g('languages'),
+    description: g('description'), whatsapp: g('whatsapp'), phone: g('phone'), email: g('email'), hp: g('hp'), agg: true, consent: true };
+  fetch(api('/api/jobs/submit'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (j && j.ok) jobDone(j.id, j.token, j.status); else toast(jobErr(j)); })
+    .catch(function () { toast(t('e_net')); });
+});
+
+/* --- Tabs --- */
+function showTab(tab) {
+  S.tab = tab;
+  ['places', 'coupons', 'jobs', 'favs', 'sos'].forEach(function (x) { (x === 'places' ? $('#wrap') : $('#v-' + x)).hidden = x !== tab; });
+  document.querySelectorAll('#tabs [data-tab]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tab === tab); });
+  if (tab === 'coupons') loadCoupons();
+  if (tab === 'jobs') loadJobs();
+  if (tab === 'favs') renderFavs();
+  if (tab === 'places' && map) setTimeout(function () { map.invalidateSize(); }, 60);
+  var p = new URLSearchParams(location.search);
+  if (tab === 'places') p.delete('view'); else p.set('view', tab);
+  history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
+}
+function extrasLang() {
+  var ks = Object.keys(KIEZE).sort(function (a, b) { return KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
+  var jk = $('#jobForm').elements.kiez, cur = jk.value;
+  jk.innerHTML = '<option value="">–</option>' + ks.map(function (k) { return '<option value="' + k + '">' + esc(KIEZE[k][0]) + '</option>'; }).join('');
+  jk.value = cur;
+  Array.prototype.forEach.call($('#jobForm').elements.jobtype.options, function (o) { o.textContent = JT[S.lang][o.value]; });
+  $('#jobConsentTxt').innerHTML = $('#consentTxt').innerHTML;
+  if (S.sp) renderSlider();
+  if (S.tab === 'coupons') loadCoupons();
+  if (S.tab === 'jobs') renderJobs();
+  if (S.tab === 'favs') renderFavs();
+}
+document.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-spc],[data-tab],[data-fav],[data-copy],[data-jboost],[data-jclose],[data-jcopy],#jobAddBtn');
+  if (!el) return;
+  if (el.dataset.spc) { if (!S.spDemo) beacon('/api/sp/click', { id: el.dataset.spc }); return; }
+  if (el.dataset.tab) { showTab(el.dataset.tab); return; }
+  if (el.dataset.fav) { toggleFav(el.dataset.fav); return; }
+  if (el.dataset.copy) {
+    var c = el.dataset.copy;
+    (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(function () { toast(c + ' ✓'); }, function () { toast(c); });
+    return;
+  }
+  if (el.id === 'jobAddBtn') { openJobForm(); return; }
+  if (el.hasAttribute('data-jclose')) { $('#jobDlg').close(); return; }
+  if (el.hasAttribute('data-jcopy')) {
+    var inp = el.parentNode.querySelector('input'); inp.select();
+    (navigator.clipboard ? navigator.clipboard.writeText(inp.value) : Promise.reject()).then(function () { toast(t('copied')); }, function () { document.execCommand('copy'); toast(t('copied')); });
+    return;
+  }
+  if (el.dataset.jboost) {
+    fetch(api('/api/checkout'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ job: el.dataset.jboost, token: el.dataset.jtoken }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j.url) location.href = j.url; else toast(errMsg(j)); })
+      .catch(function () { toast(t('e_net')); });
+  }
+});
+function initExtras() {
+  S.tab = 'places'; S.sp = { slider: [], native: [] };
+  // Vorschau: Beispiel-Gutschein am hervorgehobenen Beispieleintrag
+  Object.assign(DEMO[0], { coupon_code: 'KIEZ10', coupon_text: '10 % auf das Frühstück', coupon_until: '' });
+  var _load = load;
+  load = function () { loadSponsors(); if (S.tab === 'coupons') loadCoupons(); if (S.tab === 'jobs') loadJobs(); return _load(); };
+  var _applyLang = applyLang;
+  applyLang = function () { _applyLang(); extrasLang(); };
+  extrasLang();
+  var v = qs.get('view');
+  if (['coupons', 'jobs', 'favs', 'sos'].indexOf(v) >= 0) showTab(v);
+  if (qs.get('job') && qs.get('token')) { showTab('jobs'); openJobOwn(qs.get('job'), qs.get('token'), qs.get('paid') === '1'); }
+  window.addEventListener('pagehide', flushImp);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flushImp(); });
+}
+
+/* ===== Start ===== */
+applyLang();
+initExtras();
+load().then(function () {
+  if (qs.get('edit') && qs.get('token')) openEdit(qs.get('edit'), qs.get('token'), qs.get('paid') === '1');
+  else if (qs.get('add') === '1') openForm(null);
+});
+/* ===== Android-App (Capacitor): AdMob statt AdSense ===== */
+if (isApp && CFG.ADMOB_BANNER && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) {
+  (function () {
+    var A = window.Capacitor.Plugins.AdMob;
+    A.initialize().then(function () { return A.requestConsentInfo(); })
+      .then(function (i) { if (i && i.isConsentFormAvailable && i.status === 'REQUIRED') return A.showConsentForm(); })
+      .then(function () { return A.showBanner({ adId: CFG.ADMOB_BANNER, adSize: 'ADAPTIVE_BANNER', position: 'BOTTOM_CENTER', margin: 0 }); })
+      .then(function () { document.body.style.paddingBottom = 'calc(70px + env(safe-area-inset-bottom,0px))'; })
+      .catch(function () { });
+  })();
+}
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('/sw.js').catch(function () { });
+</script>
+</body>
+</html>

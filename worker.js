@@ -1,4 +1,4 @@
-// KiezCheck – Cloudflare Worker (API + SEO-Seiten + Sitemap)
+// Berliner Kiez-Check – Cloudflare Worker (API + SEO-Seiten + Sitemap)
 // © 2026 DeindigitalerhelferCenter
 import { SUBS, sponsorsPublic, sponsorTrack, adRequest, jobsPublic, jobSubmit, jobOwn, subscriptionCheckout, jobCheckout, handleStripeEvent, adminWerbung, news } from './werbung.js';
 
@@ -40,8 +40,8 @@ export const CATS = {
 };
 
 const PLANS = {
-  d30: { days: 30, amount: 1900, label: 'KiezCheck Hervorhebung 30 Tage' },
-  d90: { days: 90, amount: 4900, label: 'KiezCheck Hervorhebung 90 Tage' }
+  d30: { days: 30, amount: 1900, label: 'Berliner Kiez-Check Hervorhebung 30 Tage' },
+  d90: { days: 90, amount: 4900, label: 'Berliner Kiez-Check Hervorhebung 90 Tage' }
 };
 
 const PUB = 'id,name,kiez,category,address,lat,lng,desc_de,desc_tr,desc_en,phone,website,instagram,hours,photo_key,featured_until,created_at,updated_at,plan,whatsapp,coupon_code,coupon_text,coupon_until';
@@ -254,7 +254,7 @@ async function enrich(d, env) {
 async function geocode(addr) {
   try {
     const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=de&q=' +
-      encodeURIComponent(addr + ', Berlin'), { headers: { 'user-agent': 'KiezCheck/1.0 (info@deindigitalerhelfer.com)' } });
+      encodeURIComponent(addr + ', Berlin'), { headers: { 'user-agent': 'BerlinerBerliner Kiez-Check/1.0 (info@deindigitalerhelfer.com)' } });
     const j = await r.json();
     if (j && j[0]) {
       const lat = +j[0].lat, lng = +j[0].lon;
@@ -514,7 +514,7 @@ ${it.hours ? `<p class="m">${esc(it.hours)}</p>` : ''}
 
   const html = `<!doctype html><html lang="${lang}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>${esc(title)} – KiezCheck Berlin</title>
+<title>${esc(title)} – Berliner Kiez-Check</title>
 <meta name="description" content="${esc(T.desc(cName || K.name, K.name))}">
 ${items.length ? '' : '<meta name="robots" content="noindex,follow">'}
 <link rel="canonical" href="${o}${path}${lang !== 'de' ? '?lang=' + lang : ''}">
@@ -543,7 +543,7 @@ h2{font-size:19px;margin:0 0 2px;font-stretch:112%}p{margin:4px 0}.m{color:var(-
 .ad{padding:14px 0;border-top:1.5px dashed var(--muted)}.ad small{color:var(--muted)}
 footer{max-width:760px;margin:0 auto;padding:18px;color:var(--muted);font-size:13px}
 </style></head><body>
-<header><a href="/?lang=${lang}">KiezCheck</a></header>
+<header><a href="/?lang=${lang}">Berliner Kiez-Check</a></header>
 <main><h1>${esc(title)}</h1>
 <p class="intro">${items.length ? T.intro(items.length, K.name) : T.empty}</p>
 ${rows}
@@ -551,7 +551,7 @@ ${items.length < 4 ? adBlock : ''}
 <nav class="cats"><a href="/k/${k}${lang !== 'de' ? '?lang=' + lang : ''}">${T.more} ${esc(K.name)}: ${T.all}</a>${catLinks}</nav>
 <a class="cta" href="/?add=1&amp;kiez=${k}${c ? '&amp;cat=' + c : ''}&amp;lang=${lang}">${T.add}</a>
 </main>
-<footer>© 2026 DeindigitalerhelferCenter · <a href="/?lang=${lang}">KiezCheck</a></footer>
+<footer>© 2026 DeindigitalerhelferCenter · <a href="/?lang=${lang}">Berliner Kiez-Check</a></footer>
 </body></html>`;
   return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'public, max-age=600' } });
 }

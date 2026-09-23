@@ -11,7 +11,7 @@
 | `schema-002-werbung.sql` | Yeni tablolar + `listings` tablosuna 6 yeni sütun (sadece ekleme) |
 | `seed-sponsoren.sql` | 7 reklam veren |
 | `public/werben.html` | Paketler ve talep formu (DE/TR/EN) |
-| `public/quiz/index.html` | Orijinal Quiz'in KiezCheck'e bağlı kopyası |
+| `public/quiz/index.html` | Orijinal Quiz'in Berliner Kiez-Check'e bağlı kopyası |
 | `public/assets/kiez/` | 18 görselin WebP kopyası (aynı boyut, 18,5 MB → 4,0 MB) + 13 adet 800 px mobil kopya (~130 KB) |
 | `public/assets/sponsors/` | 7 banner (ekran görüntülerinden) |
 | `public/vendor/fonts/plus-jakarta-sans-*`, `public/vendor/confetti/` | Quiz için yerel font ve konfeti |

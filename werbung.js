@@ -1,14 +1,14 @@
-// KiezCheck – Werbung, Sponsoren, Abos, Jobs, Werbeanfragen, News
+// Berliner Kiez-Check – Werbung, Sponsoren, Abos, Jobs, Werbeanfragen, News
 // © 2026 DeindigitalerhelferCenter
 
 /* Pakete: 3 Monate Einführungspreis 19 €/Monat, danach nach Betriebsgröße */
 export const SUBS = {
-  s: { amount: 4900, label: 'KiezCheck Paket S (kleiner Betrieb)' },
-  m: { amount: 6900, label: 'KiezCheck Paket M (mittlerer Betrieb)' },
-  l: { amount: 8900, label: 'KiezCheck Paket L (großer Betrieb)' }
+  s: { amount: 4900, label: 'Berliner Kiez-Check Paket S (kleiner Betrieb)' },
+  m: { amount: 6900, label: 'Berliner Kiez-Check Paket M (mittlerer Betrieb)' },
+  l: { amount: 8900, label: 'Berliner Kiez-Check Paket L (großer Betrieb)' }
 };
 export const INTRO = { amount: 1900, months: 3 };
-export const JOB_URGENT = { amount: 2900, days: 30, label: 'KiezCheck Job-Anzeige „Dringend" 30 Tage' };
+export const JOB_URGENT = { amount: 2900, days: 30, label: 'Berliner Kiez-Check Job-Anzeige „Dringend" 30 Tage' };
 
 const JOBTYPES = ['vollzeit', 'teilzeit', 'minijob', 'ausbildung'];
 const now = () => Date.now();
@@ -348,7 +348,7 @@ export async function news(req) {
   const hit = await cache.match(key);
   if (hit) return hit;
   try {
-    const r = await fetch('https://www.tagesschau.de/api2u/news/?regions=3', { headers: { 'user-agent': 'KiezCheck/1.0' } });
+    const r = await fetch('https://www.tagesschau.de/api2u/news/?regions=3', { headers: { 'user-agent': 'BerlinerBerliner Kiez-Check/1.0' } });
     const j = await r.json();
     const out = J({
       news: (j.news || []).slice(0, 10).map(n => ({

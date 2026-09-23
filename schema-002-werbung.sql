@@ -1,4 +1,4 @@
--- KiezCheck Erweiterung 002: Sponsoren, Abos, Gutscheine, Jobs, Werbeanfragen
+-- Berliner Kiez-Check Erweiterung 002: Sponsoren, Abos, Gutscheine, Jobs, Werbeanfragen
 -- Nur Ergänzungen – bestehende Tabellen und Daten bleiben unverändert.
 
 ALTER TABLE listings ADD COLUMN plan TEXT NOT NULL DEFAULT 's';      -- s | m | l

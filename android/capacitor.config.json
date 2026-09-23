@@ -1,0 +1,12 @@
+{
+  "appId": "com.ersenbox.berlinerkiezcheck",
+  "appName": "Berliner Kiez-Check",
+  "webDir": "www",
+  "server": {
+    "url": "https://berliner-kiez-check.bakiciersen.workers.dev",
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "AdMob": {}
+  }
+}

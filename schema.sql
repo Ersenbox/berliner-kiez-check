@@ -1,4 +1,4 @@
--- KiezCheck D1 Schema
+-- Berliner Kiez-Check D1 Schema
 CREATE TABLE IF NOT EXISTS listings (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,

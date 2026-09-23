@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Berliner Kiez-Check Admin</title>
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<style>
+:root{--paper:#EEF0EC;--ink:#1C2B39;--pink:#FF48B0;--blue:#0078BF;--yellow:#FFE800;--muted:#4A5866;--card:#fff}
+@media (prefers-color-scheme:dark){:root{--paper:#141B22;--ink:#E9ECE6;--muted:#A9B3BC;--card:#1C252E}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;border-bottom:2px solid var(--ink)}
+h1{margin:0 auto 0 0;font-size:20px;color:var(--blue)}
+button,input{font:inherit;color:inherit}
+button{border:2px solid var(--ink);background:var(--card);padding:6px 12px;font-weight:700;cursor:pointer}
+button.ok{background:#1f9d55;color:#fff;border-color:#1f9d55}button.no{background:var(--pink);color:#1C2B39}button.del{background:none;color:var(--muted);border-color:var(--muted)}
+button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+main{max-width:980px;margin:0 auto;padding:16px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:14px;font-weight:700}
+.it{display:grid;grid-template-columns:90px 1fr;gap:14px;border-top:1.5px solid var(--ink);padding:14px 0}
+.it img,.ph{width:90px;height:90px;object-fit:cover;border:2px solid var(--ink)}.ph{background:var(--blue)}
+.it h3{margin:0}.m{color:var(--muted);font-size:13px;margin:2px 0}
+.note{background:var(--yellow);color:#1C2B39;padding:4px 8px;font-size:13px;margin:6px 0;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.sp{display:grid;grid-template-columns:160px 1fr;gap:14px;border-top:1.5px solid var(--ink);padding:14px 0}
+.sp img{width:160px;aspect-ratio:1200/630;object-fit:contain;background:#fff;border:2px solid var(--ink)}
+.sp.off{opacity:.55}
+.kv{font-size:13px;color:var(--muted);margin:2px 0}
+.big{font-size:20px;font-weight:800}
+.ed{display:grid;gap:10px;max-width:760px;border:2px solid var(--ink);background:var(--card);padding:14px;margin:10px 0}
+.ed label{display:grid;gap:3px;font-weight:700;font-size:13px}
+.ed input,.ed select{border:2px solid var(--ink);background:var(--paper);padding:7px;font:inherit;color:inherit;width:100%}
+.ed .g3{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
+@media (max-width:640px){.ed .g3{grid-template-columns:1fr}.sp{grid-template-columns:1fr}.sp img{width:100%}}
+.ed .chkrow{display:flex;gap:16px;flex-wrap:wrap}
+.ed .chkrow label{display:flex;gap:6px;align-items:center;font-weight:400}
+.ed .chkrow input{width:auto}
+#login{max-width:420px;margin:60px auto;padding:0 16px}#login input{width:100%;padding:10px;border:2px solid var(--ink);background:var(--card);margin:8px 0}
+</style>
+</head>
+<body>
+<div id="login">
+  <h1>Berliner Kiez-Check Admin</h1>
+  <p>Admin-Token eingeben (wird nur in diesem Tab gespeichert).</p>
+  <input id="tok" type="password" autocomplete="off">
+  <button id="loginBtn">Anmelden</button>
+</div>
+<div id="app" hidden>
+  <header>
+    <h1>Berliner Kiez-Check Admin</h1>
+    <button data-s="pending" aria-pressed="true">Zu prüfen</button>
+    <button data-s="approved">Online</button>
+    <button data-s="rejected">Abgelehnt</button>
+    <button data-sec="sponsors">Sponsoren</button>
+    <button data-sec="jobs">Jobs</button>
+    <button data-sec="requests">Werbeanfragen</button>
+    <button id="logout">Abmelden</button>
+  </header>
+  <main>
+    <div class="stats" id="stats"></div>
+    <div id="list"></div>
+    <div id="sec" hidden></div>
+  </main>
+</div>
+<script>
+var TOKEN = sessionStorage.getItem('kc_admin') || '', ST = 'pending';
+var $ = function (s) { return document.querySelector(s); };
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function call(p, body) {
+  return fetch(p, { method: body ? 'POST' : 'GET', headers: Object.assign({ authorization: 'Bearer ' + TOKEN }, body ? { 'content-type': 'application/json' } : {}), body: body ? JSON.stringify(body) : undefined })
+    .then(function (r) { if (r.status === 401) { logout(); throw new Error('auth'); } return r.json(); });
+}
+function logout() { TOKEN = ''; sessionStorage.removeItem('kc_admin'); $('#app').hidden = true; $('#login').hidden = false; }
+function start() {
+  $('#login').hidden = true; $('#app').hidden = false;
+  call('/api/admin/stats').then(function (s) {
+    var c = {}; s.counts.forEach(function (x) { c[x.status] = x.n; });
+    $('#stats').innerHTML = '<span>Zu prüfen: ' + (c.pending || 0) + '</span><span>Online: ' + (c.approved || 0) + '</span><span>Hervorgehoben: ' + s.featured + '</span><span>Umsatz 30 Tage: ' + (s.revenue30 / 100).toFixed(2).replace('.', ',') + ' €</span>';
+  });
+  list();
+}
+function list() {
+  call('/api/admin/list?status=' + ST).then(function (j) {
+    $('#list').innerHTML = j.items.length ? j.items.map(function (it) {
+      return '<div class="it" data-id="' + esc(it.id) + '">' + (it.photo_key ? '<img src="/img/' + esc(it.photo_key) + '?v=' + it.updated_at + '" alt="">' : '<div class="ph"></div>') +
+        '<div><h3>' + esc(it.name) + '</h3><p class="m">' + esc(it.kiez) + ' / ' + esc(it.category) + ' – ' + esc(it.address) + '</p>' +
+        '<p class="m">' + esc(it.email) + (it.phone ? ' · ' + esc(it.phone) : '') + (it.website ? ' · <a href="' + esc(it.website) + '" target="_blank" rel="noopener">' + esc(it.website) + '</a>' : '') + (it.instagram ? ' · @' + esc(it.instagram) : '') + '</p>' +
+        (it.mod_note ? '<div class="note">KI: ' + esc(it.mod_note) + '</div>' : '') +
+        '<p>' + esc(it.desc_de) + '</p><p class="m">TR: ' + esc(it.desc_tr) + '</p>' +
+        (it.featured_until > Date.now() ? '<p class="m"><b>Hervorgehoben bis ' + new Date(it.featured_until).toLocaleDateString('de') + '</b></p>' : '') +
+        '<div class="row">' + (ST !== 'approved' ? '<button class="ok" data-a="approved">Freigeben</button>' : '') + (ST !== 'rejected' ? '<button class="no" data-a="rejected">Ablehnen</button>' : '') +
+        '<button class="del" data-a="delete">Löschen</button></div></div></div>';
+    }).join('') : '<p>Nichts zu tun. 🎉</p>';
+  });
+}
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.id === 'loginBtn') { TOKEN = $('#tok').value.trim(); sessionStorage.setItem('kc_admin', TOKEN); start(); return; }
+  if (b.id === 'logout') { logout(); return; }
+  if (b.dataset.s) { ST = b.dataset.s; document.querySelectorAll('[data-s]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); list(); return; }
+  var a = b.dataset.a, id = b.closest('.it') && b.closest('.it').dataset.id;
+  if (!a || !id) return;
+  if (a === 'delete') { if (!confirm('Eintrag endgültig löschen?')) return; call('/api/admin/delete', { id: id }).then(start); }
+  else call('/api/admin/set', { id: id, status: a }).then(start);
+});
+$('#tok').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#loginBtn').click(); });
+if (TOKEN) start();
+</script>
+<script>
+/* ===== Sponsoren, Jobs, Werbeanfragen ===== */
+var SEC = null, SPS = [], JST = 'pending';
+function el(id) { return document.getElementById(id); }
+function showSec(name) {
+  SEC = name;
+  el('stats').hidden = !!name; el('list').hidden = !!name; el('sec').hidden = !name;
+  document.querySelectorAll('[data-sec]').forEach(function (x) { x.setAttribute('aria-pressed', x.dataset.sec === name); });
+  if (name) document.querySelectorAll('[data-s]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+  if (name === 'sponsors') loadSp();
+  if (name === 'jobs') loadJobs();
+  if (name === 'requests') loadReq();
+}
+function fmtD(ms) { return ms ? new Date(ms).toISOString().slice(0, 10) : ''; }
+function loadSp() {
+  call('/api/admin/sponsors').then(function (j) {
+    SPS = j.items || [];
+    var now = Date.now();
+    el('sec').innerHTML = '<div class="row" style="margin-bottom:10px"><button class="ok" data-sa="new">+ Neuer Sponsor</button></div><div id="edBox"></div>' +
+      (SPS.length ? SPS.map(function (s) {
+        var live = s.active && (!s.start_at || s.start_at <= now) && (!s.end_at || s.end_at > now);
+        var ctr = s.imp30 ? (100 * s.clk30 / s.imp30).toFixed(1).replace('.', ',') : '0';
+        return '<div class="sp' + (live ? '' : ' off') + '">' + (s.image ? '<img src="' + esc(s.image) + '" alt="">' : '<div></div>') +
+          '<div><h3 style="margin:0">' + esc(s.name) + (live ? '' : ' <small>(nicht aktiv)</small>') + (s.own ? ' <small>· Eigenwerbung</small>' : '') + '</h3>' +
+          '<p class="kv">' + esc(s.headline_de) + '</p>' +
+          '<p class="kv">Plätze: ' + esc(s.places) + ' · Kieze: ' + esc(s.kieze || 'alle') + ' · Kategorien: ' + esc(s.cats || 'alle') + ' · Priorität: ' + s.priority + '</p>' +
+          '<p class="kv">Laufzeit: ' + (fmtD(s.start_at) || 'sofort') + ' bis ' + (fmtD(s.end_at) || 'unbegrenzt') + ' · Paket: ' + esc(s.plan || '-') + (s.contact ? ' · Kontakt: ' + esc(s.contact) : '') + '</p>' +
+          '<p><span class="big">' + s.imp30 + '</span> Einblendungen · <span class="big">' + s.clk30 + '</span> Klicks · ' + ctr + ' % (30 Tage)</p>' +
+          '<div class="row"><button data-sa="edit" data-id="' + esc(s.id) + '">Bearbeiten</button><button data-sa="toggle" data-id="' + esc(s.id) + '">' + (s.active ? 'Pausieren' : 'Aktivieren') + '</button>' +
+          '<button data-sa="report" data-id="' + esc(s.id) + '">Bericht kopieren</button><button class="del" data-sa="del" data-id="' + esc(s.id) + '">Löschen</button></div></div></div>';
+      }).join('') : '<p>Noch keine Sponsoren. Führe <code>seed-sponsoren.sql</code> aus oder lege einen an.</p>');
+  });
+}
+function spForm(s) {
+  s = s || { active: 1, places: 'slider,native', priority: 5 };
+  var f = function (k, label, ph) { return '<label>' + label + '<input name="' + k + '" value="' + esc(s[k] || '') + '" placeholder="' + esc(ph || '') + '"></label>'; };
+  var pl = (s.places || '').split(',');
+  var cb = function (v, l) { return '<label><input type="checkbox" name="pl" value="' + v + '"' + (pl.indexOf(v) >= 0 ? ' checked' : '') + '>' + l + '</label>'; };
+  el('edBox').innerHTML = '<form class="ed" id="spEd"><input type="hidden" name="id" value="' + esc(s.id || '') + '">' +
+    '<div class="g3">' + f('name', 'Name *') + f('plan', 'Paket / Preis', 'intro19, 49, 69, 89, own') + f('contact', 'Kontakt (intern)') + '</div>' +
+    '<div class="g3">' + f('headline_de', 'Text DE') + f('headline_tr', 'Text TR') + f('headline_en', 'Text EN') + '</div>' +
+    '<div class="g3">' + f('cta_de', 'Button DE', 'Website ansehen') + f('cta_tr', 'Button TR', 'Siteye git') + f('cta_en', 'Button EN', 'Visit website') + '</div>' +
+    '<div class="g3">' + f('link_web', 'Website (https://…)') + f('link_wa', 'WhatsApp (https://wa.me/49…)') + f('link_tel', 'Telefon (tel:+49…)') + '</div>' +
+    '<div class="g3">' + f('link_ig', 'Instagram (https://…)') + f('kieze', 'Nur Kieze (leer = alle)', 'kreuzberg,neukoelln') + f('cats', 'Nur Kategorien (leer = alle)', 'cafe,markt') + '</div>' +
+    '<div class="g3"><label>Start<input type="date" name="start" value="' + fmtD(s.start_at) + '"></label><label>Ende<input type="date" name="end" value="' + fmtD(s.end_at) + '"></label>' +
+    '<label>Priorität (0–10)<input type="number" name="priority" min="0" max="10" value="' + (s.priority || 0) + '"></label></div>' +
+    '<div class="g3">' + f('image', 'Bild-Pfad', '/assets/sponsors/…webp') + '<label>oder Bild hochladen (1200×630)<input type="file" name="image_file" accept="image/jpeg,image/png,image/webp"></label><div></div></div>' +
+    '<div class="chkrow">' + cb('slider', 'Startseite-Leiste') + cb('native', 'Zwischen Einträgen') + cb('after_submit', 'Nach dem Eintragen') + cb('quiz', 'Kiez-Quiz') +
+    '<label><input type="checkbox" name="own" value="1"' + (s.own ? ' checked' : '') + '>Eigenwerbung</label><label><input type="checkbox" name="active" value="1"' + (s.active ? ' checked' : '') + '>Aktiv</label></div>' +
+    '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-sa="cancel">Abbrechen</button></div></form>';
+  el('spEd').onsubmit = function (e) {
+    e.preventDefault();
+    var fd = new FormData(e.target);
+    fd.set('places', fd.getAll('pl').join(',')); fd.delete('pl');
+    if (!fd.get('own')) fd.set('own', '0'); if (!fd.get('active')) fd.set('active', '0');
+    fetch('/api/admin/sponsor/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j.ok) loadSp(); else alert('Bitte prüfen: ' + (j.field || j.error)); });
+  };
+  el('edBox').scrollIntoView({ behavior: 'smooth' });
+}
+function spReport(s) {
+  var from = new Date(Date.now() - 30 * 864e5).toLocaleDateString('de'), to = new Date().toLocaleDateString('de');
+  var ctr = s.imp30 ? (100 * s.clk30 / s.imp30).toFixed(1).replace('.', ',') : '0';
+  return 'Berliner Kiez-Check – Werbebericht ' + s.name + '\nZeitraum: ' + from + ' bis ' + to + '\n\nEinblendungen: ' + s.imp30 + '\nKlicks: ' + s.clk30 + '\nKlickrate: ' + ctr + ' %\n\n' +
+    'Gezählt wird anonym und ohne Cookies: eine Einblendung, wenn mindestens die Hälfte der Anzeige sichtbar war.\nBerliner Kiez-Check – DeindigitalerhelferCenter';
+}
+function loadJobs() {
+  call('/api/admin/jobs?status=' + JST).then(function (j) {
+    var tabs = ['pending', 'approved', 'rejected'].map(function (s) { return '<button data-js="' + s + '" aria-pressed="' + (s === JST) + '">' + { pending: 'Zu prüfen', approved: 'Online', rejected: 'Abgelehnt' }[s] + '</button>'; }).join('');
+    el('sec').innerHTML = '<div class="row" style="margin-bottom:10px">' + tabs + '</div>' + ((j.items || []).length ? j.items.map(function (x) {
+      return '<div class="it" style="grid-template-columns:1fr"><div><h3>' + esc(x.title) + ' – ' + esc(x.company) + '</h3>' +
+        '<p class="m">' + esc(x.kiez) + ' · ' + esc(x.jobtype) + ' · ' + esc(x.salary || '') + ' · ' + esc(x.languages || '') + '</p>' +
+        '<p class="m">' + esc(x.email) + ' · WA ' + esc(x.whatsapp || '-') + ' · Tel ' + esc(x.phone || '-') + ' · läuft bis ' + fmtD(x.expires_at) + (x.urgent_until > Date.now() ? ' · <b>Dringend bis ' + fmtD(x.urgent_until) + '</b>' : '') + '</p>' +
+        (x.mod_note ? '<div class="note">KI: ' + esc(x.mod_note) + '</div>' : '') + '<p>' + esc(x.description || '') + '</p>' +
+        '<div class="row">' + (JST !== 'approved' ? '<button class="ok" data-ja="approved" data-id="' + esc(x.id) + '">Freigeben</button>' : '') +
+        (JST !== 'rejected' ? '<button class="no" data-ja="rejected" data-id="' + esc(x.id) + '">Ablehnen</button>' : '') +
+        '<button class="del" data-ja="delete" data-id="' + esc(x.id) + '">Löschen</button></div></div></div>';
+    }).join('') : '<p>Keine Jobs in dieser Ansicht.</p>');
+  });
+}
+function loadReq() {
+  call('/api/admin/requests').then(function (j) {
+    el('sec').innerHTML = (j.items || []).length ? j.items.map(function (r) {
+      return '<div class="it" style="grid-template-columns:1fr' + (r.done ? ';opacity:.55' : '') + '"><div><h3>' + esc(r.company) + ' <small>(' + esc(r.size) + ')</small></h3>' +
+        '<p class="m">' + esc(r.person || '') + ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a> · ' + esc(r.phone || '') + ' · ' + new Date(r.created_at).toLocaleString('de') + '</p>' +
+        '<p>' + esc(r.message || '') + '</p>' + (r.done ? '' : '<div class="row"><button class="ok" data-rd="' + esc(r.id) + '">Erledigt</button></div>') + '</div></div>';
+    }).join('') : '<p>Keine Anfragen.</p>';
+  });
+}
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.s) { showSec(null); return; }
+  if (b.dataset.sec) { showSec(b.dataset.sec); return; }
+  if (b.dataset.js) { JST = b.dataset.js; loadJobs(); return; }
+  if (b.dataset.ja) { if (b.dataset.ja === 'delete' && !confirm('Job löschen?')) return; call('/api/admin/job/set', { id: b.dataset.id, status: b.dataset.ja }).then(loadJobs); return; }
+  if (b.dataset.rd) { call('/api/admin/request/done', { id: b.dataset.rd }).then(loadReq); return; }
+  var sa = b.dataset.sa; if (!sa) return;
+  var s = SPS.filter(function (x) { return x.id === b.dataset.id; })[0];
+  if (sa === 'new') spForm(null);
+  else if (sa === 'cancel') el('edBox').innerHTML = '';
+  else if (sa === 'edit') spForm(s);
+  else if (sa === 'del') { if (confirm('Sponsor „' + s.name + '“ löschen?')) call('/api/admin/sponsor/delete', { id: s.id }).then(loadSp); }
+  else if (sa === 'report') { var txt = spReport(s); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { alert('Bericht kopiert:\n\n' + txt); }, function () { prompt('Bericht:', txt); }); }
+  else if (sa === 'toggle') {
+    var fd = new FormData();
+    ['id', 'name', 'image', 'headline_de', 'headline_tr', 'headline_en', 'cta_de', 'cta_tr', 'cta_en', 'link_web', 'link_wa', 'link_tel', 'link_ig', 'places', 'kieze', 'cats', 'plan', 'contact', 'priority'].forEach(function (k) { fd.set(k, s[k] == null ? '' : s[k]); });
+    fd.set('start', fmtD(s.start_at)); fd.set('end', fmtD(s.end_at)); fd.set('own', s.own ? '1' : '0'); fd.set('active', s.active ? '0' : '1');
+    fetch('/api/admin/sponsor/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd }).then(function () { loadSp(); });
+  }
+});
+</script>
+</body>
+</html>

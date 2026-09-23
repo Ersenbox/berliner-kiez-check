@@ -1,4 +1,4 @@
-name = "kiezcheck"
+name = "berliner-kiez-check"
 main = "worker.js"
 compatibility_date = "2026-09-01"
 
@@ -8,12 +8,12 @@ binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "kiezcheck"
+database_name = "berliner-kiez-check"
 database_id = "HIER_DATABASE_ID_EINTRAGEN"
 
 [[r2_buckets]]
 binding = "BUCKET"
-bucket_name = "kiezcheck-photos"
+bucket_name = "berliner-kiez-check-photos"
 
 [vars]
 # "1" = von der KI als unbedenklich eingestufte Einträge gehen sofort online

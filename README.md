@@ -1,4 +1,4 @@
-# KiezCheck Berlin – Kurulum ve İşletme Rehberi
+# Berliner Kiez-Check – Kurulum ve İşletme Rehberi
 
 Berlin mahalle rehberi: işletmeler kendi kaydını girer, yapay zekâ kontrol edip üç dile çevirir, sen sadece para kazandıran kısma odaklanırsın.
 
@@ -51,11 +51,11 @@ npm i -g wrangler
 wrangler login
 
 # Veritabanı
-wrangler d1 create kiezcheck          # çıkan database_id'yi wrangler.toml'a yaz
-wrangler d1 execute kiezcheck --remote --file=schema.sql
+wrangler d1 create berliner-kiez-check          # çıkan database_id'yi wrangler.toml'a yaz
+wrangler d1 execute berliner-kiez-check --remote --file=schema.sql
 
 # Fotoğraf deposu
-wrangler r2 bucket create kiezcheck-photos
+wrangler r2 bucket create berliner-kiez-check-photos
 
 # Gizli anahtarlar
 wrangler secret put ADMIN_TOKEN           # uzun rastgele şifre (en az 32 karakter)
@@ -66,7 +66,7 @@ wrangler secret put STRIPE_WEBHOOK_SECRET # whsec_... (adım 3'ten)
 wrangler deploy
 ```
 
-Sonra Cloudflare Dashboard → Workers → kiezcheck → Settings → Domains → `kiezcheck.de` ekle.
+Sonra Cloudflare Dashboard → Workers → kiezcheck → Settings → Domains → `berliner-kiez-check.bakiciersen.workers.dev` ekle.
 
 `public/index.html` içinde `CFG` bölümünü doldur: Impressum ve Datenschutz linkleri, AdSense bilgileri, fiyatlar.
 
@@ -77,7 +77,7 @@ Sonra Cloudflare Dashboard → Workers → kiezcheck → Settings → Domains �
 ## 3. Stripe (öne çıkarma ödemeleri)
 
 1. Stripe Dashboard → Developers → Webhooks → Add endpoint
-2. URL: `https://kiezcheck.de/api/stripe-webhook`
+2. URL: `https://berliner-kiez-check.bakiciersen.workers.dev/api/stripe-webhook`
 3. Event: `checkout.session.completed`
 4. Signing secret'ı `STRIPE_WEBHOOK_SECRET` olarak kaydet
 5. Settings → Invoices → alt bilgi: *„Gemäß § 19 UStG wird keine Umsatzsteuer berechnet."* (Kleinunternehmer)
@@ -89,7 +89,7 @@ Sistem her ödemede otomatik fatura oluşturur, kayıt 30/90 gün öne çıkar, 
 ## 4. Reklam
 
 **Web (AdSense):**
-- AdSense'e `kiezcheck.de`'yi ekle. Onay için sitede yeterli gerçek içerik olmalı → önce 50–100 kayıt topla, sonra başvur.
+- AdSense'e `berliner-kiez-check.bakiciersen.workers.dev`'yi ekle. Onay için sitede yeterli gerçek içerik olmalı → önce 50–100 kayıt topla, sonra başvur.
 - `index.html` → `CFG.ADSENSE_CLIENT` ve `CFG.ADSENSE_SLOT`; `wrangler.toml` → aynı değerler (SEO sayfaları için).
 - `public/ads.txt` dosyası oluştur (AdSense sana içeriğini verir).
 - **Zorunlu:** AdSense → Privacy & messaging → AB için Google'ın onaylı çerez onay formunu (CMP) aç. AB'de bu olmadan reklam gösterilmemeli.
@@ -107,7 +107,7 @@ mkdir kiezcheck-app && cd kiezcheck-app
 npm init -y
 npm i @capacitor/core @capacitor/cli @capacitor/android @capacitor-community/admob
 cp ../android/capacitor.config.json .
-mkdir www && echo '<meta http-equiv="refresh" content="0;url=https://kiezcheck.de">' > www/index.html
+mkdir www && echo '<meta http-equiv="refresh" content="0;url=https://berliner-kiez-check.bakiciersen.workers.dev">' > www/index.html
 npx cap add android
 npx cap sync
 npx cap open android      # Android Studio → Build → Generate Signed Bundle
@@ -149,7 +149,7 @@ Ana gelir **öne çıkarma**, reklam ek gelirdir. Yerel bir rehberde reklam geli
 **Ek gelir fikirleri (kod gerektirmez):**
 - Doğrudan banner satışı: bir mahallenin en üst alanı için yerel işletmeye aylık 49–99 €
 - "Esnaf Paketi" ile birleştirme: öne çıkarma + sosyal medya içeriği
-- Affiliate: taşınma, internet, sigorta (önceki KiezCheck planındaki ortaklar)
+- Affiliate: taşınma, internet, sigorta (önceki Berliner Kiez-Check planındaki ortaklar)
 
 **Maliyetler (yaklaşık):** Cloudflare başlangıçta ücretsiz katmanda kalır; Claude Haiku kayıt başına bir sentin çok altında; domain yılda ~10 €; Stripe kart başına küçük bir komisyon.
 
@@ -158,8 +158,8 @@ Ana gelir **öne çıkarma**, reklam ek gelirdir. Yerel bir rehberde reklam geli
 ## 8. İlk 30 gün – kayıt toplama planı
 
 1. **1. hafta:** Kendi mahallendeki 30 işletmeyi bizzat ziyaret et, telefondan birlikte kaydı gir (2 dakika). İlk 20 işletmeye 30 gün ücretsiz öne çıkarma ver (admin panelinden değil, Stripe'ta %100 kupon ile).
-2. **2. hafta:** Her işletmeye A6 kart / QR kod bırak: "KiezCheck'te bizi bulun". Bu hem trafik hem güven getirir.
-3. **3. hafta:** Google Search Console → sitemap gönder. Instagram'da "Neukölln'de kahvaltı: 5 yer" gibi paylaşımlar, link KiezCheck sayfasına.
+2. **2. hafta:** Her işletmeye A6 kart / QR kod bırak: "Berliner Kiez-Check'te bizi bulun". Bu hem trafik hem güven getirir.
+3. **3. hafta:** Google Search Console → sitemap gönder. Instagram'da "Neukölln'de kahvaltı: 5 yer" gibi paylaşımlar, link Berliner Kiez-Check sayfasına.
 4. **4. hafta:** Ücretsiz dönemi biten işletmelere ücretli öne çıkarmayı teklif et.
 
 Boş mahalle sayfaları otomatik olarak `noindex` olur (Google'da zayıf görünmemek için), kayıt gelince kendiliğinden indekslenir.
@@ -199,12 +199,12 @@ Ben avukat değilim; bu liste başlangıç noktasıdır, özellikle Datenschutz 
 berliner-kiez/
 ├── index.html          ← ORİJİNAL Quiz – DEĞİŞTİRİLMEDİ
 ├── images/             ← ORİJİNAL görseller – DEĞİŞTİRİLMEDİ
-└── kiezcheck/          ← YENİ: KiezCheck uygulamasının tamamı
+└── kiezcheck/          ← YENİ: Berliner Kiez-Check uygulamasının tamamı
     ├── worker.js, werbung.js, wrangler.toml
     ├── schema.sql, schema-002-werbung.sql, seed-sponsoren.sql
     └── public/
         ├── index.html, admin.html, werben.html
-        ├── quiz/index.html          ← Quiz'in KiezCheck'e bağlı kopyası
+        ├── quiz/index.html          ← Quiz'in Berliner Kiez-Check'e bağlı kopyası
         ├── assets/kiez/*.webp       ← görsellerin küçültülmüş kopyaları
         └── assets/sponsors/*.webp   ← 7 reklam verenin banner'ları
 ```
@@ -214,13 +214,13 @@ berliner-kiez/
 Yeni kurulum:
 ```bash
 cd kiezcheck
-wrangler d1 execute kiezcheck --remote --file=schema.sql
-wrangler d1 execute kiezcheck --remote --file=schema-002-werbung.sql
-wrangler d1 execute kiezcheck --remote --file=seed-sponsoren.sql
+wrangler d1 execute berliner-kiez-check --remote --file=schema.sql
+wrangler d1 execute berliner-kiez-check --remote --file=schema-002-werbung.sql
+wrangler d1 execute berliner-kiez-check --remote --file=seed-sponsoren.sql
 wrangler deploy
 ```
 
-KiezCheck zaten yayındaysa sadece son iki SQL dosyası + `wrangler deploy`. Mevcut kayıtlar korunur (test edildi).
+Berliner Kiez-Check zaten yayındaysa sadece son iki SQL dosyası + `wrangler deploy`. Mevcut kayıtlar korunur (test edildi).
 
 **GitHub'dan otomatik yayın:** Cloudflare Dashboard → Workers → kiezcheck → Settings → Builds → GitHub reposu `Ersenbox/berliner-kiez`, **Root directory: `kiezcheck`**. Böylece her `git push` sonrası otomatik yayınlanır ve repodaki orijinal Quiz (GitHub Pages vb.) etkilenmez.
 
@@ -252,6 +252,6 @@ Fiyatları değiştirmek: `werbung.js` → `SUBS` ve `INTRO`, `public/index.html
 
 1. **Quiz'deki reklam vaatleri** (650 € Cashback, 150 € Bonus, 120 € Vorteil, %40, „wissenschaftlich validiert", „98% Match") – UWG riski, metinler aynen bırakıldı.
 2. **Quiz'deki yedek haberler** (API çalışmazsa gösterilen sabit haberler) gerçek haber gibi görünüyor ama sabit metin. Kaldırılması veya „Beispiel" olarak işaretlenmesi önerilir.
-3. **Repodaki `ad_banner_check24/o2/vattenfall/bwb.jpg`** (marka logoları) KiezCheck'te kullanılmıyor; sadece WebP kopyaları oluşturuldu.
+3. **Repodaki `ad_banner_check24/o2/vattenfall/bwb.jpg`** (marka logoları) Berliner Kiez-Check'te kullanılmıyor; sadece WebP kopyaları oluşturuldu.
 4. **Partner linkleri** (`AFF` – `public/quiz/index.html`) takip kodu bekliyor.
 5. **AdSense / AdMob** ID'leri: `CFG` bloklarında boş.
