@@ -1,5 +1,5 @@
 // Berliner Kiez-Check Service Worker – App-Shell offline, API network-first
-const C = 'kiezcheck-v2';
+const C = 'kiezcheck-v3';
 const SHELL = ['/', '/index.html', '/manifest.json', '/icon.svg', '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css', '/vendor/fonts/archivo-latin-wdth-normal.woff2', '/quiz/', '/werben.html', '/vendor/confetti/confetti.browser.js', '/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener('activate', e => {

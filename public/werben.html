@@ -6,62 +6,88 @@
 <title>Werben auf Berliner Kiez-Check – Pakete für Betriebe</title>
 <meta name="description" content="Mehr Kunden aus deinem Berliner Kiez: 3 Monate für 19 € pro Monat, danach 49–89 € je nach Betriebsgröße. Banner, Hervorhebung, Gutscheine und Jobs.">
 <link rel="canonical" href="https://berliner-kiez-check.bakiciersen.workers.dev/werben.html">
-<meta name="theme-color" content="#0078BF">
+<meta name="theme-color" content="#E30613">
+<script>try{var kcT=localStorage.getItem('kc_theme');if(kcT)document.documentElement.setAttribute('data-theme',kcT)}catch(e){}</script>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <style>
-@font-face{font-family:Archivo;font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(/vendor/fonts/archivo-latin-ext-wdth-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Archivo;font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(/vendor/fonts/archivo-latin-wdth-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-:root{--paper:#EEF0EC;--ink:#1C2B39;--pink:#FF48B0;--blue:#0078BF;--yellow:#FFE800;--muted:#4A5866;--card:#fff;--blend:multiply}
-@media (prefers-color-scheme:dark){:root{--paper:#141B22;--ink:#E9ECE6;--muted:#A9B3BC;--card:#1C252E;--blend:screen}}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/vendor/fonts/plus-jakarta-sans-latin-ext-wght-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+/* === Design im Stil des Kiez-Quiz === */
+:root{--paper:#F8F9FA;--ink:#18191A;--pink:#E30613;--blue:#0288D1;--yellow:#F0D722;--green:#2E7D32;--muted:#606770;--card:#fff;--sv:#F1F3F5;--line:#121212;--soft:#D1D5DB;--shadow:0 8px 24px rgba(0,0,0,.08);--r:16px;--font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--blend:normal}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#121214;--ink:#F2F3F5;--muted:#949BA4;--card:#1E1F22;--sv:#2B2D31;--line:#000;--soft:#3F4147;--shadow:0 8px 24px rgba(0,0,0,.45)}}
+:root[data-theme=dark]{--paper:#121214;--ink:#F2F3F5;--muted:#949BA4;--card:#1E1F22;--sv:#2B2D31;--line:#000;--soft:#3F4147;--shadow:0 8px 24px rgba(0,0,0,.45)}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Archivo,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--font);padding-bottom:env(safe-area-inset-bottom,0px);transition:background-color .25s,color .25s}
 a{color:var(--blue)}
-:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
-.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--paper);border-bottom:2px solid var(--ink)}
-.logo{font-weight:900;font-stretch:125%;font-size:clamp(16px,4vw,23px);text-decoration:none;color:var(--blue);margin-right:auto;text-shadow:.045em .035em 0 var(--pink)}
-.langs{display:flex;border:2px solid var(--ink)}
-.langs button{background:none;border:0;padding:4px 8px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;color:inherit}
-.langs button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
-main{max-width:1100px;margin:0 auto;padding:30px 16px 60px}
-h1{font-weight:900;font-stretch:125%;font-size:clamp(36px,7vw,78px);line-height:.95;letter-spacing:-.02em;margin:0 0 14px;color:var(--blue);text-shadow:.045em .035em 0 var(--pink);max-width:14ch}
-.lead{color:var(--muted);font-size:18px;max-width:58ch;margin:0 0 30px}
-h2{font-stretch:112%;font-weight:900;font-size:26px;margin:44px 0 12px;border-top:2px solid var(--ink);padding-top:18px}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.pk{border:2px solid var(--ink);background:var(--card);padding:18px;display:flex;flex-direction:column;gap:8px}
-.pk.hl{box-shadow:6px 6px 0 var(--pink)}
-.pk h3{margin:0;font-stretch:125%;font-weight:900;font-size:24px}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--card);border-bottom:2px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:clamp(14px,4vw,18px);line-height:1.1;text-decoration:none;color:var(--ink);margin-right:auto}
+.logo::before{content:"BERLIN";flex:0 0 38px;width:38px;height:38px;display:grid;place-items:center;background:var(--pink);color:var(--yellow);font-size:8.5px;font-weight:800;letter-spacing:.5px;border:2px solid var(--line);border-radius:10px;transform:rotate(-5deg);box-shadow:2px 2px 0 var(--line)}
+.langs{display:flex;border:2px solid var(--soft);border-radius:20px;overflow:hidden;background:var(--card)}
+.langs button{background:none;border:0;padding:5px 9px;font:inherit;font-weight:800;font-size:13px;cursor:pointer;color:inherit}
+.langs button[aria-pressed=true]{background:var(--yellow);color:#000}
+.themebtn{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border:2px solid var(--soft);border-radius:10px;background:var(--card);cursor:pointer;font-size:16px;line-height:1;padding:0}
+@media (max-width:520px){.logo::before{flex-basis:32px;width:32px;height:32px;font-size:7px}.top{padding-left:10px;padding-right:10px;gap:6px}.langs button{padding:4px 6px;font-size:12px}.themebtn{width:32px;height:32px;flex-basis:32px}}
+main{max-width:1100px;margin:0 auto;padding:26px 16px 60px}
+.whero{display:grid;gap:18px;align-items:center;margin-bottom:10px}
+@media (min-width:760px){.whero{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px}}
+.kiezpic{position:relative;margin:0;border:2px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:var(--sv);aspect-ratio:16/9}
+.kiezpic img{display:block;width:100%;height:100%;object-fit:cover}
+.kiezpic::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55));pointer-events:none}
+.kiezpic figcaption{position:absolute;left:12px;bottom:12px;z-index:1;background:var(--yellow);color:#000;border:2px solid var(--line);border-radius:10px;padding:4px 10px;font-weight:800;font-size:14px;box-shadow:2px 2px 0 var(--line)}
+h1{font-weight:800;font-size:clamp(30px,5.4vw,54px);line-height:1.05;letter-spacing:-.025em;margin:0 0 12px;color:var(--ink);max-width:16ch}
+.lead{color:var(--muted);font-size:17px;max-width:58ch;margin:0}
+h2{font-weight:800;font-size:clamp(22px,3.2vw,28px);margin:40px 0 14px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";flex:0 0 8px;height:1.1em;background:var(--pink);border:2px solid var(--line);border-radius:4px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.pk{border:2px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);position:relative;transition:transform .15s}
+.pk:hover{transform:translateY(-3px)}
+.pk.hl{border-width:3px;box-shadow:6px 6px 0 var(--yellow),var(--shadow)}
+.pk h3{margin:0;font-weight:800;font-size:22px}
 .pk .size{color:var(--muted);font-size:14px;margin:0}
-.pk .price{font-stretch:125%;font-weight:900;font-size:40px;line-height:1;color:var(--blue)}
-.pk .price small{font-size:15px;font-stretch:100%}
-.pk .then{font-size:15px;margin:0}
-.pk ul{margin:6px 0 0;padding-left:18px}
-.pk li{margin:3px 0}
-.note{border:2px dashed var(--pink);padding:12px 14px;margin-top:16px;max-width:70ch}
-form{display:grid;gap:12px;max-width:640px}
+.pk .price{font-weight:800;font-size:40px;line-height:1;color:var(--pink)}
+.pk .price small{font-size:15px;color:var(--muted);font-weight:700}
+.pk .then{font-size:15px;margin:0;background:var(--sv);border-radius:10px;padding:6px 10px;font-weight:600}
+.pk ul{margin:6px 0 0;padding-left:0;list-style:none}
+.pk li{margin:6px 0;padding-left:26px;position:relative}
+.pk li::before{content:"✅";position:absolute;left:0;top:0;font-size:15px}
+.note{border:2px dashed var(--pink);border-radius:12px;background:var(--card);padding:12px 14px;margin-top:18px;max-width:70ch}
+form{display:grid;gap:12px;max-width:640px;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
 label{display:grid;gap:4px;font-weight:700;font-size:14px}
-input,select,textarea{font:inherit;color:inherit;border:2px solid var(--ink);background:var(--card);padding:9px 10px;width:100%}
+input,select,textarea{font:inherit;color:inherit;border:2px solid var(--soft);border-radius:10px;background:var(--paper);padding:10px 12px;width:100%;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--line);outline:none;box-shadow:0 0 0 3px rgba(240,215,34,.55)}
 textarea{min-height:100px}
 .two{display:grid;gap:12px;grid-template-columns:1fr 1fr}
 @media (max-width:560px){.two{grid-template-columns:1fr}}
 .chk{display:flex;gap:10px;align-items:flex-start;font-weight:400}
-.chk input{width:20px;height:20px;flex:0 0 20px;margin-top:2px}
+.chk input{width:20px;height:20px;flex:0 0 20px;margin-top:2px;accent-color:var(--pink)}
 .hp{position:absolute;left:-9999px}
-.btn{background:var(--pink);color:#1C2B39;border:2px solid #1C2B39;padding:10px 18px;font:inherit;font-weight:800;cursor:pointer;box-shadow:3px 3px 0 var(--blue);justify-self:start}
-.ok{border:2px solid var(--ink);background:var(--yellow);color:#1C2B39;padding:14px;font-weight:700}
-footer{max-width:1100px;margin:0 auto;padding:22px 16px 30px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 18px}
+.btn{background:var(--pink);color:#fff;border:2px solid var(--line);border-radius:10px;padding:11px 20px;font:inherit;font-weight:800;cursor:pointer;justify-self:start;display:inline-flex;align-items:center;gap:6px;transition:transform .1s,filter .15s}
+.btn::before{content:"📨"}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:scale(.96)}
+.ok{border:2px solid var(--line);border-radius:var(--r);background:var(--yellow);color:#000;padding:14px;font-weight:700;box-shadow:var(--shadow)}
+footer{max-width:1100px;margin:0 auto;padding:22px 16px 30px;border-top:2px solid var(--line);color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 18px}
 footer a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <header class="top">
   <a class="logo" href="/">Berliner Kiez-Check</a>
   <div class="langs" role="group" aria-label="Sprache"><button data-l="de">DE</button><button data-l="tr">TR</button><button data-l="en">EN</button></div>
+  <button class="themebtn" id="themeBtn" type="button" aria-label="Dark Mode">🌙</button>
 </header>
 <main>
-  <h1 data-i="h1"></h1>
-  <p class="lead" data-i="lead"></p>
+  <section class="whero">
+    <div>
+      <h1 data-i="h1"></h1>
+      <p class="lead" data-i="lead"></p>
+    </div>
+    <figure class="kiezpic"><img src="/assets/kiez/berlin_city_banner-800.webp" alt="" width="800" height="447" decoding="async"><figcaption>📍 Berlin</figcaption></figure>
+  </section>
 
   <h2 data-i="h_pk"></h2>
   <div class="grid">
@@ -170,6 +196,23 @@ document.getElementById('f').addEventListener('submit', function (e) {
 var pre = new URLSearchParams(location.search).get('size'); if (pre) document.querySelector('select[name=size]').value = pre;
 apply();
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('/sw.js').catch(function () { });
+</script>
+<script>
+/* ===== Design: Hell/Dunkel-Schalter (nur Darstellung) ===== */
+(function () {
+  var btn = document.getElementById('themeBtn'), root = document.documentElement;
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function isDark() { var a = root.getAttribute('data-theme'); return a ? a === 'dark' : !!(mq && mq.matches); }
+  function paint() { btn.textContent = isDark() ? '☀️' : '🌙'; }
+  btn.addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('kc_theme', next); } catch (e) { }
+    paint();
+  });
+  if (mq && mq.addEventListener) mq.addEventListener('change', paint);
+  paint();
+})();
 </script>
 </body>
 </html>
