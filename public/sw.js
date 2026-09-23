@@ -1,6 +1,6 @@
 // Berliner Kiez-Check Service Worker – App-Shell offline, API network-first
-const C = 'kiezcheck-v3';
-const SHELL = ['/', '/index.html', '/manifest.json', '/icon.svg', '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css', '/vendor/fonts/archivo-latin-wdth-normal.woff2', '/quiz/', '/werben.html', '/vendor/confetti/confetti.browser.js', '/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2'];
+const C = 'kiezcheck-v4';
+const SHELL = ['/', '/manifest.json', '/icon.svg', '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css', '/vendor/fonts/archivo-latin-wdth-normal.woff2', '/quiz/', '/vendor/confetti/confetti.browser.js', '/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))));
@@ -15,9 +15,14 @@ self.addEventListener('fetch', e => {
       .catch(() => caches.match(e.request)));
     return;
   }
-  // Stale-while-revalidate für App-Shell und Bilder
+  // Seitenaufrufe: immer zuerst Netz (Weiterleitungen wie /werben.html -> /werben funktionieren so), offline aus dem Cache
+  if (e.request.mode === 'navigate') {
+    e.respondWith(fetch(e.request).catch(() => caches.match(e.request).then(m => (m && !m.redirected) ? m : caches.match('/'))));
+    return;
+  }
+  // Stale-while-revalidate für Dateien und Bilder
   e.respondWith(caches.match(e.request).then(m => {
-    const net = fetch(e.request).then(r => { if (r.ok) { const cp = r.clone(); caches.open(C).then(c => c.put(e.request, cp)); } return r; }).catch(() => m);
-    return m || net;
+    const net = fetch(e.request).then(r => { if (r.ok && !r.redirected) { const cp = r.clone(); caches.open(C).then(c => c.put(e.request, cp)); } return r; }).catch(() => m);
+    return (m && !m.redirected) ? m : net;
   }));
 });
