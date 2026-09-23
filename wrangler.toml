@@ -9,7 +9,7 @@ binding = "ASSETS"
 [[d1_databases]]
 binding = "DB"
 database_name = "berliner-kiez-check"
-database_id = "HIER_DATABASE_ID_EINTRAGEN"
+database_id = "7afe8c12-e478-4c88-8fd9-029bbd801ef7"
 
 [[r2_buckets]]
 binding = "BUCKET"
