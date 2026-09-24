@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AGB | Berliner Kiez-Check</title>
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#E30613">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<script>try{var kcT=localStorage.getItem('kc_theme');if(kcT)document.documentElement.setAttribute('data-theme',kcT)}catch(e){}</script>
+<style>
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/vendor/fonts/plus-jakarta-sans-latin-ext-wght-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--paper:#F8F9FA;--ink:#18191A;--pink:#E30613;--blue:#0288D1;--yellow:#F0D722;--muted:#606770;--card:#fff;--sv:#F1F3F5;--line:#121212;--soft:#D1D5DB;--shadow:0 8px 24px rgba(0,0,0,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#121214;--ink:#F2F3F5;--muted:#A3AAB3;--card:#1E1F22;--sv:#2B2D31;--line:#000;--soft:#3F4147;--shadow:0 8px 24px rgba(0,0,0,.45)}}
+:root[data-theme=dark]{--paper:#121214;--ink:#F2F3F5;--muted:#A3AAB3;--card:#1E1F22;--sv:#2B2D31;--line:#000;--soft:#3F4147;--shadow:0 8px 24px rgba(0,0,0,.45)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:var(--blue)}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--card);border-bottom:2px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:clamp(14px,4vw,18px);text-decoration:none;color:var(--ink);margin-right:auto}
+.logo::before{content:"BERLIN";flex:0 0 36px;width:36px;height:36px;display:grid;place-items:center;background:var(--pink);color:var(--yellow);font-size:8px;font-weight:800;border:2px solid var(--line);border-radius:10px;transform:rotate(-5deg);box-shadow:2px 2px 0 var(--line)}
+.back{background:var(--pink);color:#fff;border:2px solid var(--line);border-radius:10px;padding:7px 14px;font-weight:800;font-size:14px;text-decoration:none;white-space:nowrap}
+main{max-width:820px;margin:0 auto;padding:24px 16px 50px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:clamp(20px,4vw,40px)}
+h1{font-weight:800;font-size:clamp(26px,5vw,38px);line-height:1.1;letter-spacing:-.02em;margin:0 0 6px}
+.meta{color:var(--muted);font-size:14px;margin:0 0 22px;padding-bottom:16px;border-bottom:2px solid var(--sv)}
+h2{font-size:18px;font-weight:800;margin:28px 0 8px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";flex:0 0 6px;height:1.1em;background:var(--pink);border-radius:3px}
+p,li{color:var(--ink);opacity:.92}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:22px}
+li{margin:3px 0}
+.box{background:var(--sv);border-left:6px solid var(--yellow);border-radius:10px;padding:12px 14px;margin:14px 0}
+.note{font-size:14px;color:var(--muted)}
+footer{max-width:820px;margin:0 auto;padding:0 16px 30px;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--muted)}
+footer a{color:var(--muted)}
+
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="/">Berliner Kiez-Check</a><a class="back" href="/">← Startseite</a></header>
+<main><div class="card">
+<h1>Allgemeine Geschäftsbedingungen (AGB)</h1>
+<div class="meta">für Einträge, Pakete, Banner und Stellenanzeigen auf Berliner Kiez-Check · Stand: September 2026</div>
+<p class="note">🇹🇷 Hukuken bağlayıcı olan Almanca metindir. · 🇬🇧 This is the legally binding German version.</p>
+<h2>§ 1 Geltungsbereich und Anbieter</h2>
+<p>Diese AGB gelten für alle Leistungen der Plattform <strong>Berliner Kiez-Check</strong> (berliner-kiez-check.bakiciersen.workers.dev und zugehörige Apps). Anbieter ist Deindigitalerhelfer.Center, Sarah Strehlke, Behaimstraße 3, 10585 Berlin (siehe <a href="/impressum.html">Impressum</a>).</p>
+<p>Die kostenpflichtigen Leistungen richten sich ausschließlich an Unternehmer im Sinne von § 14 BGB (Betriebe, Selbstständige, Gewerbetreibende). Mit der Bestellung bestätigen Sie, in dieser Eigenschaft zu handeln. Das Besuchen und Nutzen der Website ist für Besucherinnen und Besucher kostenlos.</p>
+
+<h2>§ 2 Leistungen</h2>
+<ul>
+<li><strong>Grundeintrag (kostenlos):</strong> Darstellung des Betriebs mit Angaben, Foto und Kartenposition.</li>
+<li><strong>Pakete (kostenpflichtig):</strong> hervorgehobene Platzierung des Eintrags, als „Anzeige" gekennzeichnet. Klein: ganz oben im eigenen Kiez und in der Kategorie, gelb markiert, eigener Gutschein. Mittel: zusätzlich oben in der Berlin-weiten Liste. Groß: zusätzlich eine Sponsor-Karte auf der Startseite und zwischen den Einträgen.</li>
+<li><strong>Banner-Sponsoring:</strong> Anzeige eines Banners mit Link, WhatsApp- oder Anruf-Button an vereinbarten Platzierungen, mit monatlichem Bericht über Einblendungen und Klicks.</li>
+<li><strong>Stellenanzeigen:</strong> kostenlos; die Option „Dringend" hebt eine Anzeige 30 Tage lang hervor.</li>
+</ul>
+<p>Wir schulden die vereinbarte Platzierung, nicht einen bestimmten Erfolg. Eine Garantie für eine bestimmte Anzahl von Besuchern, Einblendungen, Klicks, Anfragen oder Umsätzen besteht nicht. Die Reihenfolge mehrerer hervorgehobener Einträge kann wechseln.</p>
+
+<h2>§ 3 Inhalte der Betriebe</h2>
+<p>Sie sind für Ihre Angaben, Texte, Fotos, Logos und Gutscheine verantwortlich. Sie versichern, dass die Angaben zutreffen und Sie alle nötigen Rechte an Fotos und Logos besitzen. Unzulässig sind insbesondere falsche Angaben, fremde Marken ohne Erlaubnis, gefälschte Bewertungen, irreführende Werbeversprechen, diskriminierende Stellenanzeigen (AGG), Erotik, Glücksspiel, Waffen, Drogen und sonstige rechtswidrige Inhalte.</p>
+<p>Sie räumen uns ein einfaches, unentgeltliches Recht ein, die Inhalte für die Dauer der Veröffentlichung auf der Plattform anzuzeigen, zu übersetzen und in Größe und Format anzupassen. Wir prüfen Einträge vor der Veröffentlichung und dürfen sie ablehnen, ändern (z. B. kürzen oder übersetzen) oder entfernen, wenn sie gegen diese AGB oder geltendes Recht verstoßen. Bei Verstößen durch Ihre Inhalte stellen Sie uns von Ansprüchen Dritter frei.</p>
+
+<h2>§ 4 Vertragsschluss</h2>
+<p>Die Darstellung der Pakete auf der Website ist kein bindendes Angebot. Ein Vertrag über ein Paket oder eine „Dringend"-Anzeige kommt zustande, wenn Sie den Bezahlvorgang über unseren Zahlungsdienstleister abschließen. Banner-Sponsoring und kostenlose Aktionen (z. B. „Gründungspartner") werden individuell per E-Mail oder WhatsApp vereinbart.</p>
+
+<h2>§ 5 Preise und Zahlung</h2>
+<p>Es gelten die zum Zeitpunkt der Bestellung auf der Seite <a href="/werben.html">Werben</a> angegebenen Preise. Alle Preise sind Endpreise; gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer berechnet.</p>
+<p>Startangebot: In den ersten 3 Monaten eines Pakets beträgt der Preis 19 € pro Monat, danach gilt der reguläre Monatspreis des Pakets. Kostenlose Aktionen enden automatisch zum vereinbarten Datum, ohne dass eine Kündigung nötig ist; danach entstehen Kosten nur, wenn Sie ein Paket selbst bestellen.</p>
+<p>Die Zahlung erfolgt über Stripe (z. B. Kredit- oder Debitkarte) im Voraus für den jeweiligen Monat. Die Rechnung erhalten Sie per E-Mail. Nach Absprache ist auch Überweisung möglich.</p>
+
+<h2>§ 6 Laufzeit und Kündigung</h2>
+<p>Pakete laufen monatlich und verlängern sich jeweils um einen Monat. Es gibt keine Mindestlaufzeit. Sie können jederzeit zum Ende des bezahlten Monats kündigen – eine E-Mail an <a href="mailto:info@deindigitalerhelfer.com">info@deindigitalerhelfer.com</a> genügt. Bereits bezahlte Zeiträume werden nicht anteilig erstattet. Die Option „Dringend" für Stellenanzeigen ist eine einmalige Zahlung für 30 Tage.</p>
+<p>Wir können aus wichtigem Grund fristlos kündigen, insbesondere bei schweren oder wiederholten Verstößen gegen § 3.</p>
+
+<h2>§ 7 Kennzeichnung als Werbung</h2>
+<p>Bezahlte Platzierungen und Banner werden als „Anzeige" (bzw. „Reklam"/„Ad") gekennzeichnet. Auf die Kennzeichnung kann nicht verzichtet werden.</p>
+
+<h2>§ 8 Verfügbarkeit</h2>
+<p>Wir bemühen uns um eine möglichst unterbrechungsfreie Erreichbarkeit. Kurzzeitige Ausfälle durch Wartung, technische Störungen oder Ursachen außerhalb unseres Einflusses (z. B. beim Hosting-Anbieter) begründen keinen Anspruch auf Erstattung, solange die Platzierung im Monat überwiegend verfügbar war.</p>
+
+<h2>§ 9 Haftung</h2>
+<p>Wir haften unbeschränkt bei Vorsatz und grober Fahrlässigkeit sowie bei Verletzung von Leben, Körper oder Gesundheit. Bei leichter Fahrlässigkeit haften wir nur bei Verletzung einer wesentlichen Vertragspflicht und begrenzt auf den vertragstypischen, vorhersehbaren Schaden, höchstens auf die im betreffenden Vertragsjahr gezahlte Vergütung. Im Übrigen ist die Haftung ausgeschlossen. Für Inhalte der Betriebe haften wir nicht.</p>
+
+<h2>§ 10 Änderungen dieser AGB</h2>
+<p>Wir können diese AGB mit einer Frist von mindestens 4 Wochen ändern. Bestehende Kunden informieren wir per E-Mail. Widersprechen Sie nicht innerhalb der Frist, gelten die neuen AGB; auf diese Folge weisen wir in der Mitteilung hin. Im Fall eines Widerspruchs können beide Seiten den Vertrag zum Änderungszeitpunkt kündigen.</p>
+
+<h2>§ 11 Schlussbestimmungen</h2>
+<p>Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Gerichtsstand ist, soweit gesetzlich zulässig, Berlin. Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</p>
+
+</div></main>
+<footer>
+  <span>© 2026 DeindigitalerhelferCenter</span>
+  <a href="/impressum.html">Impressum</a>
+  <a href="/datenschutz.html">Datenschutz</a>
+  <a href="/agb.html">AGB</a>
+  <a href="/werben.html">Werben</a>
+  <a href="mailto:info@deindigitalerhelfer.com">Kontakt</a>
+</footer>
+</body>
+</html>
