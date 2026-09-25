@@ -23,7 +23,8 @@ export const KIEZE = {
   'treptow': { name: 'Treptow', lat: 52.4900, lng: 13.4700 },
   'britz': { name: 'Britz', lat: 52.4430, lng: 13.4330 },
   'koepenick': { name: 'Köpenick', lat: 52.4450, lng: 13.5760 },
-  'marzahn': { name: 'Marzahn', lat: 52.5450, lng: 13.5640 }
+  'marzahn': { name: 'Marzahn', lat: 52.5450, lng: 13.5640 },
+  'umgebung': { name: 'Berlin & Umgebung', lat: 52.5200, lng: 13.4050 } // + freier Ortsname (kiez_note)
 };
 
 export const CATS = {
@@ -36,7 +37,9 @@ export const CATS = {
   'friseur': { de: 'Friseur & Barber', tr: 'Kuaför & Berber', en: 'Barber & hair' },
   'beauty': { de: 'Kosmetik & Nails', tr: 'Güzellik', en: 'Beauty' },
   'service': { de: 'Dienstleistung', tr: 'Hizmet', en: 'Services' },
-  'shop': { de: 'Einkaufen', tr: 'Alışveriş', en: 'Shopping' }
+  'shop': { de: 'Einkaufen', tr: 'Alışveriş', en: 'Shopping' },
+  'handel': { de: 'Einzel- & Großhandel', tr: 'Perakende & Toptan', en: 'Retail & wholesale' },
+  'sonstiges': { de: 'Sonstiges', tr: 'Diğer', en: 'Other' } // + freie Kategorie (cat_note)
 };
 
 const PLANS = {
@@ -44,7 +47,7 @@ const PLANS = {
   d90: { days: 90, amount: 4900, label: 'Berliner Kiez-Check Hervorhebung 90 Tage' }
 };
 
-const PUB = 'id,name,kiez,category,address,lat,lng,desc_de,desc_tr,desc_en,phone,website,instagram,hours,photo_key,featured_until,created_at,updated_at,plan,whatsapp,coupon_code,coupon_text,coupon_until';
+const PUB = 'id,name,kiez,category,address,lat,lng,desc_de,desc_tr,desc_en,phone,website,instagram,hours,photo_key,featured_until,created_at,updated_at,plan,whatsapp,coupon_code,coupon_text,coupon_until,kiez_note,cat_note';
 const BERLIN_BOX = { s: 52.33, n: 52.68, w: 13.08, e: 13.77 };
 
 const J = (d, s = 200, h = {}) => new Response(JSON.stringify(d), {
@@ -165,6 +168,14 @@ async function updateOwn(id, req, env) {
   const photo_key = await savePhoto(fd, id, env);
   if (photo_key === false) return J({ error: 'photo' }, 400);
   const e = await enrich(d, env);
+  // Freigegebener Eintrag + nur kleine Änderung (Kupon, Telefon, Zeiten, Links, Adresse …) = bleibt online.
+  // Name, Beschreibung oder neues Foto geändert = erneute Prüfung.
+  const small = row.status === 'approved' && !photo_key && d.name === row.name && clean(d.desc, 600) === clean(row.desc_de, 600);
+  if (small) {
+    e.status = 'approved';
+    e.desc_de = row.desc_de || ''; e.desc_tr = row.desc_tr || ''; e.desc_en = row.desc_en || '';
+    e.reason = row.mod_note || '';
+  }
   await env.DB.prepare(`UPDATE listings SET name=?,kiez=?,category=?,address=?,lat=?,lng=?,desc_de=?,desc_tr=?,desc_en=?,
     phone=?,website=?,instagram=?,hours=?,email=?,photo_key=COALESCE(?,photo_key),status=?,mod_note=?,updated_at=? WHERE id=?`)
     .bind(d.name, d.kiez, d.category, d.address, e.lat, e.lng, e.desc_de, e.desc_tr, e.desc_en,
@@ -175,8 +186,9 @@ async function updateOwn(id, req, env) {
 }
 
 async function saveExtras(id, d, env) {
-  await env.DB.prepare('UPDATE listings SET whatsapp=?, coupon_code=?, coupon_text=?, coupon_until=? WHERE id=?')
-    .bind(d.whatsapp, d.coupon_code, d.coupon_text, d.coupon_until, id).run();
+  await env.DB.prepare('UPDATE listings SET whatsapp=?, coupon_code=?, coupon_text=?, coupon_until=?, kiez_note=?, cat_note=? WHERE id=?')
+    .bind(d.whatsapp, d.coupon_code, d.coupon_text, d.coupon_until,
+      d.kiez === 'umgebung' ? d.kiez_note : '', d.category === 'sonstiges' ? d.cat_note : '', id).run();
 }
 
 /* Gemeinsame IP-Begrenzung (5 pro Stunde) – auch für Jobs */
@@ -205,7 +217,9 @@ function readFields(fd) {
     whatsapp: clean(g('whatsapp'), 40).replace(/[^\d+ ()/-]/g, ''),
     coupon_code: clean(g('coupon_code'), 30).toUpperCase().replace(/[^A-Z0-9-]/g, ''),
     coupon_text: clean(g('coupon_text'), 120),
-    coupon_until: /^\d{4}-\d{2}-\d{2}$/.test(clean(g('coupon_until'), 10)) ? clean(g('coupon_until'), 10) : ''
+    coupon_until: /^\d{4}-\d{2}-\d{2}$/.test(clean(g('coupon_until'), 10)) ? clean(g('coupon_until'), 10) : '',
+    kiez_note: clean(g('kiez_note'), 40),
+    cat_note: clean(g('cat_note'), 40)
   };
 }
 
@@ -220,6 +234,8 @@ function validate(d) {
   if (d.name.length < 2) return 'name';
   if (!KIEZE[d.kiez]) return 'kiez';
   if (!CATS[d.category]) return 'category';
+  if (d.kiez === 'umgebung' && d.kiez_note.length < 2) return 'kiez_note';
+  if (d.category === 'sonstiges' && d.cat_note.length < 2) return 'cat_note';
   if (d.address.length < 5) return 'address';
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) return 'email';
   return null;
@@ -236,7 +252,7 @@ async function savePhoto(fd, id, env) {
 
 /* ---------- Geocoding + KI-Prüfung ---------- */
 async function enrich(d, env) {
-  const [geo, ai] = await Promise.all([geocode(d.address), aiCheck(d, env)]);
+  const [geo, ai] = await Promise.all([geocode(d.address, d.kiez === 'umgebung' ? d.kiez_note : null), aiCheck(d, env)]);
   const k = KIEZE[d.kiez];
   const status = (env.AUTO_APPROVE === '1' && ai && ai.ok === true) ? 'approved' : 'pending';
   const base = d.desc || '';
@@ -251,14 +267,16 @@ async function enrich(d, env) {
   };
 }
 
-async function geocode(addr) {
+async function geocode(addr, ort) {
+  // ort gesetzt = "Berlin & Umgebung": ohne Zusatz ", Berlin" suchen und größeren Bereich (Berlin + Brandenburg) erlauben
+  const box = ort != null ? { s: 51.3, n: 53.6, w: 11.2, e: 14.8 } : BERLIN_BOX;
   try {
     const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=de&q=' +
-      encodeURIComponent(addr + ', Berlin'), { headers: { 'user-agent': 'BerlinerBerliner Kiez-Check/1.0 (info@deindigitalerhelfer.com)' } });
+      encodeURIComponent(ort != null ? addr + (ort ? ', ' + ort : '') : addr + ', Berlin'), { headers: { 'user-agent': 'BerlinerBerliner Kiez-Check/1.0 (info@deindigitalerhelfer.com)' } });
     const j = await r.json();
     if (j && j[0]) {
       const lat = +j[0].lat, lng = +j[0].lon;
-      if (lat > BERLIN_BOX.s && lat < BERLIN_BOX.n && lng > BERLIN_BOX.w && lng < BERLIN_BOX.e) return { lat, lng };
+      if (lat > box.s && lat < box.n && lng > box.w && lng < box.e) return { lat, lng };
     }
   } catch (e) { }
   return null;
