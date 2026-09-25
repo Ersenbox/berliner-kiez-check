@@ -9,12 +9,84 @@
   "theme_color": "#0078BF",
   "lang": "de",
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "Kiez-Quiz", "url": "/quiz/", "icons": [{ "src": "/icon.svg", "sizes": "any" }] },
-    { "name": "Gutscheine", "url": "/?view=coupons", "icons": [{ "src": "/icon.svg", "sizes": "any" }] },
-    { "name": "Jobs", "url": "/?view=jobs", "icons": [{ "src": "/icon.svg", "sizes": "any" }] }
-  ]
+    {
+      "name": "Story erstellen",
+      "url": "/?story=new",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Kiez-Quiz",
+      "url": "/quiz/",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Gutscheine",
+      "url": "/?view=coupons",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Jobs",
+      "url": "/?view=jobs",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share-story",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "media",
+          "accept": [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "video/mp4",
+            "video/webm",
+            "video/quicktime",
+            "image/*",
+            "video/*"
+          ]
+        }
+      ]
+    }
+  }
 }
