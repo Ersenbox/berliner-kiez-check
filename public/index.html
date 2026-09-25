@@ -135,6 +135,9 @@ dialog::backdrop{background:rgba(18,18,20,.6)}
 .plans button{border:2px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;cursor:pointer;text-align:left;box-shadow:var(--shadow);transition:transform .15s}
 .plans button:hover{transform:translateY(-2px);background:var(--sv)}
 .plans button strong{display:block;font-size:26px;font-weight:800;color:var(--pink)}
+.pkstart{font-size:12.5px;font-weight:700;background:var(--yellow);color:#000;border:1.5px solid var(--line);border-radius:8px;padding:3px 7px}
+.pkrec{position:absolute;top:-11px;right:10px;background:var(--yellow);color:#000;border:2px solid var(--line);border-radius:20px;padding:0 9px;font-size:11.5px;font-weight:800}
+.plans{padding-top:6px}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-weight:700;z-index:9000;max-width:90vw;display:none;box-shadow:var(--shadow)}
 
 footer{max-width:1200px;margin:0 auto;padding:22px 16px 30px;border-top:2px solid var(--line);color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 18px}
@@ -292,6 +295,10 @@ footer a{color:var(--muted)}
           <label><span data-i="f_kiez"></span><select name="kiez" required></select></label>
           <label><span data-i="f_cat"></span><select name="category" required></select></label>
         </div>
+        <div class="two" id="noteRow">
+          <label id="kiezNoteL" hidden><span data-i="f_kiez_note"></span><input name="kiez_note" maxlength="40" placeholder="Rudow, Potsdam …"></label>
+          <label id="catNoteL" hidden><span data-i="f_cat_note"></span><input name="cat_note" maxlength="40" placeholder="Propan & Gas …"></label>
+        </div>
         <label><span data-i="f_addr"></span><input name="address" required maxlength="160" placeholder="Sonnenallee 12, 12045 Berlin" autocomplete="street-address"></label>
         <label><span data-i="f_desc"></span><small data-i="f_desc_hint"></small><textarea name="desc" maxlength="600"></textarea></label>
         <div class="two">
@@ -375,8 +382,8 @@ var CFG = {
   PRICE_INTRO: '19 €', PRICE_S: '29 €', PRICE_M: '49 €', PRICE_L: '89 €', PRICE_JOB: '29 €'
 };
 
-var KIEZE = {"neukoelln":["Neukölln",52.4811,13.435],"kreuzberg":["Kreuzberg",52.4986,13.403],"wedding":["Wedding",52.5496,13.3526],"gesundbrunnen":["Gesundbrunnen",52.5507,13.3905],"moabit":["Moabit",52.5302,13.342],"tiergarten":["Tiergarten",52.5145,13.3501],"mitte":["Mitte",52.52,13.405],"friedrichshain":["Friedrichshain",52.5156,13.4541],"prenzlauer-berg":["Prenzlauer Berg",52.5388,13.4244],"schoeneberg":["Schöneberg",52.483,13.353],"tempelhof":["Tempelhof",52.4664,13.385],"charlottenburg":["Charlottenburg",52.5163,13.304],"spandau":["Spandau",52.5354,13.199],"reinickendorf":["Reinickendorf",52.587,13.329],"steglitz":["Steglitz",52.456,13.322],"lichtenberg":["Lichtenberg",52.513,13.499],"pankow":["Pankow",52.569,13.402],"treptow":["Treptow",52.49,13.47],"britz":["Britz",52.443,13.433],"koepenick":["Köpenick",52.445,13.576],"marzahn":["Marzahn",52.545,13.564]};
-var CATS = {"fruehstueck":{"de":"Frühstück","tr":"Kahvaltı","en":"Breakfast"},"cafe":{"de":"Café","tr":"Kafe","en":"Café"},"restaurant":{"de":"Restaurant","tr":"Restoran","en":"Restaurant"},"imbiss":{"de":"Imbiss & Döner","tr":"Büfe & Döner","en":"Takeaway"},"baeckerei":{"de":"Bäckerei","tr":"Fırın & Pastane","en":"Bakery"},"markt":{"de":"Supermarkt & Markt","tr":"Market","en":"Grocery"},"friseur":{"de":"Friseur & Barber","tr":"Kuaför & Berber","en":"Barber & hair"},"beauty":{"de":"Kosmetik & Nails","tr":"Güzellik","en":"Beauty"},"service":{"de":"Dienstleistung","tr":"Hizmet","en":"Services"},"shop":{"de":"Einkaufen","tr":"Alışveriş","en":"Shopping"}};
+var KIEZE = {"neukoelln":["Neukölln",52.4811,13.435],"kreuzberg":["Kreuzberg",52.4986,13.403],"wedding":["Wedding",52.5496,13.3526],"gesundbrunnen":["Gesundbrunnen",52.5507,13.3905],"moabit":["Moabit",52.5302,13.342],"tiergarten":["Tiergarten",52.5145,13.3501],"mitte":["Mitte",52.52,13.405],"friedrichshain":["Friedrichshain",52.5156,13.4541],"prenzlauer-berg":["Prenzlauer Berg",52.5388,13.4244],"schoeneberg":["Schöneberg",52.483,13.353],"tempelhof":["Tempelhof",52.4664,13.385],"charlottenburg":["Charlottenburg",52.5163,13.304],"spandau":["Spandau",52.5354,13.199],"reinickendorf":["Reinickendorf",52.587,13.329],"steglitz":["Steglitz",52.456,13.322],"lichtenberg":["Lichtenberg",52.513,13.499],"pankow":["Pankow",52.569,13.402],"treptow":["Treptow",52.49,13.47],"britz":["Britz",52.443,13.433],"koepenick":["Köpenick",52.445,13.576],"marzahn":["Marzahn",52.545,13.564],"umgebung":["Berlin & Umgebung",52.52,13.405]};
+var CATS = {"fruehstueck":{"de":"Frühstück","tr":"Kahvaltı","en":"Breakfast"},"cafe":{"de":"Café","tr":"Kafe","en":"Café"},"restaurant":{"de":"Restaurant","tr":"Restoran","en":"Restaurant"},"imbiss":{"de":"Imbiss & Döner","tr":"Büfe & Döner","en":"Takeaway"},"baeckerei":{"de":"Bäckerei","tr":"Fırın & Pastane","en":"Bakery"},"markt":{"de":"Supermarkt & Markt","tr":"Market","en":"Grocery"},"friseur":{"de":"Friseur & Barber","tr":"Kuaför & Berber","en":"Barber & hair"},"beauty":{"de":"Kosmetik & Nails","tr":"Güzellik","en":"Beauty"},"service":{"de":"Dienstleistung","tr":"Hizmet","en":"Services"},"shop":{"de":"Einkaufen","tr":"Alışveriş","en":"Shopping"},"handel":{"de":"Einzel- & Großhandel","tr":"Perakende & Toptan","en":"Retail & wholesale"},"sonstiges":{"de":"Sonstiges","tr":"Diğer","en":"Other"}};
 
 var I18N = {
 de:{hero:"Was gibt's in deinem Kiez?",sub:"Cafés, Frühstück, Barber und Märkte in Berlin – eingetragen von den Betrieben selbst.",kiez_all:"Ganz Berlin",cat_all:"Alles",add:"Betrieb eintragen",list:"Liste",map:"Karte",count:function(n){return n+(n===1?" Eintrag":" Einträge")},empty:"Hier ist noch nichts eingetragen.",empty_txt:"Du hast hier einen Laden? Trag ihn kostenlos ein – in zwei Minuten ist er online.",ad:"Anzeige",call:"Anrufen",route:"Route",sample:"Beispiel",
@@ -384,21 +391,21 @@ f_title:"Betrieb kostenlos eintragen",f_edit:"Eintrag bearbeiten",f_hint:"Pflich
 done_title:"Danke!",done_pending:"Dein Eintrag wird geprüft und erscheint meist innerhalb von 24 Stunden.",done_approved:"Dein Eintrag ist online.",done_link:"Speichere diesen Link. Damit kannst du deinen Eintrag später bearbeiten oder hervorheben:",copy:"Kopieren",copied:"Link kopiert",close:"Schließen",view:"Eintrag ansehen",
 boost_title:"Oben in deinem Kiez erscheinen",boost_txt:"Dein Eintrag steht in deinem Kiez und deiner Kategorie ganz oben, gelb markiert und als Anzeige gekennzeichnet. Einmalzahlung, kein Abo.",days30:"30 Tage",days90:"90 Tage",
 st:"Status",st_pending:"wird geprüft",st_approved:"online",st_rejected:"abgelehnt – bitte Angaben prüfen und neu speichern",feat_until:"Hervorgehoben bis",paid:"Zahlung erhalten. Die Hervorhebung ist in wenigen Sekunden aktiv.",boost_wait:"Hervorheben ist möglich, sobald der Eintrag online ist.",
-e_rate:"Zu viele Einträge in kurzer Zeit. Bitte später erneut versuchen.",e_consent:"Bitte beide Häkchen setzen.",e_photo:"Foto muss JPG, PNG oder WebP und kleiner als 2,5 MB sein.",e_field:"Bitte prüfe das Feld: ",e_auth:"Dieser Bearbeitungslink ist ungültig.",e_net:"Keine Verbindung zum Server. Bitte später erneut versuchen.",e_stripe:"Zahlung ist gerade nicht verfügbar.",
+e_rate:"Zu viele Einträge in kurzer Zeit. Bitte später erneut versuchen.",e_consent:"Bitte beide Häkchen setzen.",f_kiez_note:"Ortsteil / Stadt",f_cat_note:"Deine Kategorie",pk_start:"🎉 Start: 3 Monate nur 19 €/Monat",pk_rec:"Empfohlen",e_photo:"Foto muss JPG, PNG oder WebP und kleiner als 2,5 MB sein.",e_field:"Bitte prüfe das Feld: ",e_auth:"Dieser Bearbeitungslink ist ungültig.",e_net:"Keine Verbindung zum Server. Bitte später erneut versuchen.",e_stripe:"Zahlung ist gerade nicht verfügbar.",
 demo_note:"Vorschau mit Beispieldaten – ohne Server-Verbindung. Nach dem Deployment erscheinen hier echte Einträge.",impressum:"Impressum",datenschutz:"Datenschutz",ds_word:"Datenschutzerklärung",footer_ads:"Hervorgehobene Einträge sind als Anzeige gekennzeichnet.",sending:"Wird gesendet …"},
 tr:{hero:"Mahallende neler var?",sub:"Berlin'de kafeler, kahvaltı, berberler ve marketler – işletmelerin kendisi ekliyor.",kiez_all:"Tüm Berlin",cat_all:"Hepsi",add:"İşletme ekle",list:"Liste",map:"Harita",count:function(n){return n+" kayıt"},empty:"Burada henüz kayıt yok.",empty_txt:"Burada bir dükkânın mı var? Ücretsiz ekle – iki dakikada yayında.",ad:"Reklam",call:"Ara",route:"Yol tarifi",sample:"Örnek",
 f_title:"İşletmeni ücretsiz ekle",f_edit:"Kaydı düzenle",f_hint:"Zorunlu alanlar: isim, mahalle, kategori, adres, e-posta. Her kaydı yayına almadan önce kontrol ediyoruz.",f_name:"İşletme adı",f_kiez:"Mahalle (Kiez)",f_cat:"Kategori",f_addr:"Adres",f_desc:"Kısa açıklama",f_desc_hint:"Türkçe veya Almanca yazabilirsin. Otomatik olarak üç dile çeviriyoruz.",f_phone:"Telefon",f_hours:"Çalışma saatleri",f_web:"Web sitesi",f_insta:"Instagram",f_email:"E-posta",f_email_hint:"Gösterilmez. Sadece sorular ve faturalar için.",f_photo:"Fotoğraf (isteğe bağlı)",f_auth:"İşletmenin sahibiyim veya eklemeye yetkiliyim, fotoğrafın haklarına sahibim.",f_consent:"{ds} metnini okudum ve kabul ediyorum.",f_send:"Kaydı gönder",f_save:"Değişiklikleri kaydet",f_cancel:"Vazgeç",
 done_title:"Teşekkürler!",done_pending:"Kaydın kontrol ediliyor, genellikle 24 saat içinde yayında olur.",done_approved:"Kaydın yayında.",done_link:"Bu bağlantıyı kaydet. Kaydını daha sonra düzenlemek veya öne çıkarmak için lazım:",copy:"Kopyala",copied:"Bağlantı kopyalandı",close:"Kapat",view:"Kaydı gör",
 boost_title:"Mahallende en üstte görün",boost_txt:"Kaydın, mahallende ve kategorinde en üstte, sarı işaretli ve reklam etiketiyle görünür. Tek seferlik ödeme, abonelik yok.",days30:"30 gün",days90:"90 gün",
 st:"Durum",st_pending:"kontrol ediliyor",st_approved:"yayında",st_rejected:"reddedildi – bilgileri kontrol edip tekrar kaydet",feat_until:"Öne çıkarma bitişi",paid:"Ödeme alındı. Öne çıkarma birkaç saniye içinde aktif olur.",boost_wait:"Kayıt yayına girince öne çıkarabilirsin.",
-e_rate:"Kısa sürede çok fazla kayıt. Lütfen sonra tekrar dene.",e_consent:"Lütfen iki kutucuğu da işaretle.",e_photo:"Fotoğraf JPG, PNG veya WebP olmalı ve 2,5 MB'tan küçük olmalı.",e_field:"Lütfen bu alanı kontrol et: ",e_auth:"Bu düzenleme bağlantısı geçersiz.",e_net:"Sunucuya bağlanılamadı. Lütfen sonra tekrar dene.",e_stripe:"Ödeme şu anda kullanılamıyor.",
+e_rate:"Kısa sürede çok fazla kayıt. Lütfen sonra tekrar dene.",e_consent:"Lütfen iki kutucuğu da işaretle.",f_kiez_note:"Semt / şehir",f_cat_note:"Kendi kategorin",pk_start:"🎉 Başlangıç: ilk 3 ay sadece 19 €/ay",pk_rec:"Önerimiz",e_photo:"Fotoğraf JPG, PNG veya WebP olmalı ve 2,5 MB'tan küçük olmalı.",e_field:"Lütfen bu alanı kontrol et: ",e_auth:"Bu düzenleme bağlantısı geçersiz.",e_net:"Sunucuya bağlanılamadı. Lütfen sonra tekrar dene.",e_stripe:"Ödeme şu anda kullanılamıyor.",
 demo_note:"Örnek verilerle önizleme – sunucu bağlantısı yok. Yayına alındıktan sonra burada gerçek kayıtlar görünür.",impressum:"Künye",datenschutz:"Gizlilik",ds_word:"Gizlilik politikası",footer_ads:"Öne çıkarılan kayıtlar reklam olarak işaretlenmiştir.",sending:"Gönderiliyor …"},
 en:{hero:"What's in your Kiez?",sub:"Cafés, breakfast, barbers and markets across Berlin – listed by the businesses themselves.",kiez_all:"All of Berlin",cat_all:"Everything",add:"Add your business",list:"List",map:"Map",count:function(n){return n+(n===1?" listing":" listings")},empty:"Nothing listed here yet.",empty_txt:"Run a shop here? Add it for free – it's online in two minutes.",ad:"Ad",call:"Call",route:"Directions",sample:"Sample",
 f_title:"Add your business for free",f_edit:"Edit listing",f_hint:"Required: name, Kiez, category, address, email. We check every listing before it appears.",f_name:"Business name",f_kiez:"Kiez",f_cat:"Category",f_addr:"Address",f_desc:"Short description",f_desc_hint:"German, Turkish or English. We translate it into all three automatically.",f_phone:"Phone",f_hours:"Opening hours",f_web:"Website",f_insta:"Instagram",f_email:"Email",f_email_hint:"Not shown publicly. Only for questions and invoices.",f_photo:"Photo (optional)",f_auth:"I own this business or am allowed to list it, and I hold the rights to the photo.",f_consent:"I have read the {ds} and agree.",f_send:"Submit listing",f_save:"Save changes",f_cancel:"Cancel",
 done_title:"Thank you!",done_pending:"Your listing is being checked and usually goes live within 24 hours.",done_approved:"Your listing is live.",done_link:"Save this link. You need it to edit or promote your listing later:",copy:"Copy",copied:"Link copied",close:"Close",view:"View listing",
 boost_title:"Appear at the top of your Kiez",boost_txt:"Your listing shows first in your Kiez and category, highlighted in yellow and labelled as an ad. One-time payment, no subscription.",days30:"30 days",days90:"90 days",
 st:"Status",st_pending:"being checked",st_approved:"live",st_rejected:"rejected – please check your details and save again",feat_until:"Promoted until",paid:"Payment received. Your promotion goes live in a few seconds.",boost_wait:"You can promote your listing once it's live.",
-e_rate:"Too many submissions in a short time. Please try again later.",e_consent:"Please tick both boxes.",e_photo:"Photo must be JPG, PNG or WebP and under 2.5 MB.",e_field:"Please check this field: ",e_auth:"This edit link is not valid.",e_net:"Can't reach the server. Please try again later.",e_stripe:"Payments are unavailable right now.",
+e_rate:"Too many submissions in a short time. Please try again later.",e_consent:"Please tick both boxes.",f_kiez_note:"District / town",f_cat_note:"Your category",pk_start:"🎉 Launch: first 3 months only €19/month",pk_rec:"Recommended",e_photo:"Photo must be JPG, PNG or WebP and under 2.5 MB.",e_field:"Please check this field: ",e_auth:"This edit link is not valid.",e_net:"Can't reach the server. Please try again later.",e_stripe:"Payments are unavailable right now.",
 demo_note:"Preview with sample data – no server connection. Real listings appear here once deployed.",impressum:"Legal notice",datenschutz:"Privacy",ds_word:"privacy policy",footer_ads:"Promoted listings are labelled as ads.",sending:"Sending …"}
 };
 
@@ -500,7 +507,7 @@ function applyLang() {
 }
 
 function fillSelects() {
-  var ks = Object.keys(KIEZE).sort(function (a, b) { return KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
+  var ks = Object.keys(KIEZE).sort(function (a, b) { return (a === 'umgebung') - (b === 'umgebung') || KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
   var opt = function (v, l, sel) { return '<option value="' + v + '"' + (sel ? ' selected' : '') + '>' + esc(l) + '</option>'; };
   $('#kiez').innerHTML = opt('', t('kiez_all'), !S.kiez) + ks.map(function (k) { return opt(k, KIEZE[k][0], k === S.kiez); }).join('');
   var f = $('#form');
@@ -560,7 +567,7 @@ function render() {
     out += '<article class="it' + (feat ? ' feat' : '') + '" id="it-' + esc(it.id) + '" data-id="' + esc(it.id) + '">' +
       (it.photo_key ? '<img src="' + api('/img/' + esc(it.photo_key)) + '?v=' + (it.updated_at || 0) + '" alt="" loading="lazy" width="88" height="88">' : '<div class="ph" aria-hidden="true">' + esc(it.name.charAt(0)) + '</div>') +
       '<div><h3>' + esc(it.name) + (feat ? '<span class="tag">' + esc(t('ad')) + '</span>' : '') + (S.demo ? '<span class="tag">' + esc(t('sample')) + '</span>' : '') + '</h3>' +
-      '<p class="m">' + esc(CATS[it.category] ? CATS[it.category][S.lang] : '') + ', ' + esc(KIEZE[it.kiez] ? KIEZE[it.kiez][0] : '') + ' – ' + esc(it.address) + '</p>' +
+      '<p class="m">' + esc(it.cat_note || (CATS[it.category] ? CATS[it.category][S.lang] : '')) + ', ' + esc(it.kiez_note || (KIEZE[it.kiez] ? KIEZE[it.kiez][0] : '')) + ' – ' + esc(it.address) + '</p>' +
       (d ? '<p>' + esc(d) + '</p>' : '') + (it.hours ? '<p class="m">' + esc(it.hours) + '</p>' : '') +
       (acts ? '<div class="acts">' + acts + '</div>' : '') + couponHtml(it) + '</div>' + favBtn(it) + '</article>';
     if ((i + 1) % CFG.AD_EVERY === 0 && i < items.length - 1) {
@@ -633,7 +640,7 @@ function openForm(own) {
   fillSelects();
   if (own) {
     var it = own.item;
-    ['name', 'address', 'phone', 'website', 'instagram', 'hours', 'email', 'whatsapp', 'coupon_code', 'coupon_text', 'coupon_until'].forEach(function (k) { f[k].value = it[k] || ''; });
+    ['name', 'address', 'phone', 'website', 'instagram', 'hours', 'email', 'whatsapp', 'coupon_code', 'coupon_text', 'coupon_until', 'kiez_note', 'cat_note'].forEach(function (k) { f[k].value = it[k] || ''; });
     f.kiez.value = it.kiez; f.category.value = it.category; f.desc.value = it.desc_de || '';
     f.auth.checked = true; f.consent.checked = true;
     $('#ownStatus').innerHTML = statusBox(it) + boostBox(it);
@@ -641,7 +648,15 @@ function openForm(own) {
     $('#ownStatus').innerHTML = '';
     if (S.kiez) f.kiez.value = S.kiez; if (S.cat) f.category.value = S.cat;
   }
+  syncNotes();
   var d = $('#dlg'); if (!d.open) d.showModal();
+}
+
+/* Freitext-Felder nur bei "Berlin & Umgebung" bzw. "Sonstiges" zeigen */
+function syncNotes() {
+  var f = $('#form'), k = f.kiez.value === 'umgebung', c = f.category.value === 'sonstiges';
+  $('#kiezNoteL').hidden = !k; $('#catNoteL').hidden = !c; $('#noteRow').hidden = !k && !c;
+  f.kiez_note.required = k; f.cat_note.required = c;
 }
 
 function statusBox(it) {
@@ -652,9 +667,10 @@ function statusBox(it) {
 function boostBox(it) {
   if (it.status !== 'approved') return '<p class="hint">' + esc(t('boost_wait')) + '</p>';
   var pk = function (k, price) {
-    return '<button type="button" data-plan="' + k + '" style="display:grid;gap:4px"><span style="font-weight:800">' + esc(t('pk_' + k)) + '</span>' +
-      '<strong>' + esc(CFG.PRICE_INTRO) + '<small style="font-size:13px">' + esc(t('pk_month')) + '</small></strong>' +
-      '<span style="font-size:13px">' + esc(t('pk_intro')) + ', ' + esc(t('pk_then')) + ' ' + esc(price) + esc(t('pk_month')) + '</span>' +
+    return '<button type="button" data-plan="' + k + '" style="display:grid;gap:4px;position:relative"><span style="font-weight:800">' + esc(t('pk_' + k)) + '</span>' +
+      (k === 'm' ? '<span class="pkrec">' + esc(t('pk_rec')) + '</span>' : '') +
+      '<strong>' + esc(price) + '<small style="font-size:13px">' + esc(t('pk_month')) + '</small></strong>' +
+      '<span class="pkstart">' + esc(t('pk_start')) + '</span>' +
       '<span class="hint" style="font-size:12.5px">' + esc(t('pk_' + k + '_d')) + '</span></button>';
   };
   return '<div class="status"><b>' + esc(t('pk_title')) + '</b><br><span class="hint">' + esc(t('pk_txt')) + '</span>' +
@@ -989,7 +1005,7 @@ function showTab(tab) {
   history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
 }
 function extrasLang() {
-  var ks = Object.keys(KIEZE).sort(function (a, b) { return KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
+  var ks = Object.keys(KIEZE).sort(function (a, b) { return (a === 'umgebung') - (b === 'umgebung') || KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
   var jk = $('#jobForm').elements.kiez, cur = jk.value;
   jk.innerHTML = '<option value="">–</option>' + ks.map(function (k) { return '<option value="' + k + '">' + esc(KIEZE[k][0]) + '</option>'; }).join('');
   jk.value = cur;
@@ -1073,6 +1089,8 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.se
     var name = (k && typeof KIEZE !== 'undefined' && KIEZE[k]) ? KIEZE[k][0] : 'Berlin';
     cap.textContent = '📍 ' + name;
   }
+  var fm = document.getElementById('form');
+  if (fm) { fm.kiez.addEventListener('change', syncNotes); fm.category.addEventListener('change', syncNotes); }
   if (sel) { sel.addEventListener('change', setPic); if (window.MutationObserver) new MutationObserver(setPic).observe(sel, { childList: true }); setPic(); }
   var btn = document.getElementById('themeBtn'), root = document.documentElement;
   var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;

@@ -84,7 +84,7 @@ function list() {
   call('/api/admin/list?status=' + ST).then(function (j) {
     $('#list').innerHTML = j.items.length ? j.items.map(function (it) {
       return '<div class="it" data-id="' + esc(it.id) + '">' + (it.photo_key ? '<img src="/img/' + esc(it.photo_key) + '?v=' + it.updated_at + '" alt="">' : '<div class="ph"></div>') +
-        '<div><h3>' + esc(it.name) + '</h3><p class="m">' + esc(it.kiez) + ' / ' + esc(it.category) + ' – ' + esc(it.address) + '</p>' +
+        '<div><h3>' + esc(it.name) + '</h3><p class="m">' + esc(it.kiez) + (it.kiez_note ? ' (' + esc(it.kiez_note) + ')' : '') + ' / ' + esc(it.category) + (it.cat_note ? ' (' + esc(it.cat_note) + ')' : '') + ' – ' + esc(it.address) + '</p>' +
         '<p class="m">' + esc(it.email) + (it.phone ? ' · ' + esc(it.phone) : '') + (it.website ? ' · <a href="' + esc(it.website) + '" target="_blank" rel="noopener">' + esc(it.website) + '</a>' : '') + (it.instagram ? ' · @' + esc(it.instagram) : '') + '</p>' +
         (it.mod_note ? '<div class="note">KI: ' + esc(it.mod_note) + '</div>' : '') +
         '<p>' + esc(it.desc_de) + '</p><p class="m">TR: ' + esc(it.desc_tr) + '</p>' +
