@@ -55,6 +55,7 @@ main{max-width:980px;margin:0 auto;padding:16px}
     <button data-sec="sponsors">Sponsoren</button>
     <button data-sec="jobs">Jobs</button>
     <button data-sec="requests">Werbeanfragen</button>
+    <button data-sec="posts">Kiez-Reporter</button>
     <button id="logout">Abmelden</button>
   </header>
   <main>
@@ -119,6 +120,7 @@ function showSec(name) {
   if (name === 'sponsors') loadSp();
   if (name === 'jobs') loadJobs();
   if (name === 'requests') loadReq();
+  if (name === 'posts') loadPosts();
 }
 function fmtD(ms) { return ms ? new Date(ms).toISOString().slice(0, 10) : ''; }
 function loadSp() {
@@ -216,6 +218,35 @@ document.addEventListener('click', function (e) {
     ['id', 'name', 'image', 'headline_de', 'headline_tr', 'headline_en', 'cta_de', 'cta_tr', 'cta_en', 'link_web', 'link_wa', 'link_tel', 'link_ig', 'places', 'kieze', 'cats', 'plan', 'contact', 'priority'].forEach(function (k) { fd.set(k, s[k] == null ? '' : s[k]); });
     fd.set('start', fmtD(s.start_at)); fd.set('end', fmtD(s.end_at)); fd.set('own', s.own ? '1' : '0'); fd.set('active', s.active ? '0' : '1');
     fetch('/api/admin/sponsor/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd }).then(function () { loadSp(); });
+  }
+});
+</script>
+<script>
+/* ===== Kiez-Reporter: Beiträge prüfen ===== */
+var PST = 'pending';
+function loadPosts() {
+  call('/api/admin/posts?status=' + PST).then(function (j) {
+    var cnt = {}; (j.counts || []).forEach(function (c) { cnt[c.status] = c.n; });
+    var tabs = ['pending', 'approved', 'rejected'].map(function (s) { return '<button data-ps="' + s + '" aria-pressed="' + (s === PST) + '">' + { pending: 'Zu prüfen', approved: 'Online', rejected: 'Abgelehnt' }[s] + ' (' + (cnt[s] || 0) + ')</button>'; }).join('');
+    el('sec').innerHTML = '<div class="row" style="margin-bottom:10px">' + tabs + '</div>' + ((j.items || []).length ? j.items.map(function (x) {
+      var ph = []; try { ph = JSON.parse(x.photos || '[]'); } catch (e) { }
+      return '<div class="it" style="grid-template-columns:1fr"><div><h3>' + esc(x.title) + '</h3>' +
+        '<p class="m">' + esc(x.kiez) + ' · ' + new Date(x.created_at).toLocaleString('de') + ' · ' + esc(x.author || '(ohne Namen)') + ' · <a href="mailto:' + esc(x.email) + '">' + esc(x.email) + '</a></p>' +
+        (ph.length ? '<div class="row">' + ph.map(function (k) { return '<a href="/img/' + esc(k) + '" target="_blank"><img src="/img/' + esc(k) + '" alt="" style="width:140px;height:100px;object-fit:cover;border:2px solid #121212;border-radius:8px"></a>'; }).join('') + '</div>' : '') +
+        '<p style="white-space:pre-wrap">' + esc(x.body) + '</p>' +
+        (x.video_url ? '<p class="m">Video: <a href="' + esc(x.video_url) + '" target="_blank" rel="noopener">' + esc(x.video_url) + '</a></p>' : '') +
+        '<div class="row">' + (PST !== 'approved' ? '<button class="ok" data-pa="approved" data-id="' + esc(x.id) + '">Freigeben</button>' : '') +
+        (PST !== 'rejected' ? '<button class="no" data-pa="rejected" data-id="' + esc(x.id) + '">Ablehnen</button>' : '') +
+        '<button class="del" data-pa="delete" data-id="' + esc(x.id) + '">Löschen (inkl. Fotos)</button></div></div></div>';
+    }).join('') : '<p>Keine Beiträge in dieser Ansicht.</p>');
+  });
+}
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.ps) { PST = b.dataset.ps; loadPosts(); return; }
+  if (b.dataset.pa) {
+    if (b.dataset.pa === 'delete' && !confirm('Beitrag und Fotos endgültig löschen?')) return;
+    call('/api/admin/post/set', { id: b.dataset.id, status: b.dataset.pa }).then(loadPosts);
   }
 });
 </script>

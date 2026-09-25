@@ -198,6 +198,27 @@ footer a{color:var(--muted)}
 .sos a strong{display:block;font-weight:800;font-size:26px;color:var(--blue)}
 .sos a.red{border-left:8px solid var(--pink)}
 .sos a.red strong{color:var(--pink)}
+.tabs [data-tab=tips]::before{content:"🎡 "}
+.tabs [data-tab=reporter]::before{content:"📸 "}
+#postAddBtn::before{content:"📸"}
+#tipCats{margin:0 0 14px}
+.tips{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.tip{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:14px}
+.tip-ic{width:52px;height:52px;display:grid;place-items:center;font-size:28px;background:var(--sv);border:2px solid var(--line);border-radius:12px}
+.tip h3{margin:0 0 2px;font-size:17px;font-weight:800;line-height:1.25}
+.tip .m{color:var(--muted);font-size:13.5px;margin:0}
+.tip p{margin:6px 0 0}
+.tfree{background:#2E7D32;color:#fff;font-size:11px;font-weight:800;border-radius:4px;padding:1px 6px;vertical-align:2px}
+.posts{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));align-items:start}
+.post{background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.post-ph{display:grid;gap:2px;border-bottom:2px solid var(--line);background:var(--line)}
+.post-ph.n2{grid-template-columns:1fr 1fr}.post-ph.n3{grid-template-columns:2fr 1fr 1fr}
+.post-ph img{display:block;width:100%;height:220px;object-fit:cover}
+.post-ph.n2 img,.post-ph.n3 img{height:180px}
+.post-b{padding:14px 16px}
+.post h3{margin:0 0 2px;font-size:18px;font-weight:800;line-height:1.25}
+.post .m{color:var(--muted);font-size:13.5px;margin:0}
+.post p{margin:8px 0 0}
 .leaflet-popup-content{font-family:var(--font)}
 .leaflet-container{font-family:var(--font)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -230,6 +251,8 @@ footer a{color:var(--muted)}
   <button data-tab="jobs" data-i="t_jobs"></button>
   <button data-tab="favs" data-i="t_favs"></button>
   <button data-tab="sos" data-i="t_sos"></button>
+  <button data-tab="tips" data-i="t_tips"></button>
+  <button data-tab="reporter" data-i="t_rep"></button>
   <a href="/quiz/" data-i="t_quiz"></a>
   <a href="/werben.html" class="hl" data-i="t_werben"></a>
 </nav>
@@ -271,6 +294,16 @@ footer a{color:var(--muted)}
     <a href="tel:+903122922929"><strong>+90 312 292 29 29</strong><span data-i="sos_kons"></span></a>
     <a href="https://berlin-bk.mfa.gov.tr" target="_blank" rel="noopener"><strong>T.C. Berlin BK</strong><span data-i="sos_bk"></span></a>
   </div>
+</section>
+<section class="view" id="v-tips" hidden>
+  <h2 data-i="t_tips"></h2><p class="lead" data-i="tips_lead"></p>
+  <div class="chips" id="tipCats" role="group"></div>
+  <div class="tips" id="tipList"></div>
+</section>
+<section class="view" id="v-reporter" hidden>
+  <h2 data-i="t_rep"></h2><p class="lead" data-i="rep_lead"></p>
+  <div class="row" style="margin-bottom:14px"><button class="btn" id="postAddBtn" type="button" data-i="rep_add"></button></div>
+  <div class="posts" id="postList"></div>
 </section>
 
 <footer>
@@ -365,6 +398,30 @@ footer a{color:var(--muted)}
     <div id="jobDoneView" hidden></div>
   </div>
 </dialog>
+<dialog id="postDlg">
+  <div class="dlg">
+    <div id="postFormView">
+      <h2 data-i="rep_add"></h2>
+      <p class="hint" data-i="rep_hint"></p>
+      <form class="f" id="postForm" novalidate>
+        <label><span data-i="p_title"></span><input name="title" required maxlength="100"></label>
+        <label><span data-i="f_kiez"></span><select name="kiez" required></select></label>
+        <label><span data-i="p_body"></span><textarea name="body" required maxlength="1500"></textarea></label>
+        <label><span data-i="p_photos"></span><input name="photo" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+        <label><span data-i="p_video"></span><input name="video_url" type="url" maxlength="300" placeholder="https://youtu.be/…"></label>
+        <div class="two">
+          <label><span data-i="p_author"></span><input name="author" maxlength="40" autocomplete="nickname"></label>
+          <label><span data-i="f_email"></span><small data-i="p_email_hint"></small><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
+        </div>
+        <div class="hp" aria-hidden="true"><input name="hp" tabindex="-1" autocomplete="off"></div>
+        <label class="chk"><input type="checkbox" name="rights" required><span data-i="p_rights"></span></label>
+        <label class="chk"><input type="checkbox" name="consent" required><span id="postConsentTxt"></span></label>
+        <div class="row"><button class="btn" type="submit" data-i="p_send"></button><button class="btn ghost" type="button" data-pclose data-i="f_cancel"></button></div>
+      </form>
+    </div>
+    <div id="postDoneView" hidden></div>
+  </div>
+</dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <script src="/vendor/leaflet/leaflet.js"></script>
@@ -372,6 +429,7 @@ footer a{color:var(--muted)}
 /* ===== Konfiguration ===== */
 var CFG = {
   API: '',                                  // leer = gleiche Domain (Worker)
+  SITE_URL: 'https://mykiezberlin.com',     // steht unter WhatsApp-Nachrichten an Betriebe
   ADSENSE_CLIENT: '',                       // z.B. 'ca-pub-XXXXXXXXXXXXXXXX' – leer = keine Werbung
   ADSENSE_SLOT: '',                         // Anzeigenblock-ID aus AdSense
   AD_EVERY: 6,                              // nach jedem n-ten Eintrag eine Anzeige
@@ -789,7 +847,17 @@ function beacon(u, d) {
 }
 
 /* --- Einträge: WhatsApp, Gutschein, Merken --- */
-function extraActs(it) { return it.whatsapp ? '<a href="https://wa.me/' + esc(waNum(it.whatsapp)) + '" target="_blank" rel="noopener">' + esc(t('wa')) + '</a>' : ''; }
+function extraActs(it) { return it.whatsapp ? '<a href="https://wa.me/' + esc(waNum(it.whatsapp)) + '?text=' + encodeURIComponent(waMsg((t('wa_hello') || 'Hallo') + ' ' + it.name + ',')) + '" target="_blank" rel="noopener">' + esc(t('wa')) + '</a>' : ''; }
+/* Hinweis unter jeder WhatsApp-Nachricht: zeigt dem Betrieb, dass der Kontakt über uns kam */
+function waMsg(txt) { return (txt ? txt + '\n\n\n' : '') + (t('wa_sig') || '— Berliner Kiez-Check:') + ' ' + CFG.SITE_URL; }
+function waAddSig(link, name) {
+  try {
+    var u = new URL(link);
+    if (!/(^|\.)(wa\.me|whatsapp\.com)$/.test(u.hostname)) return link;
+    var txt = u.searchParams.get('text') || ((t('wa_hello') || 'Hallo') + ' ' + (name || '') + ','); u.searchParams.delete('text');
+    return u.href + (u.search ? '&' : '?') + 'text=' + encodeURIComponent(waMsg(txt));
+  } catch (e) { return link; }
+}
 function couponValid(it) {
   if (!(it.featured_until > Date.now()) || !it.coupon_code) return false;
   return !(it.coupon_until && it.coupon_until < new Date().toISOString().slice(0, 10));
@@ -855,7 +923,7 @@ function spText(sp, k) { return sp[k + '_' + S.lang] || sp[k + '_de'] || ''; }
 function sponsorCard(sp, variant) {
   var tr = ' data-spc="' + esc(sp.id) + '"', links = '', cta = spText(sp, 'cta');
   if (sp.kind === 'listing') links += '<a href="?id=' + esc(sp.listing_id) + '&kiez=' + esc(sp.kiez) + '"' + tr + '>' + esc(cta) + '</a>';
-  if (sp.link_wa) links += '<a class="wa" href="' + esc(sp.link_wa) + '" target="_blank" rel="sponsored noopener"' + tr + '>' + esc(cta) + '</a>';
+  if (sp.link_wa) links += '<a class="wa" href="' + esc(waAddSig(sp.link_wa, sp.name)) + '" target="_blank" rel="sponsored noopener"' + tr + '>' + esc(cta) + '</a>';
   if (sp.link_web) links += '<a' + (sp.link_wa ? ' class="sec"' : '') + ' href="' + esc(sp.link_web) + '" target="_blank" rel="sponsored noopener"' + tr + '>' + esc(sp.link_wa ? 'Website' : cta) + '</a>';
   if (sp.link_tel) links += '<a class="sec" href="' + esc(sp.link_tel) + '"' + tr + '>' + esc(t('call')) + '</a>';
   if (sp.link_ig) links += '<a class="sec" href="' + esc(sp.link_ig) + '" target="_blank" rel="sponsored noopener"' + tr + '>Instagram</a>';
@@ -932,7 +1000,7 @@ function renderJobs() {
   var now = Date.now(), jt = JT[S.lang];
   $('#jobList').innerHTML = (S.jobs || []).length ? S.jobs.map(function (j) {
     var urgent = j.urgent_until > now, acts = '';
-    if (j.whatsapp) acts += '<a href="https://wa.me/' + esc(waNum(j.whatsapp)) + '?text=' + encodeURIComponent(t('j_wa_text') + j.title) + '" target="_blank" rel="noopener">' + esc(t('j_apply_wa')) + '</a>';
+    if (j.whatsapp) acts += '<a href="https://wa.me/' + esc(waNum(j.whatsapp)) + '?text=' + encodeURIComponent(waMsg(t('j_wa_text') + j.title)) + '" target="_blank" rel="noopener">' + esc(t('j_apply_wa')) + '</a>';
     if (j.phone) acts += '<a href="tel:' + esc(String(j.phone).replace(/\s/g, '')) + '">' + esc(t('j_call')) + '</a>';
     return '<article class="job' + (urgent ? ' urgent' : '') + '"><h3>' + esc(j.title) +
       (urgent ? ' <span class="tag">' + esc(t('j_urgent')) + '</span><span class="tag">' + esc(t('ad')) + '</span>' : '') +
@@ -994,11 +1062,13 @@ $('#jobForm').addEventListener('submit', function (e) {
 /* --- Tabs --- */
 function showTab(tab) {
   S.tab = tab;
-  ['places', 'coupons', 'jobs', 'favs', 'sos'].forEach(function (x) { (x === 'places' ? $('#wrap') : $('#v-' + x)).hidden = x !== tab; });
+  ['places', 'coupons', 'jobs', 'favs', 'sos', 'tips', 'reporter'].forEach(function (x) { (x === 'places' ? $('#wrap') : $('#v-' + x)).hidden = x !== tab; });
   document.querySelectorAll('#tabs [data-tab]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tab === tab); });
   if (tab === 'coupons') loadCoupons();
   if (tab === 'jobs') loadJobs();
   if (tab === 'favs') renderFavs();
+  if (tab === 'tips') renderTips();
+  if (tab === 'reporter') loadPosts();
   if (tab === 'places' && map) setTimeout(function () { map.invalidateSize(); }, 60);
   var p = new URLSearchParams(location.search);
   if (tab === 'places') p.delete('view'); else p.set('view', tab);
@@ -1076,6 +1146,266 @@ if (isApp && CFG.ADMOB_BANNER && window.Capacitor.Plugins && window.Capacitor.Pl
   })();
 }
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('/sw.js').catch(function () { });
+</script>
+<script>
+/* ===== Neu: „Was tun?“ (Ausflugsziele) + Kiez-Reporter (Beiträge mit Admin-Freigabe) ===== */
+(function () {
+  var X = {
+    de: { t_tips: 'Was tun?', tips_lead: 'Ausflugsziele und Ideen für Berlin – für Gäste und Berliner. Angaben ohne Gewähr, Öffnungszeiten und Preise bitte vorab prüfen.',
+      tc_all: 'Alle', tc_park: 'Parks', tc_museum: 'Museen', tc_view: 'Aussicht', tc_culture: 'Kultur & Geschichte', tc_kids: 'Mit Kindern', tc_free: 'Kostenlos',
+      tip_free: 'Kostenlos', tips_empty: 'Keine Ziele für diese Auswahl.',
+      t_rep: 'Kiez-Reporter', rep_lead: 'Was ist los in deinem Kiez? Teile Fotos und Neuigkeiten aus Berlin. Jeder Beitrag wird vor der Veröffentlichung geprüft.',
+      rep_add: 'Beitrag senden', rep_empty: 'Noch keine Beiträge – sei die oder der Erste!', rep_hint: 'Keine Werbung, keine Beleidigungen, keine privaten Daten anderer. Wir prüfen jeden Beitrag vor der Veröffentlichung.',
+      p_title: 'Überschrift', p_body: 'Was ist passiert?', p_photos: 'Fotos (max. 3, optional)', p_video: 'Video-Link (YouTube, Instagram, TikTok …, optional)',
+      p_author: 'Dein Name oder Spitzname (wird angezeigt)', p_email_hint: 'Wird nicht veröffentlicht – nur für Rückfragen.',
+      p_rights: 'Ich habe die Fotos/Videos selbst gemacht oder darf sie verwenden. Erkennbare Personen sind mit der Veröffentlichung einverstanden.',
+      p_send: 'Zur Prüfung senden', p_done: 'Danke! Dein Beitrag wird geprüft und erscheint nach der Freigabe.', p_video_btn: '▶ Video ansehen', p_report: 'Melden', p_by: 'von',
+      e_video: 'Bitte einen Link von YouTube, Instagram, TikTok, Facebook oder Vimeo angeben.', e_photos: 'Maximal 3 Fotos.', wa_sig: '— Gesendet über Berliner Kiez-Check:', wa_hello: 'Hallo' },
+    tr: { t_tips: 'Ne yapılır?', tips_lead: 'Berlin için gezi yerleri ve fikirler – misafirler ve Berlinliler için. Bilgiler garantisizdir, çalışma saatlerini ve fiyatları önceden kontrol et.',
+      tc_all: 'Tümü', tc_park: 'Parklar', tc_museum: 'Müzeler', tc_view: 'Manzara', tc_culture: 'Kültür & Tarih', tc_kids: 'Çocuklarla', tc_free: 'Ücretsiz',
+      tip_free: 'Ücretsiz', tips_empty: 'Bu seçim için yer yok.',
+      t_rep: 'Kiez Muhabiri', rep_lead: 'Mahallende neler oluyor? Berlin\'den fotoğraf ve haber paylaş. Her gönderi yayınlanmadan önce kontrol edilir.',
+      rep_add: 'Gönderi paylaş', rep_empty: 'Henüz gönderi yok – ilk sen ol!', rep_hint: 'Reklam, hakaret ve başkalarının özel bilgileri yok. Her gönderiyi yayınlamadan önce kontrol ediyoruz.',
+      p_title: 'Başlık', p_body: 'Ne oldu?', p_photos: 'Fotoğraflar (en fazla 3, isteğe bağlı)', p_video: 'Video linki (YouTube, Instagram, TikTok …, isteğe bağlı)',
+      p_author: 'Adın veya takma adın (görünür)', p_email_hint: 'Yayınlanmaz – sadece sorular için.',
+      p_rights: 'Fotoğrafları/videoları kendim çektim veya kullanma hakkım var. Tanınabilir kişiler yayınlanmasına izin verdi.',
+      p_send: 'Kontrole gönder', p_done: 'Teşekkürler! Gönderin kontrol ediliyor ve onaydan sonra yayınlanacak.', p_video_btn: '▶ Videoyu izle', p_report: 'Bildir', p_by: 'gönderen',
+      e_video: 'Lütfen YouTube, Instagram, TikTok, Facebook veya Vimeo linki gir.', e_photos: 'En fazla 3 fotoğraf.', wa_sig: '— Bu mesaj Berliner Kiez-Check üzerinden gönderildi:', wa_hello: 'Merhaba' },
+    en: { t_tips: 'Things to do', tips_lead: 'Places to visit and ideas for Berlin – for visitors and locals. No guarantee; please check opening times and prices in advance.',
+      tc_all: 'All', tc_park: 'Parks', tc_museum: 'Museums', tc_view: 'Views', tc_culture: 'Culture & history', tc_kids: 'With kids', tc_free: 'Free',
+      tip_free: 'Free', tips_empty: 'No places for this selection.',
+      t_rep: 'Kiez reporter', rep_lead: 'What\'s happening in your Kiez? Share photos and news from Berlin. Every post is checked before it is published.',
+      rep_add: 'Send a post', rep_empty: 'No posts yet – be the first!', rep_hint: 'No advertising, no insults, no private data of others. We check every post before publishing.',
+      p_title: 'Headline', p_body: 'What happened?', p_photos: 'Photos (max. 3, optional)', p_video: 'Video link (YouTube, Instagram, TikTok …, optional)',
+      p_author: 'Your name or nickname (shown)', p_email_hint: 'Not published – only for questions.',
+      p_rights: 'I took the photos/videos myself or may use them. Recognisable people agree to the publication.',
+      p_send: 'Send for review', p_done: 'Thank you! Your post will be checked and appear once approved.', p_video_btn: '▶ Watch video', p_report: 'Report', p_by: 'by',
+      e_video: 'Please enter a link from YouTube, Instagram, TikTok, Facebook or Vimeo.', e_photos: 'Max. 3 photos.', wa_sig: '— Sent via Berliner Kiez-Check:', wa_hello: 'Hello' }
+  };
+  ['de', 'tr', 'en'].forEach(function (l) { for (var k in X[l]) if (I18N[l][k] == null) I18N[l][k] = X[l][k]; });
+
+  /* ---------- Ausflugsziele ---------- */
+var TIPS = [
+{id:'brandenburger-tor',n:'Brandenburger Tor',k:'mitte',c:['culture'],f:1,lat:52.5163,lng:13.3777,a:'Pariser Platz, 10117 Berlin',
+ de:'Berlins Wahrzeichen und Symbol der Wiedervereinigung – am schönsten am Abend, wenn es beleuchtet ist.',
+ tr:'Berlin\'in simgesi ve yeniden birleşmenin sembolü – akşam ışıklandırıldığında en güzel hâlinde.',
+ en:'Berlin\'s landmark and symbol of reunification – most beautiful in the evening when it is lit up.'},
+{id:'reichstag',n:'Reichstagskuppel',k:'tiergarten',c:['view','culture'],f:1,lat:52.5186,lng:13.3762,a:'Platz der Republik 1, 11011 Berlin',
+ de:'Gläserne Kuppel mit Blick über das Regierungsviertel. Eintritt frei, vorherige Online-Anmeldung nötig.',
+ tr:'Hükümet semtine bakan cam kubbe. Giriş ücretsiz, önceden online kayıt gerekli.',
+ en:'Glass dome with views over the government district. Free entry, online registration required in advance.'},
+{id:'east-side-gallery',n:'East Side Gallery',k:'friedrichshain',c:['culture'],f:1,lat:52.5050,lng:13.4397,a:'Mühlenstraße, 10243 Berlin',
+ de:'Längstes erhaltenes Stück der Berliner Mauer, bemalt von Künstlern aus aller Welt – direkt an der Spree.',
+ tr:'Berlin Duvarı\'nın ayakta kalan en uzun parçası, dünyanın her yerinden sanatçılarca boyanmış – Spree kıyısında.',
+ en:'Longest surviving section of the Berlin Wall, painted by artists from around the world – right on the Spree.'},
+{id:'museumsinsel',n:'Museumsinsel',k:'mitte',c:['museum','culture'],f:0,lat:52.5211,lng:13.3969,a:'Bodestraße 1–3, 10178 Berlin',
+ de:'Fünf weltberühmte Museen auf einer Insel in der Spree – UNESCO-Welterbe.',
+ tr:'Spree\'deki bir adada dünyaca ünlü beş müze – UNESCO Dünya Mirası.',
+ en:'Five world-famous museums on an island in the Spree – a UNESCO World Heritage Site.'},
+{id:'fernsehturm',n:'Fernsehturm',k:'mitte',c:['view'],f:0,lat:52.5208,lng:13.4094,a:'Panoramastraße 1A, 10178 Berlin',
+ de:'Mit über 360 Metern das höchste Bauwerk Deutschlands – Aussicht über ganz Berlin.',
+ tr:'360 metreyi aşan yüksekliğiyle Almanya\'nın en yüksek yapısı – tüm Berlin\'e manzara.',
+ en:'At over 360 metres the tallest structure in Germany – views across all of Berlin.'},
+{id:'tempelhofer-feld',n:'Tempelhofer Feld',k:'tempelhof',c:['park','kids'],f:1,lat:52.4731,lng:13.4017,a:'Tempelhofer Damm, 12101 Berlin',
+ de:'Ehemaliger Flughafen, heute riesiger Park: Radfahren, Skaten und Drachen steigen lassen auf der Rollbahn, Grillen in den Grillbereichen.',
+ tr:'Eski havalimanı, bugün devasa bir park: pistte bisiklet, paten ve uçurtma; mangal alanlarında mangal.',
+ en:'Former airport, now a huge park: cycling, skating and kite flying on the runway, barbecues in the designated areas.'},
+{id:'tiergarten-park',n:'Großer Tiergarten',k:'tiergarten',c:['park'],f:1,lat:52.5145,lng:13.3501,a:'Straße des 17. Juni, 10785 Berlin',
+ de:'Berlins großer Stadtpark mitten in der City – mit Seen, Biergärten und der Siegessäule.',
+ tr:'Şehrin tam ortasında Berlin\'in büyük parkı – gölleri, bira bahçeleri ve Zafer Sütunu ile.',
+ en:'Berlin\'s big city park right in the centre – with lakes, beer gardens and the Victory Column.'},
+{id:'mauer-gedenkstaette',n:'Gedenkstätte Berliner Mauer',k:'mitte',c:['culture'],f:1,lat:52.5354,lng:13.3903,a:'Bernauer Straße 111, 13355 Berlin',
+ de:'Originaler Mauerstreifen mit Wachturm und Aussichtsplattform – hier wird die Teilung Berlins greifbar.',
+ tr:'Gözetleme kulesi ve seyir platformuyla orijinal Duvar şeridi – Berlin\'in bölünmüşlüğü burada somutlaşıyor.',
+ en:'Original stretch of the Wall with a watchtower and viewing platform – Berlin\'s division made tangible.'},
+{id:'mauerpark',n:'Mauerpark',k:'prenzlauer-berg',c:['park'],f:1,lat:52.5433,lng:13.4023,a:'Gleimstraße 55, 10437 Berlin',
+ de:'Sonntags Flohmarkt, im Sommer auch Open-Air-Karaoke – ein Klassiker für einen entspannten Tag.',
+ tr:'Pazar günleri bit pazarı, yazın açık hava karaokesi – rahat bir gün için klasik.',
+ en:'Flea market on Sundays and open-air karaoke in summer – a classic for a relaxed day.'},
+{id:'treptower-park',n:'Treptower Park',k:'treptow',c:['park','culture'],f:1,lat:52.4889,lng:13.4697,a:'Puschkinallee, 12435 Berlin',
+ de:'Weitläufiger Park an der Spree mit dem Sowjetischen Ehrenmal und Anlegestellen für Ausflugsschiffe.',
+ tr:'Spree kıyısında geniş park; Sovyet Anıtı ve gezi teknelerinin iskeleleriyle.',
+ en:'Spacious park on the Spree with the Soviet War Memorial and piers for excursion boats.'},
+{id:'molecule-man',n:'Molecule Man',k:'treptow',c:['view','culture'],f:1,lat:52.4969,lng:13.4533,a:'An den Treptowers 1, 12435 Berlin',
+ de:'30 Meter hohe Metallskulptur in der Spree an der früheren Grenze zwischen Ost und West – toller Fotospot.',
+ tr:'Eski Doğu-Batı sınırında, Spree\'nin içinde 30 metrelik metal heykel – harika fotoğraf noktası.',
+ en:'30-metre metal sculpture in the Spree at the former East–West border – a great photo spot.'},
+{id:'schloss-charlottenburg',n:'Schloss Charlottenburg',k:'charlottenburg',c:['culture','park'],f:0,lat:52.5209,lng:13.2957,a:'Spandauer Damm 10–22, 14059 Berlin',
+ de:'Größtes Schloss Berlins mit barockem Schlossgarten – der Garten ist kostenlos zugänglich.',
+ tr:'Berlin\'in en büyük sarayı ve barok bahçesi – bahçeye giriş ücretsiz.',
+ en:'Berlin\'s largest palace with a baroque garden – the garden is free to visit.'},
+{id:'zoo-berlin',n:'Zoo Berlin',k:'tiergarten',c:['kids'],f:0,lat:52.5079,lng:13.3377,a:'Hardenbergplatz 8, 10787 Berlin',
+ de:'Ältester Zoo Deutschlands, mit Aquarium – ideal für einen Tag mit Kindern.',
+ tr:'Akvaryumuyla Almanya\'nın en eski hayvanat bahçesi – çocuklarla bir gün için ideal.',
+ en:'Germany\'s oldest zoo, with an aquarium – ideal for a day out with kids.'},
+{id:'tierpark',n:'Tierpark Berlin',k:'lichtenberg',c:['kids','park'],f:0,lat:52.4987,lng:13.5306,a:'Am Tierpark 125, 10319 Berlin',
+ de:'Einer der größten Tierparks Europas – viel Platz, große Gehege und ein Schloss im Park.',
+ tr:'Avrupa\'nın en büyük hayvan parklarından biri – geniş alanlar, büyük bölmeler ve park içinde bir saray.',
+ en:'One of Europe\'s largest zoos – lots of space, large enclosures and a palace in the park.'},
+{id:'gaerten-der-welt',n:'Gärten der Welt',k:'marzahn',c:['park'],f:0,lat:52.5389,lng:13.5760,a:'Blumberger Damm 44, 12685 Berlin',
+ de:'Gärten aus verschiedenen Kulturen, z. B. ein Chinesischer und ein Japanischer Garten – dazu eine Seilbahn.',
+ tr:'Farklı kültürlerden bahçeler, örneğin Çin ve Japon bahçesi – ayrıca teleferik.',
+ en:'Gardens from different cultures, such as a Chinese and a Japanese garden – plus a cable car.'},
+{id:'britzer-garten',n:'Britzer Garten',k:'britz',c:['park','kids'],f:0,lat:52.4323,lng:13.4260,a:'Sangerhauser Weg 1, 12349 Berlin',
+ de:'Gepflegter Blumenpark mit See und großen Spielplätzen – im Frühling zur Tulpenblüte besonders schön.',
+ tr:'Gölü ve büyük oyun alanlarıyla bakımlı çiçek parkı – ilkbaharda lale mevsiminde çok güzel.',
+ en:'Well-kept flower park with a lake and big playgrounds – especially lovely in spring when the tulips bloom.'},
+{id:'viktoriapark',n:'Viktoriapark',k:'kreuzberg',c:['park','view'],f:1,lat:52.4879,lng:13.3811,a:'Kreuzbergstraße, 10965 Berlin',
+ de:'Kleiner Berg mit Wasserfall und Nationaldenkmal – oben toller Blick über die Stadt.',
+ tr:'Şelaleli ve anıtlı küçük bir tepe – yukarıdan şehrin harika manzarası.',
+ en:'Small hill with a waterfall and a national monument – great city views from the top.'},
+{id:'checkpoint-charlie',n:'Checkpoint Charlie',k:'kreuzberg',c:['culture'],f:1,lat:52.5075,lng:13.3904,a:'Friedrichstraße 43–45, 10969 Berlin',
+ de:'Der bekannteste Grenzübergang des Kalten Krieges – mitten in der Stadt.',
+ tr:'Soğuk Savaş\'ın en bilinen sınır kapısı – şehrin tam ortasında.',
+ en:'The best-known border crossing of the Cold War – right in the middle of the city.'},
+{id:'holocaust-mahnmal',n:'Denkmal für die ermordeten Juden Europas',k:'mitte',c:['culture'],f:1,lat:52.5139,lng:13.3786,a:'Cora-Berliner-Straße 1, 10117 Berlin',
+ de:'Feld aus über 2.700 Betonstelen zur Erinnerung an die ermordeten Juden Europas, mit unterirdischem Ort der Information.',
+ tr:'Avrupa\'da öldürülen Yahudilerin anısına 2.700\'den fazla beton blok; yer altında bir bilgi merkezi de var.',
+ en:'A field of more than 2,700 concrete slabs commemorating the murdered Jews of Europe, with an underground information centre.'},
+{id:'gendarmenmarkt',n:'Gendarmenmarkt',k:'mitte',c:['culture'],f:1,lat:52.5137,lng:13.3927,a:'Gendarmenmarkt, 10117 Berlin',
+ de:'Einer der schönsten Plätze Berlins mit Konzerthaus und zwei Domen.',
+ tr:'Konser salonu ve iki katedraliyle Berlin\'in en güzel meydanlarından biri.',
+ en:'One of Berlin\'s most beautiful squares, with a concert hall and two cathedrals.'},
+{id:'technikmuseum',n:'Deutsches Technikmuseum',k:'kreuzberg',c:['museum','kids'],f:0,lat:52.4986,lng:13.3775,a:'Trebbiner Straße 9, 10963 Berlin',
+ de:'Lokomotiven, Flugzeuge und Schiffe – begeistert Groß und Klein. Auf dem Dach hängt ein „Rosinenbomber“.',
+ tr:'Lokomotifler, uçaklar ve gemiler – büyük küçük herkesi büyüler. Çatıda bir „Rosinenbomber“ uçağı asılı.',
+ en:'Locomotives, aircraft and ships – fascinating for all ages. A “Raisin Bomber” plane hangs on the roof.'},
+{id:'naturkundemuseum',n:'Museum für Naturkunde',k:'mitte',c:['museum','kids'],f:0,lat:52.5301,lng:13.3794,a:'Invalidenstraße 43, 10115 Berlin',
+ de:'Riesige Dinosaurier-Skelette, darunter eines der größten der Welt – ein Highlight für Kinder.',
+ tr:'Dev dinozor iskeletleri, aralarında dünyanın en büyüklerinden biri – çocuklar için büyük bir keyif.',
+ en:'Huge dinosaur skeletons, including one of the largest in the world – a highlight for kids.'},
+{id:'botanischer-garten',n:'Botanischer Garten',k:'steglitz',c:['park'],f:0,lat:52.4550,lng:13.3050,a:'Königin-Luise-Straße 6–8, 14195 Berlin',
+ de:'Einer der größten botanischen Gärten der Welt, mit großen Gewächshäusern.',
+ tr:'Büyük seralarıyla dünyanın en büyük botanik bahçelerinden biri.',
+ en:'One of the largest botanical gardens in the world, with large greenhouses.'},
+{id:'zitadelle-spandau',n:'Zitadelle Spandau',k:'spandau',c:['culture','museum'],f:0,lat:52.5410,lng:13.2123,a:'Am Juliusturm 64, 13599 Berlin',
+ de:'Eine der am besten erhaltenen Festungen der Renaissance in Europa – mit Juliusturm und Museum.',
+ tr:'Avrupa\'nın en iyi korunmuş Rönesans kalelerinden biri – Julius Kulesi ve müzesiyle.',
+ en:'One of the best-preserved Renaissance fortresses in Europe – with the Julius Tower and a museum.'},
+{id:'greenwichpromenade',n:'Tegeler See & Greenwichpromenade',k:'reinickendorf',c:['park'],f:1,lat:52.5878,lng:13.2804,a:'Greenwichpromenade, 13507 Berlin',
+ de:'Spaziergang am Tegeler See – im Sommer legen hier Ausflugsschiffe ab.',
+ tr:'Tegel Gölü kıyısında yürüyüş – yazın gezi tekneleri buradan kalkıyor.',
+ en:'A stroll along Lake Tegel – in summer, excursion boats depart from here.'},
+{id:'koepenick',n:'Altstadt & Schloss Köpenick',k:'koepenick',c:['culture'],f:0,lat:52.4436,lng:13.5733,a:'Schlossinsel 1, 12557 Berlin',
+ de:'Barockschloss auf einer Insel und gemütliche Altstadt am Wasser – bekannt durch den „Hauptmann von Köpenick“.',
+ tr:'Adada barok bir saray ve su kenarında şirin bir eski şehir – „Köpenick Yüzbaşısı“ ile ünlü.',
+ en:'Baroque palace on an island and a cosy old town by the water – famous for the “Captain of Köpenick”.'},
+{id:'volkspark-friedrichshain',n:'Volkspark Friedrichshain',k:'friedrichshain',c:['park','kids'],f:1,lat:52.5279,lng:13.4357,a:'Am Friedrichshain 1, 10249 Berlin',
+ de:'Ältester Volkspark Berlins mit Märchenbrunnen, Spielplätzen und zwei kleinen Bergen.',
+ tr:'Masal Çeşmesi, oyun alanları ve iki küçük tepesiyle Berlin\'in en eski halk parkı.',
+ en:'Berlin\'s oldest public park, with the Fairy Tale Fountain, playgrounds and two small hills.'},
+{id:'koernerpark',n:'Körnerpark',k:'neukoelln',c:['park'],f:1,lat:52.4717,lng:13.4376,a:'Schierker Straße 8, 12051 Berlin',
+ de:'Kleiner, versteckter Park im neobarocken Stil mit Wasserspielen – eine Oase in Neukölln.',
+ tr:'Su oyunlarıyla neobarok tarzda küçük, gizli bir park – Neukölln\'de bir vaha.',
+ en:'Small, hidden neo-baroque park with water features – an oasis in Neukölln.'},
+{id:'gleisdreieck',n:'Park am Gleisdreieck',k:'kreuzberg',c:['park','kids'],f:1,lat:52.4960,lng:13.3740,a:'Park am Gleisdreieck, 10963 Berlin',
+ de:'Moderner Park auf ehemaligem Bahngelände – mit Skateanlage, Spielplätzen und vielen Sportflächen.',
+ tr:'Eski demiryolu alanında modern park – kaykay alanı, oyun alanları ve bol spor sahasıyla.',
+ en:'Modern park on former railway land – with a skate area, playgrounds and lots of sports areas.'},
+{id:'humboldthain',n:'Volkspark Humboldthain',k:'gesundbrunnen',c:['park','view'],f:1,lat:52.5446,lng:13.3847,a:'Brunnenstraße, 13355 Berlin',
+ de:'Park mit ehemaligem Flakturm – von der Aussichtsplattform weiter Blick über den Norden Berlins.',
+ tr:'Eski uçaksavar kulesi olan park – seyir platformundan Berlin\'in kuzeyine geniş manzara.',
+ en:'Park with a former flak tower – wide views over northern Berlin from the viewing platform.'},
+{id:'schoenhausen',n:'Schlosspark Schönhausen',k:'pankow',c:['park','culture'],f:1,lat:52.5790,lng:13.4020,a:'Tschaikowskistraße 1, 13156 Berlin',
+ de:'Ruhiger Schlosspark in Pankow; das Schloss war zu DDR-Zeiten Amtssitz des Staatsoberhaupts.',
+ tr:'Pankow\'da sakin bir saray parkı; saray, Doğu Almanya döneminde devlet başkanının makamıydı.',
+ en:'Quiet palace park in Pankow; in GDR times the palace was the official seat of the head of state.'},
+{id:'stasimuseum',n:'Stasimuseum',k:'lichtenberg',c:['museum','culture'],f:0,lat:52.5145,lng:13.4870,a:'Ruschestraße 103, 10365 Berlin',
+ de:'In der ehemaligen Zentrale der DDR-Staatssicherheit – mit dem original erhaltenen Büro von Erich Mielke.',
+ tr:'Doğu Alman gizli servisi Stasi\'nin eski merkezinde – Erich Mielke\'nin orijinal ofisiyle.',
+ en:'In the former headquarters of the East German Stasi – including Erich Mielke\'s original office.'},
+{id:'rathaus-schoeneberg',n:'Rathaus Schöneberg',k:'schoeneberg',c:['culture'],f:1,lat:52.4847,lng:13.3446,a:'John-F.-Kennedy-Platz 1, 10825 Berlin',
+ de:'Hier hielt John F. Kennedy 1963 seine berühmte Rede „Ich bin ein Berliner“.',
+ tr:'John F. Kennedy 1963\'te ünlü „Ich bin ein Berliner“ konuşmasını burada yaptı.',
+ en:'This is where John F. Kennedy gave his famous “Ich bin ein Berliner” speech in 1963.'}
+];
+  var CICON = { park: '🌳', museum: '🏛️', view: '👀', culture: '🏰', kids: '🧸' };
+  var TF = 'all';
+  window.renderTips = function () {
+    var cats = ['all', 'park', 'museum', 'view', 'culture', 'kids', 'free'];
+    $('#tipCats').innerHTML = cats.map(function (c) { return '<button type="button" data-tf="' + c + '" aria-pressed="' + (c === TF) + '">' + esc(t('tc_' + c)) + '</button>'; }).join('');
+    var list = TIPS.filter(function (p) { return TF === 'all' || (TF === 'free' ? p.f : p.c.indexOf(TF) >= 0); });
+    if (S.kiez) list.sort(function (a, b) { return (b.k === S.kiez) - (a.k === S.kiez); });
+    $('#tipList').innerHTML = list.length ? list.map(function (p) {
+      return '<article class="tip"><div class="tip-ic" aria-hidden="true">' + CICON[p.c[0]] + '</div><div><h3>' + esc(p.n) + (p.f ? ' <span class="tfree">' + esc(t('tip_free')) + '</span>' : '') + '</h3>' +
+        '<p class="m">' + esc(KIEZE[p.k] ? KIEZE[p.k][0] : '') + ' – ' + esc(p.a) + '</p><p>' + esc(p[S.lang] || p.de) + '</p>' +
+        '<div class="acts"><a href="https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng + '" target="_blank" rel="noopener">' + esc(t('route')) + '</a></div></div></article>';
+    }).join('') : '<div class="empty"><p>' + esc(t('tips_empty')) + '</p></div>';
+  };
+
+  /* ---------- Kiez-Reporter ---------- */
+  var POSTS = null;
+  window.loadPosts = function () {
+    fetch(api('/api/posts'), { headers: { accept: 'application/json' } })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) { POSTS = j.items || []; renderPosts(); })
+      .catch(function () { POSTS = []; renderPosts(); });
+  };
+  function renderPosts() {
+    if (POSTS == null) return;
+    $('#postList').innerHTML = POSTS.length ? POSTS.map(function (p) {
+      var ph = []; try { ph = JSON.parse(p.photos || '[]'); } catch (e) { }
+      var imgs = ph.length ? '<div class="post-ph n' + ph.length + '">' + ph.map(function (k) { return '<a href="' + api('/img/' + esc(k)) + '" target="_blank" rel="noopener"><img src="' + api('/img/' + esc(k)) + '" alt="" loading="lazy"></a>'; }).join('') + '</div>' : '';
+      var d = new Date(p.created_at).toLocaleDateString(S.lang, { day: 'numeric', month: 'long', year: 'numeric' });
+      return '<article class="post">' + imgs + '<div class="post-b"><h3>' + esc(p.title) + '</h3>' +
+        '<p class="m">📍 ' + esc(KIEZE[p.kiez] ? KIEZE[p.kiez][0] : '') + ' · ' + esc(d) + (p.author ? ' · ' + esc(t('p_by')) + ' ' + esc(p.author) : '') + '</p>' +
+        '<p>' + esc(p.body).replace(/\n/g, '<br>') + '</p><div class="acts">' +
+        (p.video_url ? '<a href="' + esc(p.video_url) + '" target="_blank" rel="noopener nofollow ugc">' + esc(t('p_video_btn')) + '</a>' : '') +
+        '<a href="mailto:info@deindigitalerhelfer.com?subject=' + encodeURIComponent('Meldung Kiez-Reporter ' + p.id) + '">' + esc(t('p_report')) + '</a></div></div></article>';
+    }).join('') : '<div class="empty"><p>' + esc(t('rep_empty')) + '</p></div>';
+  }
+  function repLang() {
+    var pk = $('#postForm').elements.kiez, cur = pk.value;
+    var ks = Object.keys(KIEZE).sort(function (a, b) { return (a === 'umgebung') - (b === 'umgebung') || KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
+    pk.innerHTML = '<option value="">–</option>' + ks.map(function (k) { return '<option value="' + k + '">' + esc(KIEZE[k][0]) + '</option>'; }).join('');
+    pk.value = cur;
+    $('#postConsentTxt').innerHTML = $('#consentTxt').innerHTML;
+    if (S.tab === 'tips') renderTips();
+    if (S.tab === 'reporter') renderPosts();
+  }
+  function openPost() {
+    var f = $('#postForm'); f.reset();
+    $('#postFormView').hidden = false; $('#postDoneView').hidden = true;
+    if (S.kiez) f.elements.kiez.value = S.kiez;
+    var d = $('#postDlg'); if (!d.open) d.showModal();
+  }
+  function fieldName(k) { return t({ p_title: 'p_title', p_body: 'p_body', p_video: 'p_video', kiez: 'f_kiez', email: 'f_email' }[k] || k) || k; }
+  $('#postForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target, g = function (n) { return f.elements[n]; };
+    if (!g('rights').checked || !g('consent').checked) { toast(t('e_consent')); return; }
+    var files = Array.prototype.slice.call(g('photo').files || []);
+    if (files.length > 3) { toast(t('e_photos')); return; }
+    var btn = f.querySelector('button[type=submit]'); btn.disabled = true;
+    Promise.all(files.map(function (fl) { return compress(fl); })).then(function (blobs) {
+      var fd = new FormData();
+      ['title', 'body', 'kiez', 'video_url', 'author', 'email', 'hp'].forEach(function (n) { fd.append(n, g(n).value); });
+      fd.append('rights', '1'); fd.append('consent', '1');
+      blobs.forEach(function (b, i) { if (b) fd.append('photo', b, 'foto' + i + '.jpg'); });
+      return fetch(api('/api/posts/submit'), { method: 'POST', body: fd }).then(function (r) { return r.json(); });
+    }).then(function (j) {
+      btn.disabled = false;
+      if (j && j.ok) { $('#postFormView').hidden = true; var dv = $('#postDoneView'); dv.hidden = false; dv.innerHTML = '<h2>' + esc(t('done_title')) + '</h2><p>' + esc(t('p_done')) + '</p><div class="row"><button class="btn" type="button" data-pclose>OK</button></div>'; return; }
+      if (j && j.error === 'field') toast(j.field === 'p_video' ? t('e_video') : t('e_field') + fieldName(j.field));
+      else if (j && j.error === 'rate') toast(t('e_rate'));
+      else if (j && j.error === 'photo') toast(t('e_photo'));
+      else toast(t('e_field'));
+    }).catch(function () { btn.disabled = false; toast('Error – bitte später erneut versuchen.'); });
+  });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tf],[data-pclose],#postAddBtn');
+    if (!b) return;
+    if (b.id === 'postAddBtn') { openPost(); return; }
+    if (b.hasAttribute('data-pclose')) { $('#postDlg').close(); return; }
+    if (b.dataset.tf) { TF = b.dataset.tf; renderTips(); }
+  });
+
+  var _al = applyLang;
+  applyLang = function () { _al(); repLang(); };
+  applyLang();
+  var v = new URLSearchParams(location.search).get('view');
+  if (v === 'tips' || v === 'reporter') showTab(v);
+})();
 </script>
 <script>
 /* ===== Design: Kiez-Bild im Hero + Hell/Dunkel-Schalter (nur Darstellung) ===== */
