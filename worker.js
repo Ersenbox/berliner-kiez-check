@@ -2,6 +2,7 @@
 // © 2026 DeindigitalerhelferCenter
 import { SUBS, sponsorsPublic, sponsorTrack, adRequest, jobsPublic, jobSubmit, jobOwn, subscriptionCheckout, jobCheckout, handleStripeEvent, adminWerbung, news } from './werbung.js';
 import { postsPublic, postSubmit, adminPosts } from './posts.js';
+import { storiesPublic, storySubmit, storyView, storyMedia, adminStories, storiesCleanup } from './stories.js';
 
 export const KIEZE = {
   'neukoelln': { name: 'Neukölln', lat: 52.4811, lng: 13.4350 },
@@ -79,6 +80,10 @@ export default {
       if (p === '/api/submit' && req.method === 'POST') return submit(req, env);
       if (p === '/api/posts' && req.method === 'GET') return postsPublic(url, env);
       if (p === '/api/posts/submit' && req.method === 'POST') return postSubmit(req, env, KIEZE, ipLimit);
+      if (p === '/api/stories' && req.method === 'GET') return storiesPublic(url, env, KIEZE);
+      if (p === '/api/stories/submit' && req.method === 'POST') return storySubmit(req, env, KIEZE);
+      if (p === '/api/story/view' && req.method === 'POST') return storyView(req, env);
+      if (p === '/share-story' && req.method === 'POST') return Response.redirect(url.origin + '/?story=new', 303);
       if ((m = p.match(/^\/api\/listing\/([a-z0-9]{12})$/))) {
         if (req.method === 'GET') return getOwn(m[1], url, env);
         if (req.method === 'POST') return updateOwn(m[1], req, env);
@@ -89,6 +94,7 @@ export default {
       if ((m = p.match(/^\/img\/(p\/[a-z0-9]{12}\.jpg)$/))) return img(m[1], env);
       if ((m = p.match(/^\/img\/(s\/[a-z0-9-]{1,40}\.(?:jpg|png|webp))$/))) return img(m[1], env);
       if ((m = p.match(/^\/img\/(r\/[a-z0-9]{12}-[0-2]\.jpg)$/))) return img(m[1], env);
+      if ((m = p.match(/^\/media\/(st\/[a-z0-9]{12}(?:-p)?\.(?:jpg|webp|png|mp4|webm|mov))$/))) return storyMedia(m[1], req, env);
       if (p === '/sitemap.xml') return sitemap(url, env);
       if ((m = p.match(/^\/k\/([a-z-]+)(?:\/([a-z-]+))?\/?$/))) return seoPage(m[1], m[2], url, env);
       if (env.ASSETS) return env.ASSETS.fetch(req);
@@ -96,6 +102,10 @@ export default {
     } catch (e) {
       return J({ error: 'server', detail: String(e && e.message || e) }, 500);
     }
+  },
+  // Täglicher Zeitplan (wrangler.toml → [triggers]): abgelaufene Stories und ihre Dateien löschen
+  async scheduled(ev, env, ctx) {
+    ctx.waitUntil(storiesCleanup(env));
   }
 };
 
@@ -434,6 +444,8 @@ async function admin(req, env, p, url) {
   if (w) return w;
   const po = await adminPosts(req, env, p, url);
   if (po) return po;
+  const sto = await adminStories(req, env, p, url, KIEZE);
+  if (sto) return sto;
   return J({ error: 'not_found' }, 404);
 }
 
