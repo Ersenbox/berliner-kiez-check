@@ -1,6 +1,7 @@
 // Berliner Kiez-Check – Cloudflare Worker (API + SEO-Seiten + Sitemap)
 // © 2026 DeindigitalerhelferCenter
 import { SUBS, sponsorsPublic, sponsorTrack, adRequest, jobsPublic, jobSubmit, jobOwn, subscriptionCheckout, jobCheckout, handleStripeEvent, adminWerbung, news } from './werbung.js';
+import { postsPublic, postSubmit, adminPosts } from './posts.js';
 
 export const KIEZE = {
   'neukoelln': { name: 'Neukölln', lat: 52.4811, lng: 13.4350 },
@@ -76,6 +77,8 @@ export default {
       if (p === '/api/jobs/submit' && req.method === 'POST') return jobSubmit(req, env, KIEZE, ipLimit);
       if ((m = p.match(/^\/api\/job\/([a-z0-9]{12})$/)) && req.method === 'GET') return jobOwn(m[1], url, env);
       if (p === '/api/submit' && req.method === 'POST') return submit(req, env);
+      if (p === '/api/posts' && req.method === 'GET') return postsPublic(url, env);
+      if (p === '/api/posts/submit' && req.method === 'POST') return postSubmit(req, env, KIEZE, ipLimit);
       if ((m = p.match(/^\/api\/listing\/([a-z0-9]{12})$/))) {
         if (req.method === 'GET') return getOwn(m[1], url, env);
         if (req.method === 'POST') return updateOwn(m[1], req, env);
@@ -85,6 +88,7 @@ export default {
       if (p.startsWith('/api/admin/')) return admin(req, env, p, url);
       if ((m = p.match(/^\/img\/(p\/[a-z0-9]{12}\.jpg)$/))) return img(m[1], env);
       if ((m = p.match(/^\/img\/(s\/[a-z0-9-]{1,40}\.(?:jpg|png|webp))$/))) return img(m[1], env);
+      if ((m = p.match(/^\/img\/(r\/[a-z0-9]{12}-[0-2]\.jpg)$/))) return img(m[1], env);
       if (p === '/sitemap.xml') return sitemap(url, env);
       if ((m = p.match(/^\/k\/([a-z-]+)(?:\/([a-z-]+))?\/?$/))) return seoPage(m[1], m[2], url, env);
       if (env.ASSETS) return env.ASSETS.fetch(req);
@@ -428,6 +432,8 @@ async function admin(req, env, p, url) {
   }
   const w = await adminWerbung(req, env, p, url);
   if (w) return w;
+  const po = await adminPosts(req, env, p, url);
+  if (po) return po;
   return J({ error: 'not_found' }, 404);
 }
 
