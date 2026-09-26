@@ -46,7 +46,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Kopfzeile */
 .top{position:sticky;top:0;z-index:600;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--card);border-bottom:2px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.01em;line-height:1.1;text-decoration:none;color:var(--ink);margin-right:auto}
-.logo::before{content:"BERLIN";flex:0 0 38px;width:38px;height:38px;display:grid;place-items:center;background:var(--pink);color:var(--yellow);font-size:8.5px;font-weight:800;letter-spacing:.5px;border:2px solid var(--line);border-radius:10px;transform:rotate(-5deg);box-shadow:2px 2px 0 var(--line)}
+.logo::before{display:none}
 .langs{display:flex;border:2px solid var(--soft);border-radius:20px;overflow:hidden;background:var(--card)}
 .langs button{background:none;border:0;padding:5px 9px;font-weight:800;font-size:13px;cursor:pointer}
 .langs button[aria-pressed=true]{background:var(--yellow);color:#000}
@@ -263,12 +263,15 @@ footer a{color:var(--muted)}
 </header>
 
 <section class="hero">
+  <figure class="kiezpic" id="kiezPic" style="margin-bottom: 24px;">
+    <img id="kiezImg" src="/assets/friedrichshain-banner.jpg.png" alt="Berliner Kiez entdecken" width="1200" height="630" decoding="async" style="width: 100%; height: auto; display: block;">
+    <figcaption id="kiezCap" style="display:none;">📍 Berlin</figcaption>
+  </figure>
   <div class="hero-txt">
   <h1 class="riso" id="heroH" data-t=""></h1>
   <p data-i="sub"></p>
   <div class="pick"><select id="kiez" aria-label="Kiez"></select></div>
   </div>
-  <figure class="kiezpic" id="kiezPic"><img id="kiezImg" src="/assets/kiez/berlin_city_banner-800.webp" alt="" width="800" height="500" decoding="async"><figcaption id="kiezCap">📍 Berlin</figcaption></figure>
   <div class="chips" id="cats" role="group"></div>
 </section>
 
