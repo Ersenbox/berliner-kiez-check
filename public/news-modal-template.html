@@ -1,0 +1,106 @@
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BERLINER KIEZ-CHECK: NEWS MODAL TEMPLATE
+     Aufgabe #4 - Modal für Berlin/Tiergarten/Charlottenburg etc.
+     Kopiere diesen HTML und füge ihn in index.html vor </body> ein
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+<!-- NEWS MODAL DIALOG -->
+<div id="newsModal" class="news-modal">
+  <div class="news-modal-content" style="position: relative;">
+    
+    <!-- Close Button X -->
+    <button class="btn-close-x" onclick="closeNewsModal()">✕</button>
+    
+    <!-- Logo -->
+    <img src="/assets/logo-kiez-check.svg" alt="Berliner Kiez-Check" class="news-logo">
+    
+    <!-- Dynamisches Bild je nach Modal -->
+    <img id="newsImage" src="" alt="" class="news-image">
+    
+    <!-- Titel -->
+    <h2 id="newsTitle">Berlin</h2>
+    
+    <!-- Beschreibung -->
+    <p id="newsDescription">
+      Beschreibung wird hier angezeigt...
+    </p>
+    
+    <!-- Close Button -->
+    <button class="btn-close" onclick="closeNewsModal()">Schließen</button>
+  </div>
+</div>
+
+<!-- JAVASCRIPT für News Modal -->
+<script>
+// Funktion um News Modal zu öffnen
+function showNewsModal(title, description, imageUrl) {
+  const modal = document.getElementById('newsModal');
+  const titleEl = document.getElementById('newsTitle');
+  const descEl = document.getElementById('newsDescription');
+  const imgEl = document.getElementById('newsImage');
+  
+  titleEl.textContent = title;
+  descEl.textContent = description;
+  imgEl.src = imageUrl;
+  imgEl.alt = title;
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';  // Verhindere Scrollen wenn Modal offen
+}
+
+// Funktion um News Modal zu schließen
+function closeNewsModal() {
+  const modal = document.getElementById('newsModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';  // Scrollen wieder aktivieren
+}
+
+// Modal mit Esc-Taste schließen
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeNewsModal();
+  }
+});
+
+// Modal auch schließen wenn außerhalb geklickt wird
+document.getElementById('newsModal').addEventListener('click', function(event) {
+  if (event.target === this) {
+    closeNewsModal();
+  }
+});
+
+// BEISPIEL-BUTTONS auf der Seite (ersetze mit echten Daten):
+// <button onclick="showNewsModal('Tiergarten', 'Der Tiergarten ist...', '/assets/tiergarten.jpg')">Info: Tiergarten</button>
+// <button onclick="showNewsModal('Berlin', 'Berlin ist die Hauptstadt...', '/assets/berlin-skyline.jpg')">Info: Berlin</button>
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<!-- NEWS DATEN BEISPIELE (kopiere und verwende diese):
+
+BERLIN:
+  Title: "Berlin"
+  Description: "Berlin, die Hauptstadt Deutschlands, ist eine Stadt voller Geschichte, Kultur und Vielfalt. Mit über 3,5 Millionen Einwohnern ist sie eine der größten Städte Europas. Die Stadt ist bekannt für ihre Museen, Theater, Kunstszene und ihre lebendige Nachtleben."
+  Image: /assets/berlin-skyline.jpg (oder Berlin-Bild)
+
+TIERGARTEN:
+  Title: "Tiergarten"
+  Description: "Der Tiergarten ist der größte Park im Zentrum Berlins und ein Muss für jeden Besucher. Mit über 210 Hektar bietet der Park grüne Oasen, Seerosenteiche und wunderbare Wege zum Spazieren. Ideal zum Relaxen und Natur genießen!"
+  Image: /assets/tiergarten.jpg
+
+CHARLOTTENBURG:
+  Title: "Charlottenburg"
+  Description: "Charlottenburg im Westen Berlins ist bekannt für sein prächtiges Schloss und die eleganten Straßen. Mit trendigen Cafés, Boutiquen und Galerien ist Charlottenburg ein perfekter Mix aus Geschichte und modernem Leben."
+  Image: /assets/charlottenburg.jpg
+
+KREUZBERG:
+  Title: "Kreuzberg"
+  Description: "Kreuzberg ist das Herz der alternativen Szene Berlins. Mit Graffiti-Kunst an den Wänden, kreativen Läden, Clubs und Bars ist Kreuzberg lebendig, wild und voller künstlerischer Energie. Perfekt für alle, die das Unkonventionelle lieben!"
+  Image: /assets/kreuzberg.jpg
+
+CHARLOTTENBURG-WILMERSDORF:
+  Title: "Charlottenburg-Wilmersdorf"
+  Description: "Der Bezirk Charlottenburg-Wilmersdorf verbindet Tradition mit Moderne. Mit historischen Plätzen, schönen Villen und lebhaften Einkaufsstraßen bietet der Bezirk Eleganz und Komfort."
+  Image: /assets/charlottenburg-wilmersdorf.jpg
+
+═══════════════════════════════════════════════════════════════════════════ -->
