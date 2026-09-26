@@ -16,14 +16,17 @@
 
 
 /* === SIDEBAR SLIDER (LEFT+RIGHT) === */
-.slider-container{position:fixed;top:0;width:8%;height:100%;z-index:1;pointer-events:none;overflow:hidden}
+.slider-container{position:fixed;top:0;width:18%;height:100%;z-index:1;pointer-events:none;overflow:hidden}
 .slider-left{left:0}
 .slider-right{right:0}
 .slider{position:relative;width:100%;height:100%}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity 0.8s ease-in-out;display:flex;align-items:center;justify-content:center}
 .slide.active{opacity:1}
 .slide img{width:100%;height:100%;object-fit:cover;display:block}
-@media (max-width:760px){.slider-container{display:none}}
+/* RESPONSIVE SLIDER - PC/Tablet/Mobile */
+@media (max-width:1024px){.slider-container{width:12%}}
+@media (max-width:768px){.slider-container{width:10%}}
+@media (max-width:600px){.slider-container{display:none}}
 
 </style>
 <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
@@ -44,8 +47,13 @@ button,input,select,textarea{font:inherit;color:inherit}
 .riso::after{content:none}
 
 /* Kopfzeile */
-.top{position:sticky;top:0;z-index:600;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--card);border-bottom:2px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.01em;line-height:1.1;text-decoration:none;color:var(--ink);margin-right:auto}
+.top{position:sticky;top:0;z-index:600;display:flex;align-items:center;gap:12px;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;background:var(--card);border-bottom:2px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.01em;line-height:1.1;text-decoration:none;color:var(--ink);margin-right:auto}
+/* Header Navigation Links */
+.header-nav{display:flex;gap:8px;align-items:center;margin:0 12px}
+.header-nav a{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:2px solid var(--soft);border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+.header-nav a:hover{border-color:var(--pink);background:var(--pink);color:#fff}
+.header-nav a.active{border-color:var(--pink);background:var(--pink);color:#fff}
 .logo::before{display:none}
 .langs{display:flex;border:2px solid var(--soft);border-radius:20px;overflow:hidden;background:var(--card)}
 .langs button{background:none;border:0;padding:5px 9px;font-weight:800;font-size:13px;cursor:pointer}
@@ -57,7 +65,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--soft)}
 #addBtn::before{content:"➕"}
 #jobAddBtn::before{content:"💼"}
-@media (max-width:520px){.logo{font-size:14px;gap:8px}.logo::before{flex-basis:32px;width:32px;height:32px;font-size:7px}.top{gap:6px;padding-left:10px;padding-right:10px}.top .btn{padding:7px 9px;font-size:12.5px}.langs button{padding:4px 6px;font-size:12px}.themebtn{width:32px;height:32px;flex-basis:32px}}
+@media (max-width:768px){.header-nav{display:none}}
+@media (max-width:520px){.logo{font-size:14px;gap:8px}.logo::before{flex-basis:32px;width:32px;height:32px;font-size:7px}.top{gap:6px;padding-left:10px;padding-right:10px}.top .btn{padding:7px 9px;font-size:12.5px}.langs button{padding:4px 6px;font-size:12px}.themebtn{width:32px;height:32px;flex-basis:32px}.header-nav{gap:4px}.header-nav a{padding:6px 8px;font-size:11px}}
 .langs,.themebtn{flex-shrink:0}
 .logo{min-width:0}
 @media (max-width:520px){#addBtn::before{content:none}.top .btn{max-width:118px;line-height:1.15;text-align:center;padding:6px 8px;font-size:12px}.logo{font-size:13px;max-width:116px}}
@@ -255,12 +264,21 @@ footer a{color:var(--muted)}
 </div>
 <header class="top">
   <a class="logo" href="/"><img src="/assets/logo-check.png" alt="Berliner Kiez-Check" style="height:50px;width:auto;object-fit:contain;border-radius:8px;"></a>
+  <div class="header-nav">
+    <a href="/quiz/" data-i="t_quiz" title="Kiez-Quiz starten">🎯 Quiz</a>
+    <a href="/werben.html" data-i="t_werben" title="Jetzt werben">📢 Werben</a>
+  </div>
   <div class="langs" role="group" aria-label="Sprache">
     <button data-l="de">DE</button><button data-l="tr">TR</button><button data-l="en">EN</button>
   </div>
   <button class="themebtn" id="themeBtn" type="button" aria-label="Dark Mode">🌙</button>
   <button class="btn" id="addBtn" data-i="add"></button>
 </header>
+
+<!-- 🎨 UNTERNEHMER-PROMOTIONAL BANNER -->
+<figure style="margin: 12px 16px 0; border: 2px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); position: relative; max-width: 1200px;">
+  <img src="/assets/unternehmer-banner.jpg.png" alt="Dein Kiez. Deine Kunden. Dein Erfolg." width="1200" height="400" decoding="async" style="width: 100%; height: auto; display: block; object-fit: cover;">
+</figure>
 
 <section class="hero">
   <figure class="kiezpic" id="kiezPic" style="margin-bottom: 24px;">
