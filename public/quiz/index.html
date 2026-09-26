@@ -707,12 +707,31 @@
 </head>
 <body data-theme="light">
 
+  <!-- SLIDER CONTAINERS (LEFT & RIGHT) -->
+  <div class="slider-container slider-left">
+    <div class="slider">
+      <div class="slide active"><img src="/assets/slider-1.jpg" alt="Berlin Kiez 1" loading="lazy"></div>
+      <div class="slide"><img src="/assets/slider-2.jpg" alt="Berlin Kiez 2" loading="lazy"></div>
+      <div class="slide"><img src="/assets/slider-3.jpg" alt="Berlin Kiez 3" loading="lazy"></div>
+      <div class="slide"><img src="/assets/slider-4.jpg" alt="Berlin Kiez 4" loading="lazy"></div>
+    </div>
+  </div>
+
+  <div class="slider-container slider-right">
+    <div class="slider">
+      <div class="slide active"><img src="/assets/slider-4.jpg" alt="Berlin Kiez 4" loading="lazy"></div>
+      <div class="slide"><img src="/assets/slider-3.jpg" alt="Berlin Kiez 3" loading="lazy"></div>
+      <div class="slide"><img src="/assets/slider-2.jpg" alt="Berlin Kiez 2" loading="lazy"></div>
+      <div class="slide"><img src="/assets/slider-1.jpg" alt="Berlin Kiez 1" loading="lazy"></div>
+    </div>
+  </div>
+
   <div id="app-container">
 
     <!-- PERSISTENT APP HEADER -->
     <header>
       <div class="brand-box" onclick="switchTab('quiz')">
-        <div class="logo-badge">BERLIN</div>
+        <img src="/assets/logo-quiz.png" alt="Berliner Kiez-Quiz" style="width: 50px; height: auto; cursor: pointer;">
         <div class="brand-text">
           <div class="brand-title-row">
             <span id="txt-app-title" class="brand-app-name">Berliner Kiez</span>
