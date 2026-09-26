@@ -49,6 +49,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* Kopfzeile */
 .top{position:sticky;top:0;z-index:600;display:flex;align-items:center;gap:12px;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;background:var(--card);border-bottom:2px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.01em;line-height:1.1;text-decoration:none;color:var(--ink);margin-right:auto}
+/* Logo Text "Berliner Kiez-Check" */
+.logo-text{font-size:18px;font-weight:800;color:var(--ink);white-space:nowrap;letter-spacing:-.01em;margin-left:6px}
 /* Header Navigation Links */
 .header-nav{display:flex;gap:8px;align-items:center;margin:0 12px}
 .header-nav a{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:2px solid var(--soft);border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
@@ -65,7 +67,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--soft)}
 #addBtn::before{content:"➕"}
 #jobAddBtn::before{content:"💼"}
-@media (max-width:768px){.header-nav{display:none}}
+@media (max-width:768px){.header-nav{display:none}.logo-text{display:none}}
 @media (max-width:520px){.logo{font-size:14px;gap:8px}.logo::before{flex-basis:32px;width:32px;height:32px;font-size:7px}.top{gap:6px;padding-left:10px;padding-right:10px}.top .btn{padding:7px 9px;font-size:12.5px}.langs button{padding:4px 6px;font-size:12px}.themebtn{width:32px;height:32px;flex-basis:32px}.header-nav{gap:4px}.header-nav a{padding:6px 8px;font-size:11px}}
 .langs,.themebtn{flex-shrink:0}
 .logo{min-width:0}
@@ -263,7 +265,7 @@ footer a{color:var(--muted)}
   </div>
 </div>
 <header class="top">
-  <a class="logo" href="/"><img src="/assets/logo-check.png" alt="Berliner Kiez-Check" style="height:50px;width:auto;object-fit:contain;border-radius:8px;"></a>
+  <a class="logo" href="/"><img src="/assets/logo-kiez-check.svg" alt="Berliner Kiez-Check" style="height:45px;width:auto;object-fit:contain;"><span class="logo-text">Berliner Kiez-Check</span></a>
   <div class="header-nav">
     <a href="/quiz/" data-i="t_quiz" title="Kiez-Quiz starten">🎯 Quiz</a>
     <a href="/werben.html" data-i="t_werben" title="Jetzt werben">📢 Werben</a>
@@ -275,9 +277,9 @@ footer a{color:var(--muted)}
   <button class="btn" id="addBtn" data-i="add"></button>
 </header>
 
-<!-- 🎨 UNTERNEHMER-PROMOTIONAL BANNER -->
-<figure style="margin: 12px 16px 0; border: 2px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); position: relative; max-width: 1200px;">
-  <img src="/assets/unternehmer-banner.jpg.png" alt="Dein Kiez. Deine Kunden. Dein Erfolg." width="1200" height="400" decoding="async" style="width: 100%; height: auto; display: block; object-fit: cover;">
+<!-- 🎨 UNTERNEHMER-PROMOTIONAL BANNER (OPTIMIERT) -->
+<figure style="margin: 12px auto 0; padding: 0 16px; max-width: 100%; border: 2px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); position: relative;">
+  <img src="/assets/unternehmer-banner.jpg.png" alt="Dein Kiez. Deine Kunden. Dein Erfolg." width="1200" height="400" decoding="async" style="width: 100%; height: auto; max-width: 100%; display: block; object-fit: cover; border-radius: 12px;">
 </figure>
 
 <section class="hero">
