@@ -22,7 +22,19 @@
   .kc-sp .kc-b{padding:10px 12px 12px}
   .kc-sp .kc-tag{position:absolute;top:8px;left:8px;background:var(--bvg-yellow);color:#000;font-size:10px;font-weight:900;padding:2px 6px;border-radius:4px;border:1.5px solid #000}
   .kc-sp .kc-ctas{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-  </style>
+  
+
+/* === SIDEBAR SLIDER (LEFT+RIGHT) === */
+.slider-container{position:fixed;top:0;width:8%;height:100%;z-index:1;pointer-events:none;overflow:hidden}
+.slider-left{left:0}
+.slider-right{right:0}
+.slider{position:relative;width:100%;height:100%}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 0.8s ease-in-out;display:flex;align-items:center;justify-content:center}
+.slide.active{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+@media (max-width:760px){.slider-container{display:none}}
+
+</style>
   <script src="/vendor/confetti/confetti.browser.js" defer></script>
   <style>
     :root {
@@ -2567,5 +2579,26 @@
     }
     if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('/sw.js').catch(() => {});
   </script>
+
+<script>
+(function(){
+  let currentSlide = 0;
+  const sliders = document.querySelectorAll('.slider');
+  function showSlide(idx) {
+    sliders.forEach(slider => {
+      const slides = slider.querySelectorAll('.slide');
+      slides.forEach(s => s.classList.remove('active'));
+      if(slides.length) slides[idx % slides.length].classList.add('active');
+    });
+  }
+  if(sliders.length) {
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % 4;
+      showSlide(currentSlide);
+    }, 5000);
+    showSlide(0);
+  }
+})();
+</script>
 </body>
 </html>
