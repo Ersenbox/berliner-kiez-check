@@ -1,6 +1,6 @@
 // Berliner Kiez-Check Service Worker – App-Shell offline, API network-first
-const C = 'kiezcheck-v5';
-const SHELL = ['/', '/manifest.json', '/icon.svg', '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css', '/vendor/fonts/archivo-latin-wdth-normal.woff2', '/quiz/', '/vendor/confetti/confetti.browser.js', '/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2', '/stories.js'];
+const C = 'kiezcheck-v6';
+const SHELL = ['/', '/manifest.json', '/icon.svg', '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css', '/vendor/fonts/archivo-latin-wdth-normal.woff2', '/quiz/', '/vendor/confetti/confetti.browser.js', '/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2', '/stories.js', '/assets/logo-check.png', '/assets/logo-quiz.png', '/assets/slider-1.jpg', '/assets/slider-2.jpg', '/assets/slider-3.jpg', '/assets/slider-4.jpg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C && k !== 'kc-share').map(k => caches.delete(k)))));
