@@ -25,14 +25,16 @@
   
 
 /* === SIDEBAR SLIDER (LEFT+RIGHT) === */
-.slider-container{position:fixed;top:0;width:8%;height:100%;z-index:1;pointer-events:none;overflow:hidden}
+.slider-container{position:fixed;top:0;width:18%;height:100%;z-index:1;pointer-events:none;overflow:hidden}
 .slider-left{left:0}
 .slider-right{right:0}
 .slider{position:relative;width:100%;height:100%}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity 0.8s ease-in-out;display:flex;align-items:center;justify-content:center}
 .slide.active{opacity:1}
 .slide img{width:100%;height:100%;object-fit:cover;display:block}
-@media (max-width:760px){.slider-container{display:none}}
+@media (max-width:1024px){.slider-container{width:12%}}
+@media (max-width:768px){.slider-container{width:10%}}
+@media (max-width:600px){.slider-container{display:none}}
 
 </style>
   <script src="/vendor/confetti/confetti.browser.js" defer></script>
@@ -85,6 +87,10 @@
       display: flex;
       flex-direction: column;
       position: relative;
+    }
+    
+    @media (max-width:600px) {
+      #app-container { max-width: 100%; }
     }
 
     /* HEADER */
@@ -754,6 +760,12 @@
         </button>
       </div>
     </header>
+
+    <!-- 🎨 HERO PROMOTIONAL BANNER (friedrichshain-banner) -->
+    <figure style="margin: 12px 14px 0; border: 2px solid var(--border-dark); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.05); position: relative;">
+      <img src="/assets/friedrichshain-banner.jpg.png" alt="Berliner Kiez entdecken - Berlin Kiez für Kiez" width="1200" height="630" decoding="async" style="width: 100%; height: auto; display: block;">
+      <figcaption style="display:none;">Berlin entdecken - Kiez für Kiez</figcaption>
+    </figure>
 
     <!-- LIVE BERLIN WEATHER WIDGET -->
     <div class="weather-widget">
