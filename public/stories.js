@@ -9,12 +9,13 @@
   /* ---------- Texte ---------- */
   var TX = {
     de: {
+      app_name: 'Berliner Kiez-Check',
       b_blau: 'Blau', b_weiss: 'Weiß', b_rot: 'Rot', b_gelb: 'Gelb', add: 'Deine Story', berlin: 'Berlin', ad: 'Anzeige', close: 'Schließen', prev: 'Zurück', next: 'Weiter',
       k_news: 'Neuigkeit', k_traffic: 'Verkehr', k_event: 'Veranstaltung', k_warn: 'Warnung', k_info: 'Info', k_politics: 'Politik',
       more: 'Mehr lesen', source: 'Quelle', video: 'Video ansehen', wa: 'WhatsApp', share: 'Teilen', report: 'Melden',
       ago_m: 'vor {n} Min.', ago_h: 'vor {n} Std.', ago_d: 'vor {n} Tg.',
       f_title: 'Story erstellen', f_hint: 'Wie ein WhatsApp-Status: Foto oder kurzes Video, eine Überschrift – fertig. Jede Story wird vor der Veröffentlichung geprüft.',
-      f_media: 'Foto oder Video (optional, Video max. 30 Sek. / 15 MB)', f_kind: 'Worum geht es?', f_head: 'Überschrift', f_sub: 'Kurzer Zusatztext (optional)',
+      f_media: 'Foto oder Video (optional, Video max. 60 Sek. / 30 MB)', f_kind: 'Worum geht es?', f_head: 'Überschrift', f_sub: 'Kurzer Zusatztext (optional)',
       f_bg: 'Farbe der Überschrift', f_kiez: 'Kiez', f_date: 'Datum der Veranstaltung', f_link: 'Link zur Quelle oder zum Video (optional)',
       f_src: 'Quelle (z. B. „eigene Aufnahme“, „Polizei Berlin“)', f_author: 'Dein Name oder Spitzname (wird angezeigt)', f_email: 'E-Mail (wird nicht veröffentlicht)',
       f_rights: 'Ich habe das Foto/Video selbst gemacht (nicht am Steuer), es zeigt keine fremden Logos oder Screenshots anderer Seiten und keine erkennbaren Privatpersonen oder Kennzeichen.',
@@ -23,17 +24,18 @@
       done_t: 'Danke!', done: 'Deine Story wird geprüft und erscheint danach für einige Zeit oben auf der Startseite.',
       e_head: 'Bitte eine Überschrift eingeben (mind. 4 Zeichen).', e_kiez: 'Bitte einen Kiez wählen.', e_email: 'Bitte eine gültige E-Mail angeben.',
       e_date: 'Bitte das Datum der Veranstaltung angeben.', e_link: 'Der Link ist ungültig.', e_consent: 'Bitte beide Häkchen setzen.',
-      e_vsize: 'Das Video ist zu groß (max. 15 MB).', e_vlen: 'Das Video ist zu lang (max. 30 Sekunden).', e_file: 'Dieses Dateiformat geht leider nicht.',
+      e_vsize: 'Das Video ist zu groß (max. 30 MB).', e_vlen: 'Das Video ist zu lang (max. 60 Sekunden).', e_file: 'Dieses Dateiformat geht leider nicht.',
       e_quota: 'Du hast heute schon 3 Stories gesendet. Morgen wieder!', e_full: 'Heute sind schon sehr viele Stories in Prüfung. Bitte morgen erneut versuchen.',
       e_net: 'Fehler – bitte später erneut versuchen.', empty: 'Noch keine Stories – mach die erste!'
     },
     tr: {
+      app_name: 'Berliner Kiez-Check',
       b_blau: 'Mavi', b_weiss: 'Beyaz', b_rot: 'Kırmızı', b_gelb: 'Sarı', add: 'Senin hikâyen', berlin: 'Berlin', ad: 'Reklam', close: 'Kapat', prev: 'Geri', next: 'İleri',
       k_news: 'Haber', k_traffic: 'Trafik', k_event: 'Etkinlik', k_warn: 'Uyarı', k_info: 'Bilgi', k_politics: 'Politika',
       more: 'Devamını oku', source: 'Kaynak', video: 'Videoyu izle', wa: 'WhatsApp', share: 'Paylaş', report: 'Bildir',
       ago_m: '{n} dk önce', ago_h: '{n} sa önce', ago_d: '{n} gün önce',
       f_title: 'Hikâye oluştur', f_hint: 'WhatsApp durumu gibi: fotoğraf veya kısa video, bir başlık – bu kadar. Her hikâye yayından önce kontrol edilir.',
-      f_media: 'Fotoğraf veya video (isteğe bağlı, video en fazla 30 sn / 15 MB)', f_kind: 'Konu ne?', f_head: 'Başlık', f_sub: 'Kısa ek metin (isteğe bağlı)',
+      f_media: 'Fotoğraf veya video (isteğe bağlı, video en fazla 60 sn / 30 MB)', f_kind: 'Konu ne?', f_head: 'Başlık', f_sub: 'Kısa ek metin (isteğe bağlı)',
       f_bg: 'Başlık rengi', f_kiez: 'Kiez', f_date: 'Etkinlik tarihi', f_link: 'Kaynak veya video linki (isteğe bağlı)',
       f_src: 'Kaynak (örn. „kendi çekimim“, „Polizei Berlin“)', f_author: 'Adın veya takma adın (görünür)', f_email: 'E-posta (yayınlanmaz)',
       f_rights: 'Fotoğrafı/videoyu kendim çektim (araç kullanırken değil); başka sayfaların logosu veya ekran görüntüsü, tanınabilir kişiler veya plakalar içermiyor.',
@@ -42,17 +44,18 @@
       done_t: 'Teşekkürler!', done: 'Hikâyen kontrol ediliyor, sonra bir süre ana sayfanın üstünde görünecek.',
       e_head: 'Lütfen bir başlık yaz (en az 4 karakter).', e_kiez: 'Lütfen bir Kiez seç.', e_email: 'Lütfen geçerli bir e-posta yaz.',
       e_date: 'Lütfen etkinlik tarihini gir.', e_link: 'Link geçersiz.', e_consent: 'Lütfen iki kutucuğu da işaretle.',
-      e_vsize: 'Video çok büyük (en fazla 15 MB).', e_vlen: 'Video çok uzun (en fazla 30 saniye).', e_file: 'Bu dosya formatı desteklenmiyor.',
+      e_vsize: 'Video çok büyük (en fazla 30 MB).', e_vlen: 'Video çok uzun (en fazla 60 saniye).', e_file: 'Bu dosya formatı desteklenmiyor.',
       e_quota: 'Bugün zaten 3 hikâye gönderdin. Yarın tekrar!', e_full: 'Bugün çok fazla hikâye kontrolde. Lütfen yarın tekrar dene.',
       e_net: 'Hata – lütfen sonra tekrar dene.', empty: 'Henüz hikâye yok – ilkini sen paylaş!'
     },
     en: {
+      app_name: 'Berlin Kiez-Check',
       b_blau: 'Blue', b_weiss: 'White', b_rot: 'Red', b_gelb: 'Yellow', add: 'Your story', berlin: 'Berlin', ad: 'Ad', close: 'Close', prev: 'Back', next: 'Next',
       k_news: 'News', k_traffic: 'Traffic', k_event: 'Event', k_warn: 'Warning', k_info: 'Info', k_politics: 'Politics',
       more: 'Read more', source: 'Source', video: 'Watch video', wa: 'WhatsApp', share: 'Share', report: 'Report',
       ago_m: '{n} min ago', ago_h: '{n} h ago', ago_d: '{n} d ago',
       f_title: 'Create a story', f_hint: 'Like a WhatsApp status: a photo or short video and a headline – done. Every story is checked before it goes live.',
-      f_media: 'Photo or video (optional, video max. 30 s / 15 MB)', f_kind: 'What is it about?', f_head: 'Headline', f_sub: 'Short extra text (optional)',
+      f_media: 'Photo or video (optional, video max. 60 s / 30 MB)', f_kind: 'What is it about?', f_head: 'Headline', f_sub: 'Short extra text (optional)',
       f_bg: 'Headline colour', f_kiez: 'Kiez', f_date: 'Date of the event', f_link: 'Link to source or video (optional)',
       f_src: 'Source (e.g. "my own photo", "Polizei Berlin")', f_author: 'Your name or nickname (shown)', f_email: 'Email (not published)',
       f_rights: 'I took the photo/video myself (not while driving); it shows no logos or screenshots of other pages and no recognisable private persons or number plates.',
@@ -61,7 +64,7 @@
       done_t: 'Thank you!', done: 'Your story is being checked and will then appear at the top of the start page for a while.',
       e_head: 'Please enter a headline (min. 4 characters).', e_kiez: 'Please choose a Kiez.', e_email: 'Please enter a valid email.',
       e_date: 'Please enter the date of the event.', e_link: 'The link is not valid.', e_consent: 'Please tick both boxes.',
-      e_vsize: 'The video is too large (max. 15 MB).', e_vlen: 'The video is too long (max. 30 seconds).', e_file: 'This file format is not supported.',
+      e_vsize: 'The video is too large (max. 30 MB).', e_vlen: 'The video is too long (max. 60 seconds).', e_file: 'This file format is not supported.',
       e_quota: 'You already sent 3 stories today. Try again tomorrow!', e_full: 'Too many stories are being checked today. Please try again tomorrow.',
       e_net: 'Error – please try again later.', empty: 'No stories yet – be the first!'
     }
@@ -245,6 +248,7 @@
     if (it.link_url) acts += '<a href="' + esc(it.link_url) + '" target="_blank" rel="noopener' + (it.src === 'db' && !it.ad ? ' nofollow ugc' : it.ad ? ' sponsored' : '') + '">' + esc(/youtu|tiktok|instagram|vimeo|fb\.watch|facebook/.test(it.link_url) ? tt('video') : it.src === 'auto' ? tt('source') : tt('more')) + '</a>';
     if (it.wa) acts += '<a class="wa" href="https://wa.me/' + esc(String(it.wa).replace(/^\+/, '').replace(/^0/, '49')) + '" target="_blank" rel="noopener sponsored">' + esc(tt('wa')) + '</a>';
     acts += '<button type="button" class="ghost" data-stv-share>' + esc(tt('share')) + '</button>';
+    acts += '<button type="button" class="ghost" data-stv-download title="Logo damgasıyla indir">📥 ' + esc(tt('download') || 'İndir') + '</button>';
     if (it.src === 'db') acts += '<a class="ghost" href="mailto:info@deindigitalerhelfer.com?subject=' + encodeURIComponent('Meldung Kiez-Story ' + it.id) + '">' + esc(tt('report')) + '</a>';
     V.el.innerHTML = '<div class="stv-stage">' + slideHtml(it) +
       '<div class="stv-bars">' + bars + '</div>' +
@@ -264,7 +268,7 @@
     V.dur = 7000; V.pos = 0; V.paused = false;
     if (vid) {
       V.dur = 0;
-      vid.addEventListener('loadedmetadata', function () { V.dur = Math.min(30, vid.duration || 15) * 1000; });
+      vid.addEventListener('loadedmetadata', function () { V.dur = Math.min(60, vid.duration || 30) * 1000; });
       vid.addEventListener('ended', next);
       var pl = vid.play(); if (pl && pl.catch) pl.catch(function () { vid.muted = true; vid.play().catch(function () { }); });
     }
@@ -272,7 +276,7 @@
     V.timer = setInterval(function () {
       var n = Date.now(), dt = n - last; last = n;
       if (V.paused || document.hidden) return;
-      if (vid) { if (vid.duration) { bar.style.width = Math.min(100, vid.currentTime / Math.min(30, vid.duration) * 100) + '%'; if (vid.currentTime >= 30) next(); } return; }
+      if (vid) { if (vid.duration) { bar.style.width = Math.min(100, vid.currentTime / Math.min(60, vid.duration) * 100) + '%'; if (vid.currentTime >= 60) next(); } return; }
       V.pos += dt; bar.style.width = Math.min(100, V.pos / V.dur * 100) + '%';
       if (V.pos >= V.dur) next();
     }, 50);
@@ -316,7 +320,7 @@
   }
 
   document.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-st-g],[data-st-new],[data-stv-close],[data-stv-next],[data-stv-prev],[data-stv-share]');
+    var b = e.target.closest('[data-st-g],[data-st-new],[data-stv-close],[data-stv-next],[data-stv-prev],[data-stv-share],[data-stv-download]');
     if (!b) return;
     if (b.hasAttribute('data-st-new')) { openForm(); return; }
     if (b.dataset.stG != null) { openGroup(+b.dataset.stG, 0); return; }
@@ -324,6 +328,7 @@
     if (b.hasAttribute('data-stv-next')) { next(); return; }
     if (b.hasAttribute('data-stv-prev')) { prev(); return; }
     if (b.hasAttribute('data-stv-share')) shareIt();
+    if (b.hasAttribute('data-stv-download')) downloadWithWatermark(GROUPS[V.g].items[V.i]);
   });
   document.addEventListener('keydown', function (e) {
     if (!V) return;
@@ -514,7 +519,56 @@
     }).catch(function () { btn.disabled = false; toast(tt('e_net')); });
   }
 
-  /* ---------- Links: ?story=new / ?story=<id> ---------- */
+  /* ---------- Watermark & Download ---------- */
+  function addWatermarkToImage(imgSrc) {
+    return new Promise(function(resolve) {
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var logoSize = Math.max(Math.min(canvas.width, canvas.height) * 0.12, 64);
+        var logoX = canvas.width - logoSize - 20;
+        var logoY = canvas.height - logoSize - 20;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fillRect(logoX - 8, logoY - 8, logoSize + 16, logoSize + 16);
+        ctx.font = 'bold ' + (logoSize * 0.6) + 'px Arial, sans-serif';
+        ctx.fillStyle = '#E30613';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('K', logoX + logoSize/2, logoY + logoSize/2);
+        canvas.toBlob(function(blob) { resolve(blob); }, 'image/jpeg', 0.92);
+      };
+      img.onerror = function() { resolve(null); };
+      img.src = imgSrc;
+    });
+  }
+
+  function downloadWithWatermark(it) {
+    if (!it || !it.media_key || !it.media_type) return;
+    var mediaPath = mediaUrl(it.media_key);
+    if (it.media_type === 'image') {
+      addWatermarkToImage(mediaPath).then(function(blob) {
+        if (!blob) { toast('Download fehlgeschlagen'); return; }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'kiez-story-' + it.id + '.jpg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast('Mit Logo heruntergeladen ✓');
+      });
+    } else if (it.media_type === 'video') {
+      toast('Video-Download mit Watermark wird vorbereitet...');
+      window.open(mediaPath, '_blank');
+    }
+  }
+
   var urlDone = false;
   function openFromUrl() {
     if (urlDone) return; urlDone = true;
