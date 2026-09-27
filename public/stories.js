@@ -365,7 +365,7 @@
       '<label><span>' + esc(tt('f_sub')) + ' <span class="st-cnt" id="stCntS">0/180</span></span><textarea name="sub" maxlength="180" rows="2"></textarea></label>' +
       '<fieldset style="border:0;padding:0;margin:0"><legend style="font-weight:700;font-size:14px;margin-bottom:4px">' + esc(tt('f_bg')) + '</legend><div class="st-bgs">' +
       BGS.map(function (b, i) { var c = { blau: '#0288D1', weiss: '#fff', rot: '#E30613', gelb: '#F0D722' }[b]; return '<label><input type="radio" name="bg" value="' + b + '"' + (i === 0 ? ' checked' : '') + '><i style="background:' + c + '"></i>' + esc(tt('b_' + b)) + '</label>'; }).join('') + '</div></fieldset>' +
-      '<div class="two"><label><span>' + esc(tt('f_kiez')) + '</span><select name="kiez" required></select></label>' +
+      '<div class="two"><label><span>' + esc(tt('f_kiez')) + ' <small style="font-weight:400;color:var(--muted)">(Ctrl+Click = birden fazla)</small></span><select name="kiez" required multiple size="5"></select></label>' +
       '<label id="stDateL" hidden><span>' + esc(tt('f_date')) + '</span><input name="event_date" type="date"></label></div>' +
       '<label><span>' + esc(tt('f_link')) + '</span><input name="link_url" type="url" maxlength="300" placeholder="https://…"></label>' +
       '<label><span>' + esc(tt('f_src')) + '</span><input name="source" maxlength="80"></label>' +
@@ -388,7 +388,13 @@
     var f = dlg.querySelector('#stForm');
     var ks = Object.keys(KIEZE).sort(function (a, b) { return (a === 'umgebung') - (b === 'umgebung') || KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
     f.elements.kiez.innerHTML = '<option value="">–</option>' + ks.map(function (k) { return '<option value="' + k + '">' + esc(KIEZE[k][0]) + '</option>'; }).join('');
-    if (S.kiez) f.elements.kiez.value = S.kiez;
+    if (S.kiez) {
+      if (Array.isArray(S.kiez)) {
+        Array.from(f.elements.kiez.options).forEach(function(opt) { opt.selected = S.kiez.includes(opt.value); });
+      } else {
+        f.elements.kiez.value = S.kiez;
+      }
+    }
     var ct = document.getElementById('consentTxt');
     dlg.querySelector('#stConsentTxt').innerHTML = ct ? ct.innerHTML : '';
     f.addEventListener('input', onInput);
@@ -402,8 +408,9 @@
     var g = function (n) { return f.elements[n]; };
     var kind = (f.querySelector('input[name=kind]:checked') || {}).value || 'news';
     var bg = (f.querySelector('input[name=bg]:checked') || {}).value || 'blau';
+    var kiezVals = Array.from(g('kiez').selectedOptions).map(function(opt) { return opt.value; }).filter(Boolean);
     return {
-      id: 'preview', kind: kind, bg: bg, kiez: g('kiez').value, headline: g('headline').value || tt('f_head'), sub: g('sub').value, source: g('source').value,
+      id: 'preview', kind: kind, bg: bg, kiez: kiezVals.join(','), headline: g('headline').value || tt('f_head'), sub: g('sub').value, source: g('source').value,
       media_key: FILE ? 'x' : '', media_type: FILE ? (/^video\//.test(FILE.type) ? 'video' : 'image') : '', _blob: FILEURL, i18n: {}
     };
   }
@@ -428,7 +435,7 @@
     FILE = null; FILEURL = '';
     if (file) {
       if (!/^(image\/(jpeg|png|webp)|video\/(mp4|webm|quicktime))$/.test(file.type)) { toast(tt('e_file')); if (f) f.elements.media.value = ''; }
-      else if (/^video\//.test(file.type) && file.size > 15e6) { toast(tt('e_vsize')); if (f) f.elements.media.value = ''; }
+      else if (/^video\//.test(file.type) && file.size > 30e6) { toast(tt('e_vsize')); if (f) f.elements.media.value = ''; }
       else { FILE = file; FILEURL = URL.createObjectURL(file); }
     }
     preview();
@@ -485,19 +492,22 @@
     var f = e.target, g = function (n) { return f.elements[n]; };
     var kind = (f.querySelector('input[name=kind]:checked') || {}).value;
     if (g('headline').value.trim().length < 4) return toast(tt('e_head'));
-    if (!g('kiez').value) return toast(tt('e_kiez'));
+    var kiezSelected = Array.from(g('kiez').selectedOptions).length > 0;
+    if (!kiezSelected) return toast(tt('e_kiez'));
     if (kind === 'event' && !g('event_date').value) return toast(tt('e_date'));
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g('email').value.trim())) return toast(tt('e_email'));
     if (!g('rights').checked || !g('consent').checked) return toast(tt('e_consent'));
     var btn = f.querySelector('button[type=submit]'); btn.disabled = true;
     var fd = new FormData();
-    ['headline', 'sub', 'kiez', 'event_date', 'link_url', 'source', 'author', 'email', 'hp'].forEach(function (n) { fd.append(n, g(n).value); });
+    ['headline', 'sub', 'event_date', 'link_url', 'source', 'author', 'email', 'hp'].forEach(function (n) { fd.append(n, g(n).value); });
+    // Append multiple kiez values
+    Array.from(g('kiez').selectedOptions).forEach(function(opt) { fd.append('kiez', opt.value); });
     fd.append('kind', kind); fd.append('bg', (f.querySelector('input[name=bg]:checked') || {}).value || 'blau');
     fd.append('lang', S.lang); fd.append('rights', '1'); fd.append('consent', '1');
     var prep = Promise.resolve(true);
     if (FILE && /^image\//.test(FILE.type)) prep = shrinkImage(FILE).then(function (b) { if (b) fd.append('media', b, 'story.jpg'); return true; });
     else if (FILE) prep = videoInfo(FILE).then(function (i) {
-      if (i.dur && i.dur > 30.5) { toast(tt('e_vlen')); return false; }
+      if (i.dur && i.dur > 60.5) { toast(tt('e_vlen')); return false; }
       fd.append('media', FILE, FILE.name || 'story.mp4');
       if (i.poster) fd.append('poster', i.poster, 'poster.jpg');
       return true;
