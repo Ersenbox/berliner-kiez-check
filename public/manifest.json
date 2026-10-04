@@ -1,17 +1,41 @@
 {
   "name": "Berliner Kiez-Check",
   "short_name": "Kiez-Check",
-  "description": "Cafés, Frühstück, Barber und Märkte in deinem Berliner Kiez.",
+  "description": "Cafés, Frühstück, Barber, Märkte und mehr in deinem Berliner Kiez",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#EEF0EC",
-  "theme_color": "#0078BF",
-  "lang": "de",
+  "orientation": "portrait-primary",
+  "theme_color": "#E30613",
+  "background_color": "#FFFFFF",
   "icons": [
     {
+      "src": "/assets/logo-kiez-check-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/logo-kiez-check-64x64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/logo-kiez-check-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/assets/logo-kiez-check-192x192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo-kiez-check-256x256.png",
+      "sizes": "256x256",
       "type": "image/png",
       "purpose": "any"
     },
@@ -19,90 +43,14 @@
       "src": "/assets/logo-kiez-check-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/assets/logo-kiez-check-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/assets/logo-kiez-check-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
-  "shortcuts": [
+  "screenshots": [
     {
-      "name": "Story erstellen",
-      "url": "/?story=new",
-      "icons": [
-        {
-          "src": "/assets/logo-kiez-check-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Kiez-Quiz",
-      "url": "/quiz/",
-      "icons": [
-        {
-          "src": "/assets/logo-kiez-check-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Gutscheine",
-      "url": "/?view=coupons",
-      "icons": [
-        {
-          "src": "/assets/logo-kiez-check-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Jobs",
-      "url": "/?view=jobs",
-      "icons": [
-        {
-          "src": "/assets/logo-kiez-check-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
+      "src": "/assets/logo-kiez-check-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
     }
-  ],
-  "share_target": {
-    "action": "/share-story",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
-        {
-          "name": "media",
-          "accept": [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "video/mp4",
-            "video/webm",
-            "video/quicktime",
-            "image/*",
-            "video/*"
-          ]
-        }
-      ]
-    }
-  }
+  ]
 }

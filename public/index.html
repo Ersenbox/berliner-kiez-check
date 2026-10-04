@@ -246,6 +246,24 @@ footer a{color:var(--muted)}
 .post h3{margin:0 0 2px;font-size:18px;font-weight:800;line-height:1.25}
 .post .m{color:var(--muted);font-size:13.5px;margin:0}
 .post p{margin:8px 0 0}
+
+/* === STORY-VORSCHAU (OPTION A: Text UNTER Bild) === */
+.post-preview{background:var(--card);border:2px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);margin:12px 0}
+.post-preview-img{width:100%;display:block;object-fit:cover;max-height:400px;border-bottom:2px solid var(--line)}
+.post-preview-text{padding:12px 14px;background:var(--card)}
+.post-preview-title{font-size:16px;font-weight:800;margin:0 0 6px;color:var(--ink)}
+.post-preview-body{font-size:14px;margin:0;color:var(--ink);line-height:1.4;white-space:pre-wrap;word-break:break-word}
+.post-preview-meta{font-size:12px;color:var(--muted);margin:6px 0 0;display:block}
+
+/* Textfarbe-Optionen im Formular */
+.text-color-picker{display:flex;gap:8px;margin:12px 0}
+.text-color-option{width:32px;height:32px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:border-color .2s}
+.text-color-option[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 8px rgba(0,0,0,.2)}
+.text-color-blue{background:#0288D1}
+.text-color-white{background:#FFFFFF;border:2px solid var(--line)}
+.text-color-red{background:#E30613}
+.text-color-yellow{background:#F0D722;border:2px solid var(--ink)}
+
 .leaflet-popup-content{font-family:var(--font)}
 .leaflet-container{font-family:var(--font)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -281,10 +299,6 @@ footer a{color:var(--muted)}
   <button class="btn" id="addBtn" data-i="add"></button>
 </header>
 
-<!-- 🎨 UNTERNEHMER-PROMOTIONAL BANNER (OPTIMIERT) -->
-<figure style="margin: 12px auto 0; padding: 0 16px; max-width: 100%; border: 2px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); position: relative;">
-  <img src="/assets/unternehmer-banner.jpg.png" alt="Dein Kiez. Deine Kunden. Dein Erfolg." width="1200" height="400" decoding="async" style="width: 100%; height: auto; max-width: 100%; display: block; object-fit: cover; border-radius: 12px;">
-</figure>
 
 <section class="hero">
   <figure class="kiezpic" id="kiezPic" style="margin-bottom: 24px;">
