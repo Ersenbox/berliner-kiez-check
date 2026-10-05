@@ -9,13 +9,12 @@
   css.textContent = '.sti{display:grid;grid-template-columns:120px 1fr;gap:14px;border-top:1.5px solid var(--ink);padding:14px 0}' +
     '.sti .pv{width:120px;aspect-ratio:9/16;border:2px solid var(--ink);background:#18191A center/cover no-repeat;display:grid;place-items:center;color:#fff;font-size:28px;position:relative}' +
     '.sti .pv video{width:100%;height:100%;object-fit:cover}' +
-    '.sti h3{margin:0}.sti select{border:2px solid var(--ink);background:var(--card);padding:5px;font:inherit;color:inherit}' +
+    '.sti h3{margin:0}.sti input[type="text"]{border:2px solid var(--ink);background:var(--card);padding:5px;font:inherit;color:inherit}.sti select{border:2px solid var(--ink);background:var(--card);padding:5px;font:inherit;color:inherit}' +
     '.sti .flag{background:#E30613;color:#fff;padding:2px 8px;font-size:13px;display:inline-block;margin:6px 0}' +
     '.sti .okn{background:#1f9d55;color:#fff;padding:2px 8px;font-size:13px;display:inline-block;margin:6px 0}' +
     '@media (max-width:560px){.sti{grid-template-columns:90px 1fr}.sti .pv{width:90px}}';
   document.head.appendChild(css);
 
-  // showSec aus admin.html erweitern
   if (typeof window.showSec === 'function') {
     var _ss = window.showSec;
     window.showSec = function (name) { _ss(name); if (name === 'stories') loadStories(); };
@@ -49,7 +48,11 @@
         '<button class="ok" data-sta="approved" data-id="' + esc(x.id) + '">Freigeben</button>' +
         '<button class="no" data-sta="rejected" data-id="' + esc(x.id) + '">Ablehnen</button>';
     }
-    if (STS === 'approved') acts += '<button data-sta="extend" data-h="24" data-id="' + esc(x.id) + '">+1 Tag</button><button data-sta="extend" data-h="168" data-id="' + esc(x.id) + '">+7 Tage</button>';
+    if (STS === 'approved') {
+      acts += '<button data-ste="edit" data-id="' + esc(x.id) + '">Bearbeiten</button>' +
+        '<button data-sta="extend" data-h="24" data-id="' + esc(x.id) + '">+1 Tag</button>' +
+        '<button data-sta="extend" data-h="168" data-id="' + esc(x.id) + '">+7 Tage</button>';
+    }
     if (STS === 'old') acts += '<button class="ok" data-sta="approved" data-id="' + esc(x.id) + '">Wieder online (48 Std.)</button>';
     acts += '<button class="del" data-sta="delete" data-id="' + esc(x.id) + '">Löschen (inkl. Datei)</button>';
     return '<div class="sti">' + mediaThumb(x) + '<div>' +
@@ -66,17 +69,19 @@
     var ko = KIEZ.map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
     var kinds = Object.keys(KL).map(function (k) { return '<option value="' + k + '">' + KL[k] + '</option>'; }).join('');
     return '<form class="ed" id="stAdmForm">' +
-      '<div class="chkrow"><label><input type="checkbox" name="ad" value="1" id="stAd"> Sponsor-Story (wird als „Anzeige“ markiert)</label></div>' +
-      '<div class="g3"><label>Art<select name="kind">' + kinds + '</select></label><label>Kiez<select name="kiez">' + ko + '</select></label>' +
+      '<div class="chkrow"><label><input type="checkbox" name="ad" value="1" id="stAd"> Sponsor-Story (wird als „Anzeige" markiert)</label></div>' +
+      '<div class="g3">' +
+      '<label>Art (Kategorie)<input type="text" list="kindList" name="kind" placeholder="z.B. Neuigkeit, Angebot, Rabatt"><datalist id="kindList">' + kinds + '</datalist></label>' +
+      '<label>Kiez (oder Ort)<input type="text" list="kiezList" name="kiez" placeholder="z.B. Kreuzberg, Berlin"><datalist id="kiezList">' + ko + '</datalist></label>' +
       '<label>Farbe<select name="bg"><option value="blau">blau</option><option value="weiss">weiss</option><option value="rot">rot</option><option value="gelb">gelb</option></select></label></div>' +
-      '<label>Überschrift (max. 90)<input name="headline" maxlength="90" required></label>' +
-      '<label>Zusatztext (max. 180)<input name="sub" maxlength="180"></label>' +
+      '<label>Überschrift (max. 90)<input name="headline" maxlength="90" placeholder="Kurze, aussagekräftige Überschrift"></label>' +
+      '<label>Zusatztext (max. 180)<input name="sub" maxlength="180" placeholder="Optionaler Zusatztext"></label>' +
       '<label>Foto oder Video (max. 30 Sek. / 15 MB)<input name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime"></label>' +
-      '<div class="g3"><label>Link (Quelle / Website)<input name="link_url" type="url"></label><label>Quelle<input name="source" maxlength="80"></label>' +
+      '<div class="g3"><label>Link (Quelle / Website)<input name="link_url" type="url" placeholder="https://..."></label><label>Quelle<input name="source" maxlength="80" placeholder="z.B. eigene Aufnahme, Polizei Berlin"></label>' +
       '<label>Veranstaltungsdatum<input name="event_date" type="date"></label></div>' +
-      '<div class="g3" id="stAdF"><label>Sponsor-Name<input name="sponsor" maxlength="60"></label><label>WhatsApp-Nummer<input name="wa" maxlength="30" placeholder="0151 …"></label>' +
+      '<div class="g3" id="stAdF"><label>Sponsor-Name<input name="sponsor" maxlength="60" placeholder="Name des Sponsors"></label><label>WhatsApp-Nummer<input name="wa" maxlength="30" placeholder="0151 …"></label>' +
       '<label>Laufzeit (Tage)<input name="days" type="number" min="1" max="60" value="7"></label></div>' +
-      '<label>Laufzeit in Stunden (nur normale Story, leer = Standard 48 Std.)<input name="hours" type="number" min="1" max="1440"></label>' +
+      '<label>Laufzeit in Stunden (nur normale Story, leer = Standard 48 Std.)<input name="hours" type="number" min="1" max="1440" placeholder="48"></label>' +
       '<div class="row"><button class="ok" type="submit">Sofort veröffentlichen</button><button type="button" data-st-form>Schließen</button></div></form>';
   }
 
@@ -84,6 +89,7 @@
     var b = e.target.closest('button'); if (!b) return;
     if (b.dataset.sts) { STS = b.dataset.sts; loadStories(); return; }
     if (b.hasAttribute('data-st-form')) { FORM = !FORM; loadStories(); return; }
+    if (b.dataset.ste === 'edit') { FORM = true; loadStories(); return; }
     if (b.dataset.sta) {
       var a = b.dataset.sta, body = { id: b.dataset.id, status: a };
       if (a === 'delete' && !confirm('Story und Datei endgültig löschen?')) return;
@@ -92,7 +98,7 @@
       call('/api/admin/story/set', body).then(loadStories);
     }
   });
-  function poster(file) { // Titelbild für Video-Stories (Ring-Vorschau)
+  function poster(file) {
     return new Promise(function (res) {
       var v = document.createElement('video'), u = URL.createObjectURL(file), done = false;
       function fin(b) { if (done) return; done = true; URL.revokeObjectURL(u); res(b); }

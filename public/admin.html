@@ -11,7 +11,7 @@
 @media (prefers-color-scheme:dark){:root{--paper:#141B22;--ink:#E9ECE6;--muted:#A9B3BC;--card:#1C252E}}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;border-bottom:2px solid var(--ink)}
-header img{flex-shrink:0}
+header img,header svg{flex-shrink:0;max-width:64px;max-height:64px}
 h1{margin:0 auto 0 0;font-size:20px;color:var(--blue)}
 button,input{font:inherit;color:inherit}
 button{border:2px solid var(--ink);background:var(--card);padding:6px 12px;font-weight:700;cursor:pointer}
@@ -49,7 +49,8 @@ main{max-width:980px;margin:0 auto;padding:16px}
 </div>
 <div id="app" hidden>
   <header>
-    <img src="https://raw.githubusercontent.com/Ersenbox/berliner-kiez-check/main/public/assets/logo-kiez-check-48x48.png" alt="Kiez-Check" style="width:48px;height:48px;margin-right:12px;">
+    <!-- LOGO: Verwendet neuestes SVG-Logo oder größtes verfügbares PNG -->
+    <img id="adminLogo" src="https://raw.githubusercontent.com/Ersenbox/berliner-kiez-check/main/public/assets/logo.svg" alt="Kiez-Check" onerror="this.src='https://raw.githubusercontent.com/Ersenbox/berliner-kiez-check/main/public/assets/logo-kiez-check-128x128.png'">
     <h1>Berliner Kiez-Check Admin</h1>
     <button data-s="pending" aria-pressed="true">Zu prüfen</button>
     <button data-s="approved">Online</button>
@@ -65,17 +66,20 @@ main{max-width:980px;margin:0 auto;padding:16px}
     <div class="stats" id="stats"></div>
     <div id="list"></div>
     <div id="sec" hidden></div>
+    <div id="edBox"></div>
   </main>
 </div>
 <script>
 var TOKEN = sessionStorage.getItem('kc_admin') || '', ST = 'pending';
 var $ = function (s) { return document.querySelector(s); };
+function el(s) { return $(('#' + s)); }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function call(p, body) {
   return fetch(p, { method: body ? 'POST' : 'GET', headers: Object.assign({ authorization: 'Bearer ' + TOKEN }, body ? { 'content-type': 'application/json' } : {}), body: body ? JSON.stringify(body) : undefined })
     .then(function (r) { if (r.status === 401) { logout(); throw new Error('auth'); } return r.json(); });
 }
 function logout() { TOKEN = ''; sessionStorage.removeItem('kc_admin'); $('#app').hidden = true; $('#login').hidden = false; }
+function showSec(name) { if (!name) { el('sec').hidden = true; el('list').hidden = false; } else { el('sec').hidden = false; el('list').hidden = true; if (name === 'sponsors') loadSp(); else if (name === 'jobs') loadJobs(); else if (name === 'requests') loadReq(); else if (name === 'posts') loadPosts(); else if (name === 'stories') loadStories(); } }
 function start() {
   $('#login').hidden = true; $('#app').hidden = false;
   call('/api/admin/stats').then(function (s) {
@@ -94,73 +98,50 @@ function list() {
         '<p>' + esc(it.desc_de) + '</p><p class="m">TR: ' + esc(it.desc_tr) + '</p>' +
         (it.featured_until > Date.now() ? '<p class="m"><b>Hervorgehoben bis ' + new Date(it.featured_until).toLocaleDateString('de') + '</b></p>' : '') +
         '<div class="row">' + (ST !== 'approved' ? '<button class="ok" data-a="approved">Freigeben</button>' : '') + (ST !== 'rejected' ? '<button class="no" data-a="rejected">Ablehnen</button>' : '') +
+        (ST === 'approved' ? '<button data-a="edit">Bearbeiten</button>' : '') +
         '<button class="del" data-a="delete">Löschen</button></div></div></div>';
     }).join('') : '<p>Nichts zu tun. 🎉</p>';
   });
 }
-document.addEventListener('click', function (e) {
-  var b = e.target.closest('button'); if (!b) return;
-  if (b.id === 'loginBtn') { TOKEN = $('#tok').value.trim(); sessionStorage.setItem('kc_admin', TOKEN); start(); return; }
-  if (b.id === 'logout') { logout(); return; }
-  if (b.dataset.s) { ST = b.dataset.s; document.querySelectorAll('[data-s]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); list(); return; }
-  var a = b.dataset.a, id = b.closest('.it') && b.closest('.it').dataset.id;
-  if (!a || !id) return;
-  if (a === 'delete') { if (!confirm('Eintrag endgültig löschen?')) return; call('/api/admin/delete', { id: id }).then(start); }
-  else call('/api/admin/set', { id: id, status: a }).then(start);
-});
-$('#tok').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#loginBtn').click(); });
-if (TOKEN) start();
-</script>
-<script>
-/* ===== Sponsoren, Jobs, Werbeanfragen ===== */
-var SEC = null, SPS = [], JST = 'pending';
-function el(id) { return document.getElementById(id); }
-function showSec(name) {
-  SEC = name;
-  el('stats').hidden = !!name; el('list').hidden = !!name; el('sec').hidden = !name;
-  document.querySelectorAll('[data-sec]').forEach(function (x) { x.setAttribute('aria-pressed', x.dataset.sec === name); });
-  if (name) document.querySelectorAll('[data-s]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-  if (name === 'sponsors') loadSp();
-  if (name === 'jobs') loadJobs();
-  if (name === 'requests') loadReq();
-  if (name === 'posts') loadPosts();
-}
-function fmtD(ms) { return ms ? new Date(ms).toISOString().slice(0, 10) : ''; }
+function fmtD(ms) { return ms ? new Date(ms).toLocaleDateString('de', { year: 'numeric', month: '2-digit', day: '2-digit' }) : ''; }
+var SPS = [];
 function loadSp() {
   call('/api/admin/sponsors').then(function (j) {
     SPS = j.items || [];
-    var now = Date.now();
-    el('sec').innerHTML = '<div class="row" style="margin-bottom:10px"><button class="ok" data-sa="new">+ Neuer Sponsor</button></div><div id="edBox"></div>' +
-      (SPS.length ? SPS.map(function (s) {
-        var live = s.active && (!s.start_at || s.start_at <= now) && (!s.end_at || s.end_at > now);
-        var ctr = s.imp30 ? (100 * s.clk30 / s.imp30).toFixed(1).replace('.', ',') : '0';
-        return '<div class="sp' + (live ? '' : ' off') + '">' + (s.image ? '<img src="' + esc(s.image) + '" alt="">' : '<div></div>') +
-          '<div><h3 style="margin:0">' + esc(s.name) + (live ? '' : ' <small>(nicht aktiv)</small>') + (s.own ? ' <small>· Eigenwerbung</small>' : '') + '</h3>' +
-          '<p class="kv">' + esc(s.headline_de) + '</p>' +
-          '<p class="kv">Plätze: ' + esc(s.places) + ' · Kieze: ' + esc(s.kieze || 'alle') + ' · Kategorien: ' + esc(s.cats || 'alle') + ' · Priorität: ' + s.priority + '</p>' +
-          '<p class="kv">Laufzeit: ' + (fmtD(s.start_at) || 'sofort') + ' bis ' + (fmtD(s.end_at) || 'unbegrenzt') + ' · Paket: ' + esc(s.plan || '-') + (s.contact ? ' · Kontakt: ' + esc(s.contact) : '') + '</p>' +
-          '<p><span class="big">' + s.imp30 + '</span> Einblendungen · <span class="big">' + s.clk30 + '</span> Klicks · ' + ctr + ' % (30 Tage)</p>' +
-          '<div class="row"><button data-sa="edit" data-id="' + esc(s.id) + '">Bearbeiten</button><button data-sa="toggle" data-id="' + esc(s.id) + '">' + (s.active ? 'Pausieren' : 'Aktivieren') + '</button>' +
-          '<button data-sa="report" data-id="' + esc(s.id) + '">Bericht kopieren</button><button class="del" data-sa="del" data-id="' + esc(s.id) + '">Löschen</button></div></div></div>';
-      }).join('') : '<p>Noch keine Sponsoren. Führe <code>seed-sponsoren.sql</code> aus oder lege einen an.</p>');
+    var h = '<div class="row" style="margin-bottom:10px"><button class="ok" data-sa="new">+ Sponsor</button></div>';
+    h += (SPS.length ? SPS.map(function (s) {
+      return '<div class="sp' + (s.active ? '' : '.off') + '" data-id="' + esc(s.id) + '"><img src="' + esc(s.image) + '" alt=""><div><h3>' + esc(s.name) + '</h3>' +
+        '<p class="kv">Priorität: ' + (s.priority || 0) + ' | ' + (s.active ? 'Aktiv' : 'Inaktiv') + (s.own ? ' | Eigenwerbung' : '') + '</p>' +
+        '<p class="kv">Laufzeit: ' + fmtD(s.start_at) + ' bis ' + fmtD(s.end_at) + '</p>' +
+        '<p>' + esc(s.headline_de || '') + '</p>' +
+        '<div class="row"><button data-sa="edit" data-id="' + esc(s.id) + '">Bearbeiten</button><button data-sa="toggle" data-id="' + esc(s.id) + '">' + (s.active ? 'Deaktivieren' : 'Aktivieren') + '</button><button data-sa="report" data-id="' + esc(s.id) + '">Report</button><button class="del" data-sa="del" data-id="' + esc(s.id) + '">Löschen</button></div></div></div>';
+    }).join('') : '<p>Keine Sponsoren.</p>');
+    el('sec').innerHTML = h;
   });
 }
 function spForm(s) {
-  s = s || { active: 1, places: 'slider,native', priority: 5 };
-  var f = function (k, label, ph) { return '<label>' + label + '<input name="' + k + '" value="' + esc(s[k] || '') + '" placeholder="' + esc(ph || '') + '"></label>'; };
-  var pl = (s.places || '').split(',');
-  var cb = function (v, l) { return '<label><input type="checkbox" name="pl" value="' + v + '"' + (pl.indexOf(v) >= 0 ? ' checked' : '') + '>' + l + '</label>'; };
-  el('edBox').innerHTML = '<form class="ed" id="spEd"><input type="hidden" name="id" value="' + esc(s.id || '') + '">' +
-    '<div class="g3">' + f('name', 'Name *') + f('plan', 'Paket / Preis', 'intro19, 49, 69, 89, own') + f('contact', 'Kontakt (intern)') + '</div>' +
-    '<div class="g3">' + f('headline_de', 'Text DE') + f('headline_tr', 'Text TR') + f('headline_en', 'Text EN') + '</div>' +
-    '<div class="g3">' + f('cta_de', 'Button DE', 'Website ansehen') + f('cta_tr', 'Button TR', 'Siteye git') + f('cta_en', 'Button EN', 'Visit website') + '</div>' +
-    '<div class="g3">' + f('link_web', 'Website (https://…)') + f('link_wa', 'WhatsApp (https://wa.me/49…)') + f('link_tel', 'Telefon (tel:+49…)') + '</div>' +
-    '<div class="g3">' + f('link_ig', 'Instagram (https://…)') + f('kieze', 'Nur Kieze (leer = alle)', 'kreuzberg,neukoelln') + f('cats', 'Nur Kategorien (leer = alle)', 'cafe,markt') + '</div>' +
-    '<div class="g3"><label>Start<input type="date" name="start" value="' + fmtD(s.start_at) + '"></label><label>Ende<input type="date" name="end" value="' + fmtD(s.end_at) + '"></label>' +
-    '<label>Priorität (0–10)<input type="number" name="priority" min="0" max="10" value="' + (s.priority || 0) + '"></label></div>' +
+  var f = function (t, l, p) { return '<label>' + l + '<input type="text" name="' + t + '" placeholder="' + p + '"></label>'; };
+  var cb = function (n, l) { return '<label><input type="checkbox" name="' + n + '" value="1"> ' + l + '</label>'; };
+  var places = { slider: 'Startseite-Leiste', native: 'Zwischen Einträgen', after_submit: 'Nach dem Eintragen', quiz: 'Kiez-Quiz' };
+  var ko = ['neukoelln', 'kreuzberg', 'wedding', 'gesundbrunnen', 'moabit', 'tiergarten', 'mitte', 'friedrichshain', 'prenzlauer-berg', 'schoeneberg', 'tempelhof', 'charlottenburg', 'spandau', 'reinickendorf', 'steglitz', 'lichtenberg', 'pankow', 'treptow', 'britz', 'koepenick', 'marzahn', 'umgebung'];
+  var cats = ['Restaurant', 'Café', 'Bar', 'Shop', 'Service', 'Kultur', 'Schule', 'Sport', 'Sonstiges'];
+  el('edBox').innerHTML = '<form class="ed" id="spEd">' +
+    '<h3>' + (s ? 'Sponsor bearbeiten' : 'Neuer Sponsor') + '</h3>' +
+    '<div class="g3">' + f('name', 'Name', 'Sponsor Name') + f('contact', 'Kontakt', 'Name / E-Mail') + '<label>Priorität (0–10)<input type="number" name="priority" min="0" max="10" value="' + (s && s.priority || 0) + '"></label></div>' +
+    '<div class="g3"><label>Kieze (Komma-getrennt)<input type="text" name="kieze" value="' + (s && s.kieze || '') + '"></label><label>Kategorien<input type="text" name="cats" value="' + (s && s.cats || '') + '"></label><label>Plan<input type="text" name="plan" value="' + (s && s.plan || '') + '"></label></div>' +
+    '<label>Headline DE<input type="text" name="headline_de" value="' + (s && s.headline_de || '') + '"></label>' +
+    '<label>Headline TR<input type="text" name="headline_tr" value="' + (s && s.headline_tr || '') + '"></label>' +
+    '<label>Headline EN<input type="text" name="headline_en" value="' + (s && s.headline_en || '') + '"></label>' +
+    '<label>CTA DE<input type="text" name="cta_de" value="' + (s && s.cta_de || '') + '"></label>' +
+    '<label>CTA TR<input type="text" name="cta_tr" value="' + (s && s.cta_tr || '') + '"></label>' +
+    '<label>CTA EN<input type="text" name="cta_en" value="' + (s && s.cta_en || '') + '"></label>' +
+    '<div class="g3">' + f('link_web', 'Website-Link', 'https://...') + f('link_wa', 'WhatsApp-Link', 'https://wa.me/...') + f('link_tel', 'Telefon-Link', 'tel:+49...') + '</div>' +
+    '<label>Instagram Link<input type="text" name="link_ig" value="' + (s && s.link_ig || '') + '"></label>' +
+    '<div class="g3"><label>Start (Datum)<input type="date" name="start" value="' + (s ? fmtD(s.start_at) : '') + '"></label><label>Ende (Datum)<input type="date" name="end" value="' + (s ? fmtD(s.end_at) : '') + '"></label>' +
+    '<label>Priorität (0–10)<input type="number" name="priority" min="0" max="10" value="' + (s && s.priority || 0) + '"></label></div>' +
     '<div class="g3">' + f('image', 'Bild-Pfad', '/assets/sponsors/…webp') + '<label>oder Bild hochladen (1200×630)<input type="file" name="image_file" accept="image/jpeg,image/png,image/webp"></label><div></div></div>' +
     '<div class="chkrow">' + cb('slider', 'Startseite-Leiste') + cb('native', 'Zwischen Einträgen') + cb('after_submit', 'Nach dem Eintragen') + cb('quiz', 'Kiez-Quiz') +
-    '<label><input type="checkbox" name="own" value="1"' + (s.own ? ' checked' : '') + '>Eigenwerbung</label><label><input type="checkbox" name="active" value="1"' + (s.active ? ' checked' : '') + '>Aktiv</label></div>' +
+    '<label><input type="checkbox" name="own" value="1"' + (s && s.own ? ' checked' : '') + '>Eigenwerbung</label><label><input type="checkbox" name="active" value="1"' + (s && s.active ? ' checked' : '') + '>Aktiv</label></div>' +
     '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-sa="cancel">Abbrechen</button></div></form>';
   el('spEd').onsubmit = function (e) {
     e.preventDefault();
@@ -169,7 +150,7 @@ function spForm(s) {
     if (!fd.get('own')) fd.set('own', '0'); if (!fd.get('active')) fd.set('active', '0');
     fetch('/api/admin/sponsor/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd })
       .then(function (r) { return r.json(); })
-      .then(function (j) { if (j.ok) loadSp(); else alert('Bitte prüfen: ' + (j.field || j.error)); });
+      .then(function (j) { if (j.ok) { el('edBox').innerHTML = ''; loadSp(); } else alert('Bitte prüfen: ' + (j.field || j.error)); });
   };
   el('edBox').scrollIntoView({ behavior: 'smooth' });
 }
@@ -179,6 +160,7 @@ function spReport(s) {
   return 'Berliner Kiez-Check – Werbebericht ' + s.name + '\nZeitraum: ' + from + ' bis ' + to + '\n\nEinblendungen: ' + s.imp30 + '\nKlicks: ' + s.clk30 + '\nKlickrate: ' + ctr + ' %\n\n' +
     'Gezählt wird anonym und ohne Cookies: eine Einblendung, wenn mindestens die Hälfte der Anzeige sichtbar war.\nBerliner Kiez-Check – DeindigitalerhelferCenter';
 }
+var JST = 'pending';
 function loadJobs() {
   call('/api/admin/jobs?status=' + JST).then(function (j) {
     var tabs = ['pending', 'approved', 'rejected'].map(function (s) { return '<button data-js="' + s + '" aria-pressed="' + (s === JST) + '">' + { pending: 'Zu prüfen', approved: 'Online', rejected: 'Abgelehnt' }[s] + '</button>'; }).join('');
@@ -189,6 +171,7 @@ function loadJobs() {
         (x.mod_note ? '<div class="note">KI: ' + esc(x.mod_note) + '</div>' : '') + '<p>' + esc(x.description || '') + '</p>' +
         '<div class="row">' + (JST !== 'approved' ? '<button class="ok" data-ja="approved" data-id="' + esc(x.id) + '">Freigeben</button>' : '') +
         (JST !== 'rejected' ? '<button class="no" data-ja="rejected" data-id="' + esc(x.id) + '">Ablehnen</button>' : '') +
+        (JST === 'approved' ? '<button data-ja="edit" data-id="' + esc(x.id) + '">Bearbeiten</button>' : '') +
         '<button class="del" data-ja="delete" data-id="' + esc(x.id) + '">Löschen</button></div></div></div>';
     }).join('') : '<p>Keine Jobs in dieser Ansicht.</p>');
   });
@@ -198,7 +181,7 @@ function loadReq() {
     el('sec').innerHTML = (j.items || []).length ? j.items.map(function (r) {
       return '<div class="it" style="grid-template-columns:1fr' + (r.done ? ';opacity:.55' : '') + '"><div><h3>' + esc(r.company) + ' <small>(' + esc(r.size) + ')</small></h3>' +
         '<p class="m">' + esc(r.person || '') + ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a> · ' + esc(r.phone || '') + ' · ' + new Date(r.created_at).toLocaleString('de') + '</p>' +
-        '<p>' + esc(r.message || '') + '</p>' + (r.done ? '' : '<div class="row"><button class="ok" data-rd="' + esc(r.id) + '">Erledigt</button></div>') + '</div></div>';
+        '<p>' + esc(r.message || '') + '</p><div class="row"><button data-rq="edit" data-id="' + esc(r.id) + '">Bearbeiten</button>' + (r.done ? '' : '<button class="ok" data-rd="' + esc(r.id) + '">Erledigt</button>') + '<button class="del" data-rq="delete" data-id="' + esc(r.id) + '">Löschen</button></div></div></div>';
     }).join('') : '<p>Keine Anfragen.</p>';
   });
 }
@@ -209,12 +192,13 @@ document.addEventListener('click', function (e) {
   if (b.dataset.js) { JST = b.dataset.js; loadJobs(); return; }
   if (b.dataset.ja) { if (b.dataset.ja === 'delete' && !confirm('Job löschen?')) return; call('/api/admin/job/set', { id: b.dataset.id, status: b.dataset.ja }).then(loadJobs); return; }
   if (b.dataset.rd) { call('/api/admin/request/done', { id: b.dataset.rd }).then(loadReq); return; }
+  if (b.dataset.rq) { if (b.dataset.rq === 'delete' && !confirm('Anfrage löschen?')) return; call('/api/admin/request/set', { id: b.dataset.id, action: b.dataset.rq }).then(loadReq); return; }
   var sa = b.dataset.sa; if (!sa) return;
   var s = SPS.filter(function (x) { return x.id === b.dataset.id; })[0];
   if (sa === 'new') spForm(null);
   else if (sa === 'cancel') el('edBox').innerHTML = '';
   else if (sa === 'edit') spForm(s);
-  else if (sa === 'del') { if (confirm('Sponsor „' + s.name + '“ löschen?')) call('/api/admin/sponsor/delete', { id: s.id }).then(loadSp); }
+  else if (sa === 'del') { if (confirm('Sponsor „' + s.name + '" löschen?')) call('/api/admin/sponsor/delete', { id: s.id }).then(loadSp); }
   else if (sa === 'report') { var txt = spReport(s); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { alert('Bericht kopiert:\n\n' + txt); }, function () { prompt('Bericht:', txt); }); }
   else if (sa === 'toggle') {
     var fd = new FormData();
@@ -223,9 +207,14 @@ document.addEventListener('click', function (e) {
     fetch('/api/admin/sponsor/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd }).then(function () { loadSp(); });
   }
 });
-</script>
-<script>
-/* ===== Kiez-Reporter: Beiträge prüfen ===== */
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.ps) { PST = b.dataset.ps; loadPosts(); return; }
+  if (b.dataset.pa) {
+    if (b.dataset.pa === 'delete' && !confirm('Beitrag und Fotos endgültig löschen?')) return;
+    call('/api/admin/post/set', { id: b.dataset.id, status: b.dataset.pa }).then(loadPosts);
+  }
+});
 var PST = 'pending';
 function loadPosts() {
   call('/api/admin/posts?status=' + PST).then(function (j) {
@@ -240,18 +229,26 @@ function loadPosts() {
         (x.video_url ? '<p class="m">Video: <a href="' + esc(x.video_url) + '" target="_blank" rel="noopener">' + esc(x.video_url) + '</a></p>' : '') +
         '<div class="row">' + (PST !== 'approved' ? '<button class="ok" data-pa="approved" data-id="' + esc(x.id) + '">Freigeben</button>' : '') +
         (PST !== 'rejected' ? '<button class="no" data-pa="rejected" data-id="' + esc(x.id) + '">Ablehnen</button>' : '') +
+        (PST === 'approved' ? '<button data-pa="edit" data-id="' + esc(x.id) + '">Bearbeiten</button>' : '') +
         '<button class="del" data-pa="delete" data-id="' + esc(x.id) + '">Löschen (inkl. Fotos)</button></div></div></div>';
     }).join('') : '<p>Keine Beiträge in dieser Ansicht.</p>');
   });
 }
 document.addEventListener('click', function (e) {
   var b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.ps) { PST = b.dataset.ps; loadPosts(); return; }
-  if (b.dataset.pa) {
-    if (b.dataset.pa === 'delete' && !confirm('Beitrag und Fotos endgültig löschen?')) return;
-    call('/api/admin/post/set', { id: b.dataset.id, status: b.dataset.pa }).then(loadPosts);
+  if (b.dataset.a) {
+    if (b.dataset.a === 'delete' && !confirm('Eintrag wirklich löschen?')) return;
+    call('/api/admin/item/set', { id: e.target.closest('.it').dataset.id, status: b.dataset.a }).then(list);
   }
 });
+$('#loginBtn').onclick = function () {
+  TOKEN = el('tok').value;
+  if (!TOKEN) { alert('Token erforderlich'); return; }
+  sessionStorage.setItem('kc_admin', TOKEN);
+  start();
+};
+$('#logout').onclick = logout;
+if (TOKEN) start();
 </script>
 <script src="/admin-stories.js"></script>
 </body>
