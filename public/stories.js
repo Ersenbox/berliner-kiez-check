@@ -499,19 +499,35 @@
     });
     prep.then(function (ok) {
       if (!ok) { btn.disabled = false; return; }
-      return fetch(api('/api/stories/submit'), { method: 'POST', body: fd }).then(function (r) { return r.json(); }).then(function (j) {
-        btn.disabled = false;
-        if (j && j.ok) {
-          dlg.querySelector('#stFormView').hidden = true;
-          var dv = dlg.querySelector('#stDoneView'); dv.hidden = false;
-          dv.innerHTML = '<h2>' + esc(tt('done_t')) + '</h2><p>' + esc(tt('done')) + '</p><div class="row"><button class="btn" type="button" data-st-cancel>OK</button></div>';
-          return;
-        }
-        var m = { quota: 'e_quota', full: 'e_full', consent: 'e_consent', photo: 'e_file', video: 'e_vsize', rate: 'e_quota' }[j && j.error];
-        if (j && j.error === 'field') m = { headline: 'e_head', kiez: 'e_kiez', email: 'e_email', event_date: 'e_date', link_url: 'e_link' }[j.field];
-        toast(tt(m || 'e_net'));
-      });
-    }).catch(function () { btn.disabled = false; toast(tt('e_net')); });
+      return fetch(api('/api/stories/submit'), { method: 'POST', body: fd })
+        .then(function (r) { 
+          // ✅ WICHTIG: HTTP-Status prüfen!
+          if (!r.ok) {
+            console.error('Story submit HTTP error:', r.status);
+            throw new Error('HTTP ' + r.status);
+          }
+          return r.json().catch(function () {
+            console.error('Story submit: invalid JSON response');
+            throw new Error('Invalid response');
+          });
+        })
+        .then(function (j) {
+          btn.disabled = false;
+          if (j && j.ok) {
+            dlg.querySelector('#stFormView').hidden = true;
+            var dv = dlg.querySelector('#stDoneView'); dv.hidden = false;
+            dv.innerHTML = '<h2>' + esc(tt('done_t')) + '</h2><p>' + esc(tt('done')) + '</p><div class="row"><button class="btn" type="button" data-st-cancel>OK</button></div>';
+            return;
+          }
+          var m = { quota: 'e_quota', full: 'e_full', consent: 'e_consent', photo: 'e_file', video: 'e_vsize', rate: 'e_quota' }[j && j.error];
+          if (j && j.error === 'field') m = { headline: 'e_head', kiez: 'e_kiez', email: 'e_email', event_date: 'e_date', link_url: 'e_link' }[j.field];
+          toast(tt(m || 'e_net'));
+        });
+    }).catch(function (err) { 
+      btn.disabled = false; 
+      console.error('Story form error:', err);
+      toast(tt('e_net')); 
+    });
   }
 
   /* ---------- Links: ?story=new / ?story=<id> ---------- */
