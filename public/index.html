@@ -14,7 +14,6 @@
 @font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/vendor/fonts/plus-jakarta-sans-latin-ext-wght-normal.woff2) format('woff2-variations');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/vendor/fonts/plus-jakarta-sans-latin-wght-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
-
 /* === SIDEBAR SLIDER (LEFT+RIGHT) === */
 .slider-container{position:fixed;top:0;width:18%;height:100%;z-index:1;pointer-events:none;overflow:hidden}
 .slider-left{left:0}
@@ -119,1421 +118,175 @@ button,input,select,textarea{font:inherit;color:inherit}
 .it{display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;padding:14px;margin-bottom:12px;background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);position:relative}
 .it.feat{border-left:8px solid var(--yellow);box-shadow:0 0 0 1px var(--line),var(--shadow)}
 .it.hl{animation:hl 1.6s ease-out}
-@keyframes hl{from{background-color:rgba(240,215,34,.45)}to{background-color:var(--card)}}
-@keyframes newsPulse{0%{transform:scale(0.95);opacity:0.8}50%{transform:scale(1.05);opacity:1}100%{transform:scale(1);opacity:1}}
-.it img,.ph{width:88px;height:88px;object-fit:cover;border:2px solid var(--line);border-radius:12px;display:block}
-.ph{display:grid;place-items:center;background:var(--pink);color:var(--yellow);font-weight:800;font-size:40px;line-height:1}
-.it h3{margin:0 0 2px;font-size:18px;font-weight:800;line-height:1.25}
-.it .m{color:var(--muted);font-size:14px;margin:0}
-.it p{margin:6px 0 0;max-width:60ch}
-.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:13px;font-weight:800}
-.acts a{text-decoration:none;color:var(--ink);background:var(--sv);border:1.5px solid var(--soft);border-radius:20px;padding:3px 10px}
-.acts a:hover{border-color:var(--line)}
-.tag{background:var(--yellow);color:#000;font-size:11px;padding:1px 6px;border:1.5px solid var(--line);border-radius:4px;font-weight:800;margin-left:6px;vertical-align:2px}
-.ad{border:2px dashed var(--soft);border-radius:var(--r);padding:12px;margin-bottom:12px;min-height:100px}
-.ad small{color:var(--muted);display:block;margin-bottom:4px}
-.empty{padding:26px 18px;background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.empty h3{font-weight:800;margin:0 0 8px}
+@keyframes hl{0%{background:var(--yellow);color:#000}to{background:var(--card);color:inherit}}
+.it img,.ph{width:88px;height:88px;object-fit:cover;border:2px solid var(--line);border-radius:8px}
+.ph{background:var(--line)}
+.it h3{margin:0 0 4px}
+.it .m{color:var(--muted);font-size:13px;margin:0}
+@media (max-width:540px){.it{grid-template-columns:64px minmax(0,1fr)}.it img,.ph{width:64px;height:64px}}
 
-/* Dialoge und Formulare */
-dialog{border:2px solid var(--line);border-radius:var(--r);background:var(--card);color:var(--ink);padding:0;width:min(640px,calc(100% - 24px));max-height:calc(100% - 32px);overflow:auto;overscroll-behavior:contain;box-shadow:0 20px 50px rgba(0,0,0,.3)}
-dialog::backdrop{background:rgba(18,18,20,.6)}
-.dlg{padding:20px 20px 24px}
-.dlg h2{font-weight:800;font-size:26px;line-height:1.1;margin:0 0 6px;color:var(--ink)}
-.dlg .hint{color:var(--muted);font-size:14px;margin:0 0 16px}
-.f{display:grid;gap:12px}
-.f label{display:grid;gap:4px;font-weight:700;font-size:14px}
-.f label small{font-weight:400;color:var(--muted)}
-.f input,.f select,.f textarea{border:2px solid var(--soft);border-radius:10px;background:var(--paper);padding:10px 12px;font-size:16px;width:100%;transition:border-color .15s}
-.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--line);outline:none;box-shadow:0 0 0 3px rgba(240,215,34,.55)}
-.f textarea{min-height:90px;resize:vertical}
-.f fieldset{border-radius:12px}
-.two{display:grid;gap:12px;grid-template-columns:1fr 1fr}
-@media (max-width:520px){.two{grid-template-columns:1fr}}
-.chk{display:flex!important;grid-template-columns:none;gap:10px!important;align-items:flex-start;font-weight:400!important}
-.chk input{width:20px;height:20px;flex:0 0 20px;margin-top:2px;accent-color:var(--pink)}
-.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-.status{border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--sv);margin-bottom:14px;font-size:15px}
-.status b{font-weight:800}
-.linkbox{display:flex;gap:8px;margin:10px 0 18px}
-.linkbox input{flex:1;min-width:0;border:2px solid var(--soft);border-radius:10px;background:var(--paper);padding:8px;font-size:13px}
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.plans button{border:2px solid var(--line);border-radius:12px;background:var(--card);padding:14px 12px;cursor:pointer;text-align:left;box-shadow:var(--shadow);transition:transform .15s}
-.plans button:hover{transform:translateY(-2px);background:var(--sv)}
-.plans button strong{display:block;font-size:26px;font-weight:800;color:var(--pink)}
-.pkstart{font-size:12.5px;font-weight:700;background:var(--yellow);color:#000;border:1.5px solid var(--line);border-radius:8px;padding:3px 7px}
-.pkrec{position:absolute;top:-11px;right:10px;background:var(--yellow);color:#000;border:2px solid var(--line);border-radius:20px;padding:0 9px;font-size:11.5px;font-weight:800}
-.plans{padding-top:6px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-weight:700;z-index:9000;max-width:90vw;display:none;box-shadow:var(--shadow)}
+/* POST: Betriebe hinzufügen */
+dialog{border:0;border-radius:var(--r);background:var(--card);color:var(--ink);box-shadow:0 8px 32px rgba(0,0,0,.15)}
+dialog::backdrop{background:rgba(0,0,0,.4);backdrop-filter:blur(2px)}
+dialog p{margin:0 0 10px}
+dialog input,dialog select,dialog textarea{width:100%;border:2px solid var(--soft);background:var(--sv);padding:8px;border-radius:8px;font-size:15px;font-family:inherit}
+dialog button{border:2px solid var(--line);padding:8px 12px}
+dialog textarea{min-height:100px;resize:vertical}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.row button{flex:1;min-width:100px}
 
-footer{max-width:1200px;margin:0 auto;padding:22px 16px 30px;border-top:2px solid var(--line);color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 18px}
-footer a{color:var(--muted)}
-
-/* === Werbung, Tabs, Gutscheine, Jobs, Merkliste, Notruf === */
-.spons{max-width:1200px;margin:0 auto;padding:0 16px 8px}
-.spons-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:thin}
-.spons-track .spc{flex:0 0 min(420px,86%);scroll-snap-align:start}
-.spc{position:relative;border:2px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);display:flex;flex-direction:column;box-shadow:var(--shadow)}
-.spc img.img{display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:contain;background:#fff;border-bottom:2px solid var(--line)}
-.it h3{padding-right:34px}
-.spc .ph-sp{display:grid;place-items:center;aspect-ratio:1200/630;background:var(--pink);color:var(--yellow);font-weight:800;font-size:72px;border-bottom:2px solid var(--line)}
-.spc.native .ph-sp{flex:0 0 38%;aspect-ratio:auto;min-height:140px;border-bottom:0;border-right:2px solid var(--line)}
-@media (max-width:560px){.spc.native .ph-sp{aspect-ratio:1200/630;border-right:0;border-bottom:2px solid var(--line)}}
-.spc .b{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
-.spc .n{font-weight:800;font-size:15px}
-.spc .h{font-size:14px;color:var(--muted);margin:0}
-.spc .ctas{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:4px}
-.spc .ctas a{border:2px solid var(--line);border-radius:10px;background:var(--yellow);color:#000;padding:6px 12px;font-weight:800;font-size:13px;text-decoration:none}
-.spc .ctas a.wa{background:#25D366;color:#000}
-.spc .ctas a.sec{background:transparent;color:var(--ink);border-color:var(--soft)}
-.spc .adtag{position:absolute;top:8px;left:8px;background:var(--yellow);color:#000;border:1.5px solid var(--line);border-radius:4px;font-size:11px;font-weight:800;padding:0 6px}
-.spc.native{margin:0 0 12px;flex-direction:row}
-.spc.native img.img{flex:0 0 38%;width:38%;aspect-ratio:auto;min-height:140px;border-bottom:0;border-right:2px solid var(--line)}
-@media (max-width:560px){.spc.native{flex-direction:column}.spc.native img.img{width:100%;aspect-ratio:1200/630;border-right:0;border-bottom:2px solid var(--line)}}
-.tabs{max-width:1200px;margin:0 auto;padding:6px 16px 14px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin}
-.tabs button,.tabs a{flex:0 0 auto;border:2px solid var(--soft);border-radius:20px;background:var(--card);color:var(--ink);padding:7px 14px;font-weight:800;font-size:14px;cursor:pointer;text-decoration:none;white-space:nowrap}
-.tabs button:hover,.tabs a:hover{border-color:var(--line)}
-.tabs [aria-pressed=true]{background:var(--pink);border-color:var(--line);color:#fff;box-shadow:1px 1px 0 var(--line)}
-.tabs a.hl{background:var(--yellow);border-color:var(--line);color:#000}
-.tabs [data-tab=places]::before{content:"📍 "}
-.tabs [data-tab=coupons]::before{content:"🎟️ "}
-.tabs [data-tab=jobs]::before{content:"💼 "}
-.tabs [data-tab=favs]::before{content:"❤️ "}
-.tabs [data-tab=sos]::before{content:"🚨 "}
-.tabs a[href="/quiz/"]::before{content:"🎯 "}
-.tabs a.hl::before{content:"📣 "}
-.view{max-width:1200px;margin:0 auto;padding:0 16px 40px}
-.view h2{font-weight:800;font-size:clamp(24px,3.6vw,36px);line-height:1.1;margin:6px 0 8px;color:var(--ink)}
-.view .lead{color:var(--muted);margin:0 0 14px;max-width:60ch}
-.coupon{margin-top:10px;border:2px dashed var(--pink);border-radius:12px;padding:8px 10px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:14px;background:var(--sv)}
-.coupon::before{content:"🎟️"}
-.coupon code{font-size:16px;font-weight:800;letter-spacing:.06em;background:var(--yellow);color:#000;border:1.5px solid var(--line);border-radius:6px;padding:1px 8px}
-.coupon button{border:1.5px solid var(--soft);border-radius:8px;background:var(--card);padding:2px 10px;font-weight:700;cursor:pointer;font-size:13px}
-.fav{position:absolute;top:12px;right:10px;border:0;background:none;font-size:22px;cursor:pointer;line-height:1;color:var(--pink);padding:4px}
-.it .fav{right:10px}
-.job{background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px;margin-bottom:12px;position:relative}
-.job.urgent{border-left:8px solid var(--pink)}
-.job h3{margin:0;font-size:18px;font-weight:800}
-.job .m{color:var(--muted);font-size:14px;margin:2px 0}
-.job .pills{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.job .pills span{background:var(--sv);border:1.5px solid var(--soft);border-radius:20px;padding:1px 9px;font-size:13px;font-weight:600}
-.job .acts a{margin-right:0}
-.sos{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.sos a{display:block;border:2px solid var(--line);border-radius:var(--r);background:var(--card);color:var(--ink);text-decoration:none;padding:14px 16px;box-shadow:var(--shadow);transition:transform .15s}
-.sos a:hover{transform:translateY(-2px)}
-.sos a strong{display:block;font-weight:800;font-size:26px;color:var(--blue)}
-.sos a.red{border-left:8px solid var(--pink)}
-.sos a.red strong{color:var(--pink)}
-.tabs [data-tab=tips]::before{content:"🎡 "}
-.tabs [data-tab=reporter]::before{content:"📸 "}
-#postAddBtn::before{content:"📸"}
-#tipCats{margin:0 0 14px}
-.tips{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
-.tip{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:14px}
-.tip-ic{width:52px;height:52px;display:grid;place-items:center;font-size:28px;background:var(--sv);border:2px solid var(--line);border-radius:12px}
-.tip h3{margin:0 0 2px;font-size:17px;font-weight:800;line-height:1.25}
-.tip .m{color:var(--muted);font-size:13.5px;margin:0}
-.tip p{margin:6px 0 0}
-.tfree{background:#2E7D32;color:#fff;font-size:11px;font-weight:800;border-radius:4px;padding:1px 6px;vertical-align:2px}
-.posts{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));align-items:start}
-.post{background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
-.post-ph{display:grid;gap:2px;border-bottom:2px solid var(--line);background:var(--line)}
-.post-ph.n2{grid-template-columns:1fr 1fr}.post-ph.n3{grid-template-columns:2fr 1fr 1fr}
-.post-ph img{display:block;width:100%;height:220px;object-fit:cover}
-.post-ph.n2 img,.post-ph.n3 img{height:180px}
-.post-b{padding:14px 16px}
-.post h3{margin:0 0 2px;font-size:18px;font-weight:800;line-height:1.25}
-.post .m{color:var(--muted);font-size:13.5px;margin:0}
-.post p{margin:8px 0 0}
-
-/* === STORY-SYSTEM: Kurzer Text + DEVAM OKU Button === */
-.post-preview{font-size:14px;margin:8px 0;color:var(--ink);line-height:1.4}
-.btn-devam{background:var(--pink);color:#fff;border:2px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:800;font-size:12px;cursor:pointer;margin:8px 0;transition:filter .15s}
-.btn-devam:hover{filter:brightness(1.07)}
-.btn-devam:active{transform:scale(.96)}
-.post-img-wrapper{position:relative;display:inline-block;width:100%;height:100%}
-.post-download{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.75);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:16px;cursor:pointer;transition:background .2s,transform .1s;z-index:5}
-.post-download:hover{background:rgba(0,0,0,.95)}
-.post-download:active{transform:scale(.95)}
-.post-logo-badge{position:absolute;top:8px;right:8px;z-index:10;background:rgba(255,255,255,.95);border-radius:8px;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.post-logo-small{width:24px;height:24px;display:block;opacity:0.9}
-
-/* Textfarbe-Optionen im Formular */
-.text-color-picker{display:flex;gap:8px;margin:12px 0}
-.text-color-option{width:32px;height:32px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:border-color .2s}
-.text-color-option[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 8px rgba(0,0,0,.2)}
-.text-color-blue{background:#0288D1}
-.text-color-white{background:#FFFFFF;border:2px solid var(--line)}
-.text-color-red{background:#E30613}
-.text-color-yellow{background:#F0D722;border:2px solid var(--ink)}
-
-.leaflet-popup-content{font-family:var(--font)}
-.leaflet-container{font-family:var(--font)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* TOAST: Benachrichtigungen */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:12px;font-weight:700;font-size:14px;z-index:9000;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:ts .4s ease-out}
+@keyframes ts{from{transform:translateX(-50%) translateY(20px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 </style>
 </head>
 <body>
-<div class="slider-container slider-left" id="sliderLeft">
-  <div class="slider">
-    <div class="slide"><img src="/assets/slider-1.jpg" alt="Kreuzberg" loading="lazy"></div>
-    <div class="slide"><img src="/assets/slider-2.jpg" alt="Berlin Panorama" loading="lazy"></div>
-    <div class="slide"><img src="/assets/slider-3.jpg" alt="Brandenburg Gate" loading="lazy"></div>
-    <div class="slide"><img src="/assets/slider-4.jpg" alt="Street Art" loading="lazy"></div>
-  </div>
-</div>
-<div class="slider-container slider-right" id="sliderRight">
-  <div class="slider">
-    <div class="slide"><img src="/assets/slider-1.jpg" alt="Kreuzberg" loading="lazy"></div>
-    <div class="slide"><img src="/assets/slider-2.jpg" alt="Berlin Panorama" loading="lazy"></div>
-    <div class="slide"><img src="/assets/slider-3.jpg" alt="Brandenburg Gate" loading="lazy"></div>
-    <div class="slide"><img src="/assets/slider-4.jpg" alt="Street Art" loading="lazy"></div>
-  </div>
-</div>
-<header class="top">
-  <a class="logo" href="/"><img src="/assets/logo-kiez-check-64x64.png" alt="Berliner Kiez-Check" style="height:45px;width:auto;object-fit:contain;"><span class="logo-text" data-i="app_name">Berliner Kiez-Check</span></a>
+
+<div class="top">
+  <a class="logo" href="/" title="Berliner Kiez-Check">
+    <svg class="riso" viewBox="0 0 36 36" width="40" height="40" role="img" aria-hidden="true">
+      <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-weight="800" font-size="20" fill="#E30613">BK</text>
+    </svg>
+    <span class="logo-text">Berliner Kiez-Check</span>
+  </a>
   <div class="header-nav">
-    <a href="/quiz/" data-i="t_quiz" title="Kiez-Quiz starten">🎯 Quiz</a>
-    <a href="/werben.html" data-i="t_werben" title="Jetzt werben">📢 Werben</a>
+    <a href="/?view=tips" id="tipsTab">💡 Tipps</a>
+    <a href="/?view=reporter" id="reporterTab">📸 Stories</a>
   </div>
-  <div class="langs" role="group" aria-label="Sprache">
-    <button data-l="de">DE</button><button data-l="tr">TR</button><button data-l="en">EN</button>
+  <div class="langs" role="tablist" aria-label="Sprachen">
+    <button data-l="de" aria-pressed="true">DE</button>
+    <button data-l="tr">TR</button>
+    <button data-l="en">EN</button>
   </div>
-  <button class="themebtn" id="themeBtn" type="button" aria-label="Dark Mode">🌙</button>
-  <button class="btn" id="addBtn" data-i="add"></button>
-</header>
+  <button class="themebtn" id="themeBtn" title="Hell/Dunkel" aria-label="Hell/Dunkel wechseln">🌙</button>
+  <button class="btn" id="addBtn">Eintrag</button>
+  <button class="btn" id="jobAddBtn">Job</button>
+  <button class="btn" id="postAddBtn">Story</button>
+</div>
 
+<dialog id="postDlg">
+  <h2>Kiez-Story teilen</h2>
+  <form id="postForm">
+    <label>Kiez (erforderlich)
+      <select name="kiez" required>
+        <option value="">– bitte wählen –</option>
+      </select>
+    </label>
+    <label>Titel oder Anlass (kurz)
+      <input name="title" maxlength="200" placeholder="z.B. Neue Spätkneipe in der Oranienstraße" required>
+    </label>
+    <label>Deine Story (erforderlich)
+      <textarea name="body" minlength="20" maxlength="5000" placeholder="Beschreib, was du gesehen/erlebt hast…" required></textarea>
+    </label>
+    <label>Fotos hochladen (optional, max. 3)
+      <input type="file" name="photos" multiple accept="image/jpeg,image/png,image/webp" data-max="3">
+    </label>
+    <label>Video-Link (YouTube/TikTok, optional)
+      <input name="video_url" type="url" placeholder="https://…">
+    </label>
+    <label>Dein Name (optional)
+      <input name="author" maxlength="100" placeholder="Dein Name">
+    </label>
+    <label>Deine E-Mail (erforderlich, wird nicht veröffentlicht)
+      <input name="email" type="email" required>
+    </label>
+    <div class="row">
+      <button type="submit" class="btn">Story veröffentlichen</button>
+      <button type="button" class="btn ghost" data-pclose>Abbrechen</button>
+    </div>
+  </form>
+</dialog>
 
-<section class="hero">
-  <figure class="kiezpic" id="kiezPic" style="margin-bottom: 24px;">
-    <img id="kiezImg" src="/assets/friedrichshain-banner.jpg.png" alt="Berliner Kiez entdecken" width="1200" height="630" decoding="async" style="width: 100%; height: auto; display: block;">
-    <figcaption id="kiezCap" style="display:none;">📍 Berlin</figcaption>
-  </figure>
+<div class="hero">
   <div class="hero-txt">
-  <h1 class="riso" id="heroH" data-t=""></h1>
-  <p data-i="sub"></p>
-  <div class="pick"><select id="kiez" aria-label="Kiez"></select></div>
+    <h1 id="headline">Was gibt's in deinem Kiez?</h1>
+    <p id="subline">Cafés, Frühstück, Barber, Märkte und mehr. Betriebe tragen sich selbst ein – kostenlos.</p>
+    <div class="chips" id="filterTabs"></div>
   </div>
-  <div class="chips" id="cats" role="group"></div>
-</section>
+  <figure class="kiezpic">
+    <img id="kiezImg" src="/assets/kiez/berlin_city_banner-800.webp" alt="Berliner Kiez" loading="lazy">
+    <figcaption id="kiezCap">📍 Berlin</figcaption>
+  </figure>
+  <div class="pick">
+    <label for="kiez" style="font-weight:800;color:#fff;margin:0">Kiez:</label>
+    <select id="kiez"></select>
+  </div>
+</div>
 
-<section class="spons" id="spons" hidden aria-label="Anzeigen"><div class="spons-track" id="sponsTrack"></div></section>
-<section class="stories" id="stories" aria-label="Kiez-Stories" hidden></section>
-<nav class="tabs" id="tabs" aria-label="Bereiche">
-  <button data-tab="places" aria-pressed="true" data-i="t_places"></button>
-  <button data-tab="coupons" data-i="t_coupons"></button>
-  <button data-tab="jobs" data-i="t_jobs"></button>
-  <button data-tab="favs" data-i="t_favs"></button>
-  <button data-tab="sos" data-i="t_sos"></button>
-  <button data-tab="tips" data-i="t_tips"></button>
-  <button data-tab="reporter" data-i="t_rep"></button>
-  <a href="/quiz/" data-i="t_quiz"></a>
-  <a href="/werben.html" class="hl" data-i="t_werben"></a>
-</nav>
-
-<main class="wrap" id="wrap">
+<div class="wrap">
   <div class="bar">
-    <span id="count" aria-live="polite"></span>
-    <div class="seg" role="group"><button data-v="list" data-i="list"></button><button data-v="map" data-i="map"></button></div>
+    <span id="count"></span>
+    <div class="seg">
+      <button data-v="list" aria-pressed="true"></button>
+      <button data-v="map"></button>
+    </div>
   </div>
-  <div id="demoNote" class="demo" hidden data-i="demo_note"></div>
   <div class="cols">
     <div id="list"></div>
     <div id="mapbox"><div id="map"></div></div>
   </div>
-</main>
+</div>
 
-<section class="view" id="v-coupons" hidden>
-  <h2 data-i="t_coupons"></h2><p class="lead" data-i="coupons_lead"></p>
-  <div id="couponList"></div>
-</section>
-<section class="view" id="v-jobs" hidden>
-  <h2 data-i="t_jobs"></h2><p class="lead" data-i="jobs_lead"></p>
-  <div class="row" style="margin-bottom:12px"><button class="btn" id="jobAddBtn" data-i="job_add"></button></div>
-  <div id="jobOwn"></div>
-  <div id="jobList"></div>
-</section>
-<section class="view" id="v-favs" hidden>
-  <h2 data-i="t_favs"></h2><p class="lead" data-i="favs_lead"></p>
-  <div id="favList"></div>
-</section>
-<section class="view" id="v-sos" hidden>
-  <h2 data-i="t_sos"></h2><p class="lead" data-i="sos_lead"></p>
-  <div class="sos">
-    <a class="red" href="tel:110"><strong>110</strong><span data-i="sos_110"></span></a>
-    <a class="red" href="tel:112"><strong>112</strong><span data-i="sos_112"></span></a>
-    <a href="tel:116117"><strong>116 117</strong><span data-i="sos_116"></span></a>
-    <a href="tel:03019240"><strong>030 19240</strong><span data-i="sos_gift"></span></a>
-    <a href="tel:08001110111"><strong>0800 111 0 111</strong><span data-i="sos_seel"></span></a>
-    <a href="tel:+903122922929"><strong>+90 312 292 29 29</strong><span data-i="sos_kons"></span></a>
-    <a href="https://berlin-bk.mfa.gov.tr" target="_blank" rel="noopener"><strong>T.C. Berlin BK</strong><span data-i="sos_bk"></span></a>
-  </div>
-</section>
-<section class="view" id="v-tips" hidden>
-  <h2 data-i="t_tips"></h2><p class="lead" data-i="tips_lead"></p>
-  <div class="chips" id="tipCats" role="group"></div>
-  <div class="tips" id="tipList"></div>
-</section>
-<section class="view" id="v-reporter" hidden>
-  <h2 data-i="t_rep"></h2><p class="lead" data-i="rep_lead"></p>
-  <div class="row" style="margin-bottom:14px"><button class="btn" id="postAddBtn" type="button" data-i="rep_add"></button></div>
-  <div class="posts" id="postList"></div>
-</section>
-
-<footer>
-  <span>© 2026 DeindigitalerhelferCenter</span>
-  <a id="impLink" href="#" data-i="impressum"></a>
-  <a id="dsLink" href="#" data-i="datenschutz"></a>
-  <a href="/agb.html">AGB</a>
-  <a href="/quiz/" data-i="t_quiz"></a>
-  <a href="/werben.html" data-i="t_werben"></a>
-  <span data-i="footer_ads"></span>
-</footer>
-
-<dialog id="dlg">
-  <div class="dlg">
-    <div id="formView">
-      <h2 id="fTitle"></h2>
-      <p class="hint" data-i="f_hint"></p>
-      <div id="ownStatus"></div>
-      <form class="f" id="form" novalidate>
-        <label><span data-i="f_name"></span><input name="name" required maxlength="80" autocomplete="organization"></label>
-        <div class="two">
-          <label><span data-i="f_kiez"></span><select name="kiez" required></select></label>
-          <label><span data-i="f_cat"></span><select name="category" required></select></label>
-        </div>
-        <div class="two" id="noteRow">
-          <label id="kiezNoteL" hidden><span data-i="f_kiez_note"></span><input name="kiez_note" maxlength="40" placeholder="Rudow, Potsdam …"></label>
-          <label id="catNoteL" hidden><span data-i="f_cat_note"></span><input name="cat_note" maxlength="40" placeholder="Propan & Gas …"></label>
-        </div>
-        <label><span data-i="f_addr"></span><input name="address" required maxlength="160" placeholder="Sonnenallee 12, 12045 Berlin" autocomplete="street-address"></label>
-        <label><span data-i="f_desc"></span><small data-i="f_desc_hint"></small><textarea name="desc" maxlength="600"></textarea></label>
-        <div class="two">
-          <label><span data-i="f_phone"></span><input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
-          <label><span data-i="f_hours"></span><input name="hours" maxlength="160" placeholder="Mo–Sa 8–20"></label>
-        </div>
-        <div class="two">
-          <label><span data-i="f_web"></span><input name="website" type="url" maxlength="200" placeholder="www.…"></label>
-          <label><span data-i="f_insta"></span><input name="instagram" maxlength="60" placeholder="@…"></label>
-        </div>
-        <label><span data-i="f_wa"></span><input name="whatsapp" type="tel" maxlength="40" placeholder="+49 151 …"></label>
-        <fieldset style="border:2px dashed var(--pink);padding:10px;margin:0;display:grid;gap:10px">
-          <legend style="font-weight:800;padding:0 6px" data-i="f_coupon"></legend>
-          <small style="color:var(--muted)" data-i="f_coupon_hint"></small>
-          <div class="two">
-            <label><span data-i="f_ccode"></span><input name="coupon_code" maxlength="30" placeholder="KIEZ10"></label>
-            <label><span data-i="f_cuntil"></span><input name="coupon_until" type="date"></label>
-          </div>
-          <label><span data-i="f_ctext"></span><input name="coupon_text" maxlength="120" placeholder="10 % auf alle Getränke"></label>
-        </fieldset>
-        <label><span data-i="f_email"></span><small data-i="f_email_hint"></small><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
-        <label><span data-i="f_photo"></span><input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
-        <div class="hp" aria-hidden="true"><input name="website_url_hp" tabindex="-1" autocomplete="off"></div>
-        <label class="chk"><input type="checkbox" name="auth" value="1" required><span data-i="f_auth"></span></label>
-        <label class="chk"><input type="checkbox" name="consent" value="1" required><span id="consentTxt"></span></label>
-        <div class="row">
-          <button class="btn" type="submit" id="sendBtn"></button>
-          <button class="btn ghost" type="button" data-close data-i="f_cancel"></button>
-        </div>
-      </form>
-    </div>
-    <div id="doneView" hidden></div>
-  </div>
-</dialog>
-<dialog id="jobDlg">
-  <div class="dlg">
-    <div id="jobFormView">
-      <h2 data-i="job_add"></h2>
-      <p class="hint" data-i="job_hint"></p>
-      <form class="f" id="jobForm" novalidate>
-        <label><span data-i="j_title"></span><input name="title" required maxlength="100" placeholder="Barista (m/w/d)"></label>
-        <div class="two">
-          <label><span data-i="j_company"></span><input name="company" required maxlength="100"></label>
-          <label><span data-i="f_kiez"></span><select name="kiez" required></select></label>
-        </div>
-        <div class="two">
-          <label><span data-i="j_type"></span><select name="jobtype" required>
-            <option value="vollzeit">Vollzeit</option><option value="teilzeit">Teilzeit</option><option value="minijob">Minijob</option><option value="ausbildung">Ausbildung</option></select></label>
-          <label><span data-i="j_salary"></span><input name="salary" maxlength="60" placeholder="14 €/Std."></label>
-        </div>
-        <label><span data-i="j_lang"></span><input name="languages" maxlength="100" placeholder="Deutsch, Türkisch"></label>
-        <label><span data-i="j_desc"></span><textarea name="description" maxlength="1500"></textarea></label>
-        <div class="two">
-          <label><span data-i="f_wa"></span><input name="whatsapp" type="tel" maxlength="40"></label>
-          <label><span data-i="f_phone"></span><input name="phone" type="tel" maxlength="40"></label>
-        </div>
-        <label><span data-i="f_email"></span><small data-i="f_email_hint"></small><input name="email" type="email" required maxlength="120"></label>
-        <div class="hp" aria-hidden="true"><input name="hp" tabindex="-1" autocomplete="off"></div>
-        <label class="chk"><input type="checkbox" name="agg" required><span data-i="j_agg"></span></label>
-        <label class="chk"><input type="checkbox" name="consent" required><span id="jobConsentTxt"></span></label>
-        <div class="row"><button class="btn" type="submit" data-i="job_send"></button><button class="btn ghost" type="button" data-jclose data-i="f_cancel"></button></div>
-      </form>
-    </div>
-    <div id="jobDoneView" hidden></div>
-  </div>
-</dialog>
-<dialog id="postDlg">
-  <div class="dlg">
-    <div id="postFormView">
-      <h2 data-i="rep_add"></h2>
-      <p class="hint" data-i="rep_hint"></p>
-      <form class="f" id="postForm" novalidate>
-        <label><span data-i="p_title"></span><input name="title" required maxlength="100"></label>
-        <label><span data-i="f_kiez"></span><select name="kiez" required></select></label>
-        <label><span data-i="p_body"></span><textarea name="body" required maxlength="1500"></textarea></label>
-        <label><span data-i="p_photos"></span><input name="photo" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
-        <label><span data-i="p_video"></span><input name="video_url" type="url" maxlength="300" placeholder="https://youtu.be/…"></label>
-        <div class="two">
-          <label><span data-i="p_author"></span><input name="author" maxlength="40" autocomplete="nickname"></label>
-          <label><span data-i="f_email"></span><small data-i="p_email_hint"></small><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
-        </div>
-        <div class="hp" aria-hidden="true"><input name="hp" tabindex="-1" autocomplete="off"></div>
-        <label class="chk"><input type="checkbox" name="rights" required><span data-i="p_rights"></span></label>
-        <label class="chk"><input type="checkbox" name="consent" required><span id="postConsentTxt"></span></label>
-        <div class="row"><button class="btn" type="submit" data-i="p_send"></button><button class="btn ghost" type="button" data-pclose data-i="f_cancel"></button></div>
-      </form>
-    </div>
-    <div id="postDoneView" hidden></div>
-  </div>
-</dialog>
-<!-- Modal für vollständigen Post-Text (DEVAM OKU) -->
-<dialog id="postViewDlg">
-  <div class="dlg">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-      <img src="/assets/logo-kiez-check-48x48.png" alt="Kiez-Check" style="width:48px;height:48px;flex-shrink:0;">
-      <h2 id="postViewTitle" style="margin:0;flex:1;font-size:20px;"></h2>
-      <button data-pview-close style="background:var(--soft);border:none;border-radius:8px;padding:8px;cursor:pointer;font-size:18px;flex-shrink:0;">✕</button>
-    </div>
-    <p class="m" id="postViewMeta" style="color:var(--muted);font-size:13.5px;margin:0 0 12px"></p>
-    <div id="postViewBody" style="max-height:60vh;overflow-y:auto;padding:12px;background:var(--sv);border-radius:8px;margin:0 0 16px"></div>
-    <div class="row">
-      <button class="btn" type="button" data-pview-close>Schließen</button>
-    </div>
-  </div>
-</dialog>
-<div class="toast" id="toast" role="status"></div>
-
-<script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/vendor/leaflet/leaflet.min.js"></script>
+<script src="/i18n.js"></script>
 <script>
-/* ===== Konfiguration ===== */
-var CFG = {
-  API: '',                                  // leer = gleiche Domain (Worker)
-  SITE_URL: 'https://mykiezberlin.com',     // steht unter WhatsApp-Nachrichten an Betriebe
-  ADSENSE_CLIENT: '',                       // z.B. 'ca-pub-XXXXXXXXXXXXXXXX' – leer = keine Werbung
-  ADSENSE_SLOT: '',                         // Anzeigenblock-ID aus AdSense
-  AD_EVERY: 6,                              // nach jedem n-ten Eintrag eine Anzeige
-  IMPRESSUM: '/impressum.html',
-  DATENSCHUTZ: '/datenschutz.html',
-  PRICE_30: '19 €', PRICE_90: '49 €',
-  ADMOB_BANNER: '',                         // nur Android-App: 'ca-app-pub-XXXX/YYYY' – leer = kein Banner
-  PRICE_INTRO: '19 €', PRICE_S: '29 €', PRICE_M: '49 €', PRICE_L: '89 €', PRICE_JOB: '29 €'
-};
-
-var KIEZE = {"neukoelln":["Neukölln",52.4811,13.435],"kreuzberg":["Kreuzberg",52.4986,13.403],"wedding":["Wedding",52.5496,13.3526],"gesundbrunnen":["Gesundbrunnen",52.5507,13.3905],"moabit":["Moabit",52.5302,13.342],"tiergarten":["Tiergarten",52.5145,13.3501],"mitte":["Mitte",52.52,13.405],"friedrichshain":["Friedrichshain",52.5156,13.4541],"prenzlauer-berg":["Prenzlauer Berg",52.5388,13.4244],"schoeneberg":["Schöneberg",52.483,13.353],"tempelhof":["Tempelhof",52.4664,13.385],"charlottenburg":["Charlottenburg",52.5163,13.304],"spandau":["Spandau",52.5354,13.199],"reinickendorf":["Reinickendorf",52.587,13.329],"steglitz":["Steglitz",52.456,13.322],"lichtenberg":["Lichtenberg",52.513,13.499],"pankow":["Pankow",52.569,13.402],"treptow":["Treptow",52.49,13.47],"britz":["Britz",52.443,13.433],"koepenick":["Köpenick",52.445,13.576],"marzahn":["Marzahn",52.545,13.564],"umgebung":["Berlin & Umgebung",52.52,13.405]};
-var CATS = {"fruehstueck":{"de":"Frühstück","tr":"Kahvaltı","en":"Breakfast"},"cafe":{"de":"Café","tr":"Kafe","en":"Café"},"restaurant":{"de":"Restaurant","tr":"Restoran","en":"Restaurant"},"imbiss":{"de":"Imbiss & Döner","tr":"Büfe & Döner","en":"Takeaway"},"baeckerei":{"de":"Bäckerei","tr":"Fırın & Pastane","en":"Bakery"},"markt":{"de":"Supermarkt & Markt","tr":"Market","en":"Grocery"},"friseur":{"de":"Friseur & Barber","tr":"Kuaför & Berber","en":"Barber & hair"},"beauty":{"de":"Kosmetik & Nails","tr":"Güzellik","en":"Beauty"},"service":{"de":"Dienstleistung","tr":"Hizmet","en":"Services"},"shop":{"de":"Einkaufen","tr":"Alışveriş","en":"Shopping"},"handel":{"de":"Einzel- & Großhandel","tr":"Perakende & Toptan","en":"Retail & wholesale"},"sonstiges":{"de":"Sonstiges","tr":"Diğer","en":"Other"}};
-
-var I18N = {
-de:{hero:"Was gibt's in deinem Kiez?",sub:"Cafés, Frühstück, Barber und Märkte in Berlin – eingetragen von den Betrieben selbst.",kiez_all:"Ganz Berlin",cat_all:"Alles",add:"Betrieb eintragen",list:"Liste",map:"Karte",count:function(n){return n+(n===1?" Eintrag":" Einträge")},empty:"Hier ist noch nichts eingetragen.",empty_txt:"Du hast hier einen Laden? Trag ihn kostenlos ein – in zwei Minuten ist er online.",ad:"Anzeige",call:"Anrufen",route:"Route",sample:"Beispiel",
-f_title:"Betrieb kostenlos eintragen",f_edit:"Eintrag bearbeiten",f_hint:"Pflichtfelder: Name, Kiez, Kategorie, Adresse, E-Mail. Wir prüfen jeden Eintrag, bevor er erscheint.",f_name:"Name des Betriebs",f_kiez:"Kiez",f_cat:"Kategorie",f_addr:"Adresse",f_desc:"Kurzbeschreibung",f_desc_hint:"Auf Deutsch oder Türkisch. Wir übersetzen automatisch in drei Sprachen.",f_phone:"Telefon",f_hours:"Öffnungszeiten",f_web:"Website",f_insta:"Instagram",f_email:"E-Mail",f_email_hint:"Wird nicht angezeigt. Nur für Rückfragen und Rechnungen.",f_photo:"Foto (optional)",f_auth:"Ich bin Inhaber:in oder berechtigt, diesen Betrieb einzutragen, und habe die Rechte am Foto.",f_consent:"Ich habe die {ds} gelesen und bin einverstanden.",f_send:"Eintrag absenden",f_save:"Änderungen speichern",f_cancel:"Abbrechen",
-done_title:"Danke!",done_pending:"Dein Eintrag wird geprüft und erscheint meist innerhalb von 24 Stunden.",done_approved:"Dein Eintrag ist online.",done_link:"Speichere diesen Link. Damit kannst du deinen Eintrag später bearbeiten oder hervorheben:",copy:"Kopieren",copied:"Link kopiert",close:"Schließen",view:"Eintrag ansehen",
-boost_title:"Oben in deinem Kiez erscheinen",boost_txt:"Dein Eintrag steht in deinem Kiez und deiner Kategorie ganz oben, gelb markiert und als Anzeige gekennzeichnet. Einmalzahlung, kein Abo.",days30:"30 Tage",days90:"90 Tage",
-st:"Status",st_pending:"wird geprüft",st_approved:"online",st_rejected:"abgelehnt – bitte Angaben prüfen und neu speichern",feat_until:"Hervorgehoben bis",paid:"Zahlung erhalten. Die Hervorhebung ist in wenigen Sekunden aktiv.",boost_wait:"Hervorheben ist möglich, sobald der Eintrag online ist.",
-e_rate:"Zu viele Einträge in kurzer Zeit. Bitte später erneut versuchen.",e_consent:"Bitte beide Häkchen setzen.",f_kiez_note:"Ortsteil / Stadt",f_cat_note:"Deine Kategorie",pk_start:"🎉 Start: 3 Monate nur 19 €/Monat",pk_rec:"Empfohlen",e_photo:"Foto muss JPG, PNG oder WebP und kleiner als 2,5 MB sein.",e_field:"Bitte prüfe das Feld: ",e_auth:"Dieser Bearbeitungslink ist ungültig.",e_net:"Keine Verbindung zum Server. Bitte später erneut versuchen.",e_stripe:"Zahlung ist gerade nicht verfügbar.",
-demo_note:"Vorschau mit Beispieldaten – ohne Server-Verbindung. Nach dem Deployment erscheinen hier echte Einträge.",impressum:"Impressum",datenschutz:"Datenschutz",ds_word:"Datenschutzerklärung",footer_ads:"Hervorgehobene Einträge sind als Anzeige gekennzeichnet.",sending:"Wird gesendet …"},
-tr:{hero:"Mahallende neler var?",sub:"Berlin'de kafeler, kahvaltı, berberler ve marketler – işletmelerin kendisi ekliyor.",kiez_all:"Tüm Berlin",cat_all:"Hepsi",add:"İşletme ekle",list:"Liste",map:"Harita",count:function(n){return n+" kayıt"},empty:"Burada henüz kayıt yok.",empty_txt:"Burada bir dükkânın mı var? Ücretsiz ekle – iki dakikada yayında.",ad:"Reklam",call:"Ara",route:"Yol tarifi",sample:"Örnek",
-f_title:"İşletmeni ücretsiz ekle",f_edit:"Kaydı düzenle",f_hint:"Zorunlu alanlar: isim, mahalle, kategori, adres, e-posta. Her kaydı yayına almadan önce kontrol ediyoruz.",f_name:"İşletme adı",f_kiez:"Mahalle (Kiez)",f_cat:"Kategori",f_addr:"Adres",f_desc:"Kısa açıklama",f_desc_hint:"Türkçe veya Almanca yazabilirsin. Otomatik olarak üç dile çeviriyoruz.",f_phone:"Telefon",f_hours:"Çalışma saatleri",f_web:"Web sitesi",f_insta:"Instagram",f_email:"E-posta",f_email_hint:"Gösterilmez. Sadece sorular ve faturalar için.",f_photo:"Fotoğraf (isteğe bağlı)",f_auth:"İşletmenin sahibiyim veya eklemeye yetkiliyim, fotoğrafın haklarına sahibim.",f_consent:"{ds} metnini okudum ve kabul ediyorum.",f_send:"Kaydı gönder",f_save:"Değişiklikleri kaydet",f_cancel:"Vazgeç",
-done_title:"Teşekkürler!",done_pending:"Kaydın kontrol ediliyor, genellikle 24 saat içinde yayında olur.",done_approved:"Kaydın yayında.",done_link:"Bu bağlantıyı kaydet. Kaydını daha sonra düzenlemek veya öne çıkarmak için lazım:",copy:"Kopyala",copied:"Bağlantı kopyalandı",close:"Kapat",view:"Kaydı gör",
-boost_title:"Mahallende en üstte görün",boost_txt:"Kaydın, mahallende ve kategorinde en üstte, sarı işaretli ve reklam etiketiyle görünür. Tek seferlik ödeme, abonelik yok.",days30:"30 gün",days90:"90 gün",
-st:"Durum",st_pending:"kontrol ediliyor",st_approved:"yayında",st_rejected:"reddedildi – bilgileri kontrol edip tekrar kaydet",feat_until:"Öne çıkarma bitişi",paid:"Ödeme alındı. Öne çıkarma birkaç saniye içinde aktif olur.",boost_wait:"Kayıt yayına girince öne çıkarabilirsin.",
-e_rate:"Kısa sürede çok fazla kayıt. Lütfen sonra tekrar dene.",e_consent:"Lütfen iki kutucuğu da işaretle.",f_kiez_note:"Semt / şehir",f_cat_note:"Kendi kategorin",pk_start:"🎉 Başlangıç: ilk 3 ay sadece 19 €/ay",pk_rec:"Önerimiz",e_photo:"Fotoğraf JPG, PNG veya WebP olmalı ve 2,5 MB'tan küçük olmalı.",e_field:"Lütfen bu alanı kontrol et: ",e_auth:"Bu düzenleme bağlantısı geçersiz.",e_net:"Sunucuya bağlanılamadı. Lütfen sonra tekrar dene.",e_stripe:"Ödeme şu anda kullanılamıyor.",
-demo_note:"Örnek verilerle önizleme – sunucu bağlantısı yok. Yayına alındıktan sonra burada gerçek kayıtlar görünür.",impressum:"Künye",datenschutz:"Gizlilik",ds_word:"Gizlilik politikası",footer_ads:"Öne çıkarılan kayıtlar reklam olarak işaretlenmiştir.",sending:"Gönderiliyor …"},
-en:{hero:"What's in your Kiez?",sub:"Cafés, breakfast, barbers and markets across Berlin – listed by the businesses themselves.",kiez_all:"All of Berlin",cat_all:"Everything",add:"Add your business",list:"List",map:"Map",count:function(n){return n+(n===1?" listing":" listings")},empty:"Nothing listed here yet.",empty_txt:"Run a shop here? Add it for free – it's online in two minutes.",ad:"Ad",call:"Call",route:"Directions",sample:"Sample",
-f_title:"Add your business for free",f_edit:"Edit listing",f_hint:"Required: name, Kiez, category, address, email. We check every listing before it appears.",f_name:"Business name",f_kiez:"Kiez",f_cat:"Category",f_addr:"Address",f_desc:"Short description",f_desc_hint:"German, Turkish or English. We translate it into all three automatically.",f_phone:"Phone",f_hours:"Opening hours",f_web:"Website",f_insta:"Instagram",f_email:"Email",f_email_hint:"Not shown publicly. Only for questions and invoices.",f_photo:"Photo (optional)",f_auth:"I own this business or am allowed to list it, and I hold the rights to the photo.",f_consent:"I have read the {ds} and agree.",f_send:"Submit listing",f_save:"Save changes",f_cancel:"Cancel",
-done_title:"Thank you!",done_pending:"Your listing is being checked and usually goes live within 24 hours.",done_approved:"Your listing is live.",done_link:"Save this link. You need it to edit or promote your listing later:",copy:"Copy",copied:"Link copied",close:"Close",view:"View listing",
-boost_title:"Appear at the top of your Kiez",boost_txt:"Your listing shows first in your Kiez and category, highlighted in yellow and labelled as an ad. One-time payment, no subscription.",days30:"30 days",days90:"90 days",
-st:"Status",st_pending:"being checked",st_approved:"live",st_rejected:"rejected – please check your details and save again",feat_until:"Promoted until",paid:"Payment received. Your promotion goes live in a few seconds.",boost_wait:"You can promote your listing once it's live.",
-e_rate:"Too many submissions in a short time. Please try again later.",e_consent:"Please tick both boxes.",f_kiez_note:"District / town",f_cat_note:"Your category",pk_start:"🎉 Launch: first 3 months only €19/month",pk_rec:"Recommended",e_photo:"Photo must be JPG, PNG or WebP and under 2.5 MB.",e_field:"Please check this field: ",e_auth:"This edit link is not valid.",e_net:"Can't reach the server. Please try again later.",e_stripe:"Payments are unavailable right now.",
-demo_note:"Preview with sample data – no server connection. Real listings appear here once deployed.",impressum:"Legal notice",datenschutz:"Privacy",ds_word:"privacy policy",footer_ads:"Promoted listings are labelled as ads.",sending:"Sending …"}
-};
-
-/* ===== Texte für Werbung, Tabs, Gutscheine, Jobs, Merkliste, Notruf ===== */
-Object.assign(I18N.de, {t_places:"Betriebe",t_coupons:"Gutscheine",t_jobs:"Jobs",t_favs:"Merkliste",t_sos:"Notruf",t_quiz:"Kiez-Quiz",t_werben:"Werben",
- coupons_lead:"Aktuelle Rabatte von Betrieben aus deinem Kiez. Code an der Kasse zeigen.",coupons_empty:"Gerade keine Gutscheine in dieser Auswahl.",
- favs_lead:"Deine gemerkten Betriebe – nur auf diesem Gerät gespeichert.",favs_empty:"Noch nichts gemerkt. Tippe bei einem Betrieb auf ♡.",
- sos_lead:"Im Notfall direkt anrufen. Die Nummern gelten in ganz Deutschland, wenn nicht anders angegeben.",sos_110:"Polizei",sos_112:"Feuerwehr & Rettungsdienst",sos_116:"Ärztlicher Bereitschaftsdienst (außerhalb der Sprechzeiten)",sos_gift:"Giftnotruf Berlin",sos_seel:"TelefonSeelsorge, kostenlos, rund um die Uhr",sos_kons:"Türkisches Konsularisches Callcenter, 24/7",sos_bk:"Türkisches Generalkonsulat Berlin – Kontakt & Termine",
- jobs_lead:"Jobs in Berliner Kiezen – direkt bei den Betrieben bewerben.",jobs_empty:"Gerade keine Jobs in dieser Auswahl.",job_add:"Job kostenlos inserieren",job_hint:"Die Anzeige ist 30 Tage online. Wir prüfen jede Anzeige vorher.",job_send:"Job-Anzeige absenden",
- j_title:"Stellenbezeichnung (m/w/d)",j_company:"Betrieb",j_type:"Art",j_salary:"Lohn / Gehalt",j_lang:"Sprachen",j_desc:"Beschreibung",j_agg:"Die Anzeige ist diskriminierungsfrei (AGG): kein Alter, kein Geschlecht außer (m/w/d), keine Herkunft oder Religion als Bedingung.",
- j_apply_wa:"Per WhatsApp bewerben",j_call:"Anrufen",j_urgent:"Dringend",j_done_title:"Danke!",j_done:"Deine Anzeige wird geprüft und ist dann 30 Tage online.",j_done_ok:"Deine Anzeige ist online (30 Tage).",
- j_link:"Speichere diesen Link, um die Anzeige später als „Dringend“ hervorzuheben:",j_boost:"Als „Dringend“ hervorheben – ganz oben, 30 Tage",j_wa_text:"Hallo, ich bewerbe mich auf Ihre Anzeige bei Berliner Kiez-Check: ",
- f_wa:"WhatsApp-Nummer",f_coupon:"Gutschein (optional)",f_coupon_hint:"Dein Gutschein erscheint unter „Gutscheine“ und in deinem Eintrag, solange dein Eintrag mit einem Paket hervorgehoben ist.",f_ccode:"Code",f_cuntil:"Gültig bis",f_ctext:"Was gibt es?",
- c_valid:"gültig bis",c_copy:"Code kopieren",fav_add:"Merken",fav_rm:"Nicht mehr merken",wa:"WhatsApp",
- pk_title:"Mehr Kunden aus deinem Kiez",pk_txt:"Zum Start die ersten 3 Monate nur 19 € pro Monat, danach 29, 49 oder 89 €. Monatlich kündbar, keine Mindestlaufzeit. Hervorgehobene Einträge sind als Anzeige gekennzeichnet.",
- pk_s:"Klein",pk_s_d:"Ganz oben im eigenen Kiez und in deiner Kategorie, gelb markiert, mit Gutschein",
- pk_m:"Mittel",pk_m_d:"Wie Klein, zusätzlich oben in der Berlin-weiten Liste",
- pk_l:"Groß",pk_l_d:"Wie Mittel, zusätzlich als Sponsor-Karte auf der Startseite",
- pk_then:"danach",pk_month:"/Monat",pk_intro:"3 Monate",sp_more:"Mehr",sp_title:"Anzeige"});
-Object.assign(I18N.tr, {t_places:"İşletmeler",t_coupons:"Kuponlar",t_jobs:"İş ilanları",t_favs:"Kaydedilenler",t_sos:"Acil",t_quiz:"Kiez Quiz",t_werben:"Reklam ver",
- coupons_lead:"Mahallendeki işletmelerden güncel indirimler. Kodu kasada göster.",coupons_empty:"Bu seçimde şu an kupon yok.",
- favs_lead:"Kaydettiğin işletmeler – sadece bu cihazda saklanır.",favs_empty:"Henüz bir şey kaydetmedin. Bir işletmede ♡ işaretine dokun.",
- sos_lead:"Acil durumda doğrudan ara. Aksi belirtilmedikçe numaralar tüm Almanya'da geçerlidir.",sos_110:"Polis",sos_112:"İtfaiye ve ambulans",sos_116:"Nöbetçi doktor (mesai saatleri dışında)",sos_gift:"Berlin zehir danışma hattı",sos_seel:"TelefonSeelsorge (psikolojik destek), ücretsiz, 7/24",sos_kons:"Konsolosluk Çağrı Merkezi, 7/24",sos_bk:"T.C. Berlin Başkonsolosluğu – iletişim ve randevu",
- jobs_lead:"Berlin mahallelerinde iş ilanları – doğrudan işletmeye başvur.",jobs_empty:"Bu seçimde şu an iş ilanı yok.",job_add:"Ücretsiz iş ilanı ver",job_hint:"İlan 30 gün yayında kalır. Her ilanı önceden kontrol ediyoruz.",job_send:"İlanı gönder",
- j_title:"Pozisyon (m/w/d)",j_company:"İşletme",j_type:"Çalışma türü",j_salary:"Ücret",j_lang:"Diller",j_desc:"Açıklama",j_agg:"İlan ayrımcılık içermiyor (AGG): yaş, cinsiyet ((m/w/d) hariç), köken veya din şart olarak yok.",
- j_apply_wa:"WhatsApp ile başvur",j_call:"Ara",j_urgent:"Acil",j_done_title:"Teşekkürler!",j_done:"İlanın kontrol ediliyor, sonra 30 gün yayında kalır.",j_done_ok:"İlanın yayında (30 gün).",
- j_link:"İlanı daha sonra „Acil“ olarak öne çıkarmak için bu bağlantıyı kaydet:",j_boost:"„Acil“ olarak öne çıkar – en üstte, 30 gün",j_wa_text:"Merhaba, Berliner Kiez-Check'teki ilanınız için başvuruyorum: ",
- f_wa:"WhatsApp numarası",f_coupon:"Kupon (isteğe bağlı)",f_coupon_hint:"Kaydın bir paketle öne çıkarıldığı sürece kuponun „Kuponlar“ bölümünde ve kaydında görünür.",f_ccode:"Kod",f_cuntil:"Geçerlilik",f_ctext:"Ne indirim var?",
- c_valid:"son gün",c_copy:"Kodu kopyala",fav_add:"Kaydet",fav_rm:"Kayıttan çıkar",wa:"WhatsApp",
- pk_title:"Mahallenden daha fazla müşteri",pk_txt:"Başlangıç teklifi: ilk 3 ay aylık sadece 19 €, sonra 29, 49 veya 89 €. Aylık iptal edilebilir, asgari süre yok. Öne çıkan kayıtlar reklam olarak işaretlenir.",
- pk_s:"Küçük",pk_s_d:"Kendi mahallende ve kategorinde en üstte, sarı işaretli, kuponlu",
- pk_m:"Orta",pk_m_d:"Küçük paket + tüm Berlin listesinde üstte",
- pk_l:"Büyük",pk_l_d:"Orta paket + ana sayfada sponsor kartı",
- pk_then:"sonra",pk_month:"/ay",pk_intro:"3 ay",sp_more:"Daha fazla",sp_title:"Reklam"});
-Object.assign(I18N.en, {t_places:"Businesses",t_coupons:"Coupons",t_jobs:"Jobs",t_favs:"Saved",t_sos:"Emergency",t_quiz:"Kiez quiz",t_werben:"Advertise",
- coupons_lead:"Current deals from businesses in your Kiez. Show the code at the till.",coupons_empty:"No coupons in this selection right now.",
- favs_lead:"Businesses you saved – stored on this device only.",favs_empty:"Nothing saved yet. Tap ♡ on a business.",
- sos_lead:"In an emergency, call directly. Numbers work across Germany unless noted.",sos_110:"Police",sos_112:"Fire brigade & ambulance",sos_116:"On-call doctor (outside office hours)",sos_gift:"Poison control Berlin",sos_seel:"TelefonSeelsorge crisis line, free, 24/7",sos_kons:"Turkish consular call centre, 24/7",sos_bk:"Turkish Consulate General Berlin – contact & appointments",
- jobs_lead:"Jobs in Berlin's Kieze – apply directly to the business.",jobs_empty:"No jobs in this selection right now.",job_add:"Post a job for free",job_hint:"Your ad stays online for 30 days. We check every ad first.",job_send:"Submit job ad",
- j_title:"Job title (m/f/d)",j_company:"Business",j_type:"Type",j_salary:"Pay",j_lang:"Languages",j_desc:"Description",j_agg:"The ad is non-discriminatory (AGG): no age, gender other than (m/f/d), origin or religion as a requirement.",
- j_apply_wa:"Apply via WhatsApp",j_call:"Call",j_urgent:"Urgent",j_done_title:"Thank you!",j_done:"Your ad is being checked and will then be online for 30 days.",j_done_ok:"Your ad is live (30 days).",
- j_link:"Save this link to promote the ad as “Urgent” later:",j_boost:"Promote as “Urgent” – top of the list, 30 days",j_wa_text:"Hello, I'm applying for your job ad on Berliner Kiez-Check: ",
- f_wa:"WhatsApp number",f_coupon:"Coupon (optional)",f_coupon_hint:"Your coupon shows under “Coupons” and in your listing while your listing is promoted with a package.",f_ccode:"Code",f_cuntil:"Valid until",f_ctext:"What's the deal?",
- c_valid:"valid until",c_copy:"Copy code",fav_add:"Save",fav_rm:"Remove",wa:"WhatsApp",
- pk_title:"More customers from your Kiez",pk_txt:"Launch offer: first 3 months only €19 per month, then €29, €49 or €89. Cancel monthly, no minimum term. Promoted listings are labelled as ads.",
- pk_s:"Small",pk_s_d:"Top of your Kiez and category, highlighted, with coupon",
- pk_m:"Medium",pk_m_d:"Like Small, plus top of the Berlin-wide list",
- pk_l:"Large",pk_l_d:"Like Medium, plus a sponsor card on the home page",
- pk_then:"then",pk_month:"/month",pk_intro:"3 months",sp_more:"More",sp_title:"Ad"});
-
-var DEMO_SP = [
- {id:"berlin-handel",name:"Berlin Handel",image:"/assets/sponsors/berlin-handel.webp",headline_de:"Getränke-Lieferservice für Berlin & Umgebung – Bestellung per WhatsApp",headline_tr:"Berlin ve çevresine içecek teslimatı – WhatsApp ile sipariş",headline_en:"Drinks delivery in Berlin & surroundings – order via WhatsApp",cta_de:"WhatsApp bestellen",cta_tr:"WhatsApp ile sipariş",cta_en:"Order on WhatsApp",link_wa:"https://wa.me/4915126509586",link_tel:"tel:+4915126509586",kind:"sponsor"},
- {id:"the-visit",name:"The Visit Coffee Roastery",image:"/assets/sponsors/the-visit.webp",headline_de:"Kaffeerösterei in Kreuzberg",headline_tr:"Kreuzberg'de kahve kavurma evi",headline_en:"Coffee roastery in Kreuzberg",cta_de:"Website ansehen",cta_tr:"Siteye git",cta_en:"Visit website",link_web:"https://thevisitcoffeeroastery.pages.dev/",kind:"sponsor"},
- {id:"tek-getraenke",name:"Terra Verde TEK Getränke",image:"/assets/sponsors/tek-getraenke.webp",headline_de:"Getränke, Lebensmittel & Verpackung im Großhandel – privat und gewerblich",headline_tr:"İçecek, gıda ve ambalajda toptan satış – bireysel ve işletmelere",headline_en:"Wholesale drinks, food & packaging – private and business",cta_de:"Sortiment ansehen",cta_tr:"Ürünleri gör",cta_en:"See products",link_web:"https://www.tekgetraenke.de",link_ig:"https://www.instagram.com/terraverdegetraenke/",kind:"sponsor"},
- {id:"deindigitalerhelfer",name:"Dein Digitaler Helfer",image:"/assets/sponsors/deindigitalerhelfer.webp",headline_de:"Behördenbriefe verstehen, Anträge vorbereiten",headline_tr:"Resmi yazıları anla, başvuruları hazırla",headline_en:"Understand official letters, prepare applications",cta_de:"Kostenlos starten",cta_tr:"Ücretsiz başla",cta_en:"Start for free",link_web:"https://deindigitalerhelfer.com",kind:"sponsor"},
- {id:"it-rechtbox",name:"IT-Rechtbox",image:"/assets/sponsors/it-rechtbox.webp",headline_de:"Website prüfen: Impressum, Datenschutz, Cookies",headline_tr:"Web siteni kontrol et: Impressum, Datenschutz, çerezler",headline_en:"Check your website: imprint, privacy, cookies",cta_de:"Website prüfen",cta_tr:"Siteyi kontrol et",cta_en:"Check website",link_web:"https://it-rechtbox.pages.dev",kind:"sponsor"},
- {id:"deinfinanzenhelfer",name:"Dein Finanzen Helfer",image:"/assets/sponsors/deinfinanzenhelfer.webp",headline_de:"Finanzamt-Brief verstehen, Steuererklärung online",headline_tr:"Finanzamt mektubunu anla, vergi beyannamesi online",headline_en:"Understand tax office letters, file online",cta_de:"Anfrage starten",cta_tr:"Başvur",cta_en:"Get started",link_web:"https://deinfinanzenhelfer.com",kind:"sponsor"},
- {id:"ersenbox",name:"ErsenBox",image:"/assets/sponsors/ersenbox.webp",headline_de:"Dokumente verstehen, Risiken erkennen",headline_tr:"Belgeleri anla, riskleri gör",headline_en:"Understand documents, spot risks",cta_de:"Mehr erfahren",cta_tr:"Keşfet",cta_en:"Learn more",link_web:"https://ersenbox.com",kind:"sponsor"}
-];
-
-var DEMO = [
- {id:"demo00000001",name:"Frühstückshaus Anatolia",kiez:"neukoelln",category:"fruehstueck",address:"Sonnenallee 50, 12045 Berlin",lat:52.4830,lng:13.4330,desc_de:"Türkisches Frühstück mit Simit, Menemen und Tee.",desc_tr:"Simit, menemen ve çayla Türk kahvaltısı.",desc_en:"Turkish breakfast with simit, menemen and tea.",phone:"030 1234567",website:"",instagram:"",hours:"Täglich 8–15",photo_key:null,featured_until:9e15,created_at:3},
- {id:"demo00000002",name:"Barber Kiez 44",kiez:"neukoelln",category:"friseur",address:"Karl-Marx-Straße 100, 12043 Berlin",lat:52.4790,lng:13.4390,desc_de:"Haarschnitt und Bartpflege, ohne Termin.",desc_tr:"Randevusuz saç ve sakal tıraşı.",desc_en:"Haircuts and beard trims, walk-ins welcome.",phone:"030 7654321",website:"",instagram:"",hours:"Mo–Sa 10–20",photo_key:null,featured_until:0,created_at:2},
- {id:"demo00000003",name:"Café Görlitzer Eck",kiez:"kreuzberg",category:"cafe",address:"Wiener Straße 20, 10999 Berlin",lat:52.4975,lng:13.4320,desc_de:"Kleines Café mit Filterkaffee und Kuchen.",desc_tr:"Filtre kahve ve kek sunan küçük bir kafe.",desc_en:"Small café with filter coffee and cake.",phone:"",website:"",instagram:"",hours:"Di–So 9–18",photo_key:null,featured_until:0,created_at:1},
- {id:"demo00000004",name:"Markt am Leopoldplatz",kiez:"wedding",category:"markt",address:"Müllerstraße 150, 13353 Berlin",lat:52.5465,lng:13.3590,desc_de:"Obst, Gemüse und türkische Spezialitäten.",desc_tr:"Meyve, sebze ve Türk ürünleri.",desc_en:"Fruit, vegetables and Turkish specialities.",phone:"",website:"",instagram:"",hours:"Mo–Sa 7–21",photo_key:null,featured_until:0,created_at:0}
-];
-
-/* ===== Zustand ===== */
-var qs = new URLSearchParams(location.search);
-var S = {
-  lang: pickLang(), kiez: KIEZE[qs.get('kiez')] ? qs.get('kiez') : '', cat: CATS[qs.get('cat')] ? qs.get('cat') : '',
-  items: [], demo: false, loading: true, view: 'list', own: null, focusId: qs.get('id') || ''
-};
-var isApp = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-var map = null, layer = null, adsLoaded = false;
-var $ = function (s) { return document.querySelector(s); };
-
-function pickLang() {
-  var l = qs.get('lang');
-  if (!l) { try { l = localStorage.getItem('kc_lang'); } catch (e) { } }
-  if (!l) l = (navigator.language || 'de').slice(0, 2);
-  return I18N[l] ? l : 'de';
-}
-function t(k) { return I18N[S.lang][k]; }
-function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-function toast(msg) { var el = $('#toast'); el.textContent = msg; el.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(function () { el.style.display = 'none'; }, 3200); }
-function api(p) { return CFG.API + p; }
-
-/* ===== Texte / Sprache ===== */
-function applyLang() {
-  document.documentElement.lang = S.lang;
-  try { localStorage.setItem('kc_lang', S.lang); } catch (e) { }
-  document.querySelectorAll('[data-i]').forEach(function (el) { var v = t(el.getAttribute('data-i')); if (typeof v === 'string') el.textContent = v; });
-  document.querySelectorAll('.langs button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.l === S.lang); });
-  var h = $('#heroH'); h.textContent = t('hero'); h.setAttribute('data-t', t('hero'));
-  $('#impLink').href = CFG.IMPRESSUM; $('#dsLink').href = CFG.DATENSCHUTZ;
-  $('#consentTxt').innerHTML = esc(t('f_consent')).replace('{ds}', '<a href="' + esc(CFG.DATENSCHUTZ) + '" target="_blank" rel="noopener">' + esc(t('ds_word')) + '</a>');
-  fillSelects(); renderCats(); render();
-}
-
-function fillSelects() {
-  var ks = Object.keys(KIEZE).sort(function (a, b) { return (a === 'umgebung') - (b === 'umgebung') || KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
-  var opt = function (v, l, sel) { return '<option value="' + v + '"' + (sel ? ' selected' : '') + '>' + esc(l) + '</option>'; };
-  $('#kiez').innerHTML = opt('', t('kiez_all'), !S.kiez) + ks.map(function (k) { return opt(k, KIEZE[k][0], k === S.kiez); }).join('');
-  var f = $('#form');
-  var fk = f.kiez.value || S.kiez, fc = f.category.value || S.cat;
-  f.kiez.innerHTML = opt('', '–', !fk) + ks.map(function (k) { return opt(k, KIEZE[k][0], k === fk); }).join('');
-  f.category.innerHTML = opt('', '–', !fc) + Object.keys(CATS).map(function (c) { return opt(c, CATS[c][S.lang], c === fc); }).join('');
-}
-
-function renderCats() {
-  var html = '<button data-c="" aria-pressed="' + (!S.cat) + '">' + esc(t('cat_all')) + '</button>';
-  Object.keys(CATS).forEach(function (c) { html += '<button data-c="' + c + '" aria-pressed="' + (S.cat === c) + '">' + esc(CATS[c][S.lang]) + '</button>'; });
-  $('#cats').innerHTML = html;
-}
-
-/* ===== Daten laden ===== */
-function syncUrl() {
-  var p = new URLSearchParams();
-  if (S.kiez) p.set('kiez', S.kiez); if (S.cat) p.set('cat', S.cat); if (S.lang !== 'de') p.set('lang', S.lang);
-  history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
-}
-
-function load() {
-  var p = new URLSearchParams(); if (S.kiez) p.set('kiez', S.kiez); if (S.cat) p.set('cat', S.cat);
-  return fetch(api('/api/listings?' + p), { headers: { accept: 'application/json' } })
-    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-    .then(function (j) { if (!j || !j.items) throw 0; S.items = j.items; S.demo = false; })
-    .catch(function () {
-      S.demo = true;
-      S.items = DEMO.filter(function (d) { return (!S.kiez || d.kiez === S.kiez) && (!S.cat || d.category === S.cat); });
-    })
-    .then(function () { S.loading = false; render(); });
-}
-
-/* ===== Darstellung ===== */
-function render() {
-  var now = Date.now(), items = S.items;
-  if (S.loading) { $('#count').textContent = ''; return; }
-  $('#count').textContent = t('count')(items.length);
-  $('#demoNote').hidden = !S.demo;
-  $('#wrap').classList.toggle('v-map', S.view === 'map');
-  document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === S.view); });
-  var showAds = CFG.ADSENSE_CLIENT && CFG.ADSENSE_SLOT && !isApp && !S.demo;
-  S.spIdx = 0;
-  var out = '';
-  if (!items.length) {
-    out = '<div class="empty"><h3>' + esc(t('empty')) + '</h3><p>' + esc(t('empty_txt')) + '</p><button class="btn" data-add>' + esc(t('add')) + '</button></div>';
-  }
-  items.forEach(function (it, i) {
-    var feat = it.featured_until > now;
-    var d = it['desc_' + S.lang] || it.desc_de || '';
-    var acts = '';
-    if (it.phone) acts += '<a href="tel:' + esc(it.phone.replace(/\s/g, '')) + '">' + esc(t('call')) + '</a>';
-    if (it.website) acts += '<a href="' + esc(it.website) + '" target="_blank" rel="noopener nofollow ugc">Website</a>';
-    if (it.instagram) acts += '<a href="https://instagram.com/' + esc(it.instagram) + '" target="_blank" rel="noopener nofollow ugc">Instagram</a>';
-    acts += extraActs(it);
-    if (it.lat) acts += '<a href="https://www.google.com/maps/dir/?api=1&destination=' + it.lat + ',' + it.lng + '" target="_blank" rel="noopener">' + esc(t('route')) + '</a>';
-    out += '<article class="it' + (feat ? ' feat' : '') + '" id="it-' + esc(it.id) + '" data-id="' + esc(it.id) + '">' +
-      (it.photo_key ? '<img src="' + api('/img/' + esc(it.photo_key)) + '?v=' + (it.updated_at || 0) + '" alt="" loading="lazy" width="88" height="88">' : '<div class="ph" aria-hidden="true">' + esc(it.name.charAt(0)) + '</div>') +
-      '<div><h3>' + esc(it.name) + (feat ? '<span class="tag">' + esc(t('ad')) + '</span>' : '') + (S.demo ? '<span class="tag">' + esc(t('sample')) + '</span>' : '') + '</h3>' +
-      '<p class="m">' + esc(it.cat_note || (CATS[it.category] ? CATS[it.category][S.lang] : '')) + ', ' + esc(it.kiez_note || (KIEZE[it.kiez] ? KIEZE[it.kiez][0] : '')) + ' – ' + esc(it.address) + '</p>' +
-      (d ? '<p>' + esc(d) + '</p>' : '') + (it.hours ? '<p class="m">' + esc(it.hours) + '</p>' : '') +
-      (acts ? '<div class="acts">' + acts + '</div>' : '') + couponHtml(it) + '</div>' + favBtn(it) + '</article>';
-    if ((i + 1) % CFG.AD_EVERY === 0 && i < items.length - 1) {
-      var spn = nextNative();
-      if (spn) out += sponsorCard(spn, 'native');
-      else if (showAds) out += '<div class="ad"><small>' + esc(t('ad')) + '</small><ins class="adsbygoogle" style="display:block" data-ad-client="' + esc(CFG.ADSENSE_CLIENT) + '" data-ad-slot="' + esc(CFG.ADSENSE_SLOT) + '" data-ad-format="auto" data-full-width-responsive="true"></ins></div>';
-    } else if (items.length < CFG.AD_EVERY && i === Math.min(1, items.length - 1)) {
-      var spn2 = nextNative();
-      if (spn2) out += sponsorCard(spn2, 'native');
-    }
-  });
-  $('#list').innerHTML = out;
-  observeSponsors();
-  if (showAds) pushAds();
-  drawMap();
-  if (S.focusId) {
-    var el = document.getElementById('it-' + S.focusId);
-    if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('hl'); }
-    S.focusId = '';
-  }
-}
-
-function pushAds() {
-  if (!adsLoaded) {
-    adsLoaded = true;
-    var s = document.createElement('script'); s.async = true; s.crossOrigin = 'anonymous';
-    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(CFG.ADSENSE_CLIENT);
-    document.head.appendChild(s);
-  }
-  document.querySelectorAll('ins.adsbygoogle:not([data-pushed])').forEach(function (el) {
-    el.setAttribute('data-pushed', '1');
-    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
-  });
-}
-
-function drawMap() {
-  if (!window.L) return;
-  var wide = window.matchMedia('(min-width:920px)').matches;
-  if (!wide && S.view !== 'map') return;
-  if (!map) {
-    map = L.map('map', { scrollWheelZoom: false }).setView([52.51, 13.40], 11);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
-    layer = L.layerGroup().addTo(map);
-  }
-  layer.clearLayers();
-  var pts = [], now = Date.now();
-  S.items.forEach(function (it) {
-    if (it.lat == null) return;
-    var feat = it.featured_until > now;
-    L.circleMarker([it.lat, it.lng], { radius: feat ? 11 : 8, color: '#121212', weight: 2, fillColor: feat ? '#F0D722' : '#E30613', fillOpacity: .95 })
-      .bindPopup('<b>' + esc(it.name) + '</b><br>' + esc(it.address) + '<br><a href="#it-' + esc(it.id) + '" data-jump="' + esc(it.id) + '">↓</a>')
-      .addTo(layer);
-    pts.push([it.lat, it.lng]);
-  });
-  setTimeout(function () {
-    map.invalidateSize();
-    if (pts.length) map.fitBounds(pts, { padding: [36, 36], maxZoom: 15 });
-    else if (S.kiez) map.setView([KIEZE[S.kiez][1], KIEZE[S.kiez][2]], 14);
-    else map.setView([52.51, 13.40], 11);
-  }, 60);
-}
-
-/* ===== Formular ===== */
-function openForm(own) {
-  S.own = own || null;
-  var f = $('#form'); f.reset();
-  $('#formView').hidden = false; $('#doneView').hidden = true;
-  $('#fTitle').textContent = own ? t('f_edit') : t('f_title');
-  $('#sendBtn').textContent = own ? t('f_save') : t('f_send');
-  fillSelects();
-  if (own) {
-    var it = own.item;
-    ['name', 'address', 'phone', 'website', 'instagram', 'hours', 'email', 'whatsapp', 'coupon_code', 'coupon_text', 'coupon_until', 'kiez_note', 'cat_note'].forEach(function (k) { f[k].value = it[k] || ''; });
-    f.kiez.value = it.kiez; f.category.value = it.category; f.desc.value = it.desc_de || '';
-    f.auth.checked = true; f.consent.checked = true;
-    $('#ownStatus').innerHTML = statusBox(it) + boostBox(it);
-  } else {
-    $('#ownStatus').innerHTML = '';
-    if (S.kiez) f.kiez.value = S.kiez; if (S.cat) f.category.value = S.cat;
-  }
-  syncNotes();
-  var d = $('#dlg'); if (!d.open) d.showModal();
-}
-
-/* Freitext-Felder nur bei "Berlin & Umgebung" bzw. "Sonstiges" zeigen */
-function syncNotes() {
-  var f = $('#form'), k = f.kiez.value === 'umgebung', c = f.category.value === 'sonstiges';
-  $('#kiezNoteL').hidden = !k; $('#catNoteL').hidden = !c; $('#noteRow').hidden = !k && !c;
-  f.kiez_note.required = k; f.cat_note.required = c;
-}
-
-function statusBox(it) {
-  var html = '<div class="status"><b>' + esc(t('st')) + ':</b> ' + esc(t('st_' + it.status));
-  if (it.featured_until > Date.now()) html += '<br><b>' + esc(t('feat_until')) + ':</b> ' + new Date(it.featured_until).toLocaleDateString(S.lang);
-  return html + '</div>';
-}
-function boostBox(it) {
-  if (it.status !== 'approved') return '<p class="hint">' + esc(t('boost_wait')) + '</p>';
-  var pk = function (k, price) {
-    return '<button type="button" data-plan="' + k + '" style="display:grid;gap:4px;position:relative"><span style="font-weight:800">' + esc(t('pk_' + k)) + '</span>' +
-      (k === 'm' ? '<span class="pkrec">' + esc(t('pk_rec')) + '</span>' : '') +
-      '<strong>' + esc(price) + '<small style="font-size:13px">' + esc(t('pk_month')) + '</small></strong>' +
-      '<span class="pkstart">' + esc(t('pk_start')) + '</span>' +
-      '<span class="hint" style="font-size:12.5px">' + esc(t('pk_' + k + '_d')) + '</span></button>';
-  };
-  return '<div class="status"><b>' + esc(t('pk_title')) + '</b><br><span class="hint">' + esc(t('pk_txt')) + '</span>' +
-    '<div class="plans" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">' + pk('s', CFG.PRICE_S) + pk('m', CFG.PRICE_M) + pk('l', CFG.PRICE_L) + '</div></div>';
-}
-
-function compress(file) {
-  return new Promise(function (res) {
-    var img = new Image(), url = URL.createObjectURL(file);
-    img.onload = function () {
-      var s = Math.min(1, 1200 / Math.max(img.width, img.height));
-      var c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-      URL.revokeObjectURL(url);
-      c.toBlob(function (b) { res(b); }, 'image/jpeg', 0.82);
-    };
-    img.onerror = function () { URL.revokeObjectURL(url); res(null); };
-    img.src = url;
-  });
-}
-
-function errMsg(j) {
-  if (!j) return t('e_net');
-  if (j.error === 'field') return t('e_field') + (t('f_' + ({ category: 'cat', address: 'addr', kiez: 'kiez', name: 'name', email: 'email' }[j.field] || j.field)) || j.field);
-  var m = { rate: 'e_rate', consent: 'e_consent', photo: 'e_photo', auth: 'e_auth', stripe: 'e_stripe', stripe_missing: 'e_stripe', not_approved: 'boost_wait' }[j.error];
-  return m ? t(m) : t('e_net');
-}
-
-$('#form').addEventListener('submit', function (e) {
-  e.preventDefault();
-  var f = e.target;
-  if (!f.auth.checked || !f.consent.checked) { toast(t('e_consent')); return; }
-  if (!f.reportValidity()) return;
-  var btn = $('#sendBtn'); btn.disabled = true; btn.textContent = t('sending');
-  var fd = new FormData(f); fd.delete('photo');
-  var file = f.photo.files[0];
-  (file ? compress(file) : Promise.resolve(null)).then(function (blob) {
-    if (blob) fd.append('photo', blob, 'photo.jpg');
-    if (S.demo) return { ok: true, id: 'demo', token: 'demo', status: 'pending' };
-    var url = '/api/submit';
-    if (S.own) { url = '/api/listing/' + S.own.item.id; fd.append('token', S.own.token); }
-    return fetch(api(url), { method: 'POST', body: fd }).then(function (r) { return r.json(); });
-  }).then(function (j) {
-    if (!j || !j.ok) { toast(errMsg(j)); return; }
-    var token = S.own ? S.own.token : j.token;
-    showDone(j.id, token, j.status);
-    load();
-  }).catch(function () { toast(t('e_net')); })
-    .then(function () { btn.disabled = false; btn.textContent = S.own ? t('f_save') : t('f_send'); });
-});
-
-function showDone(id, token, status) {
-  var link = location.origin + location.pathname + '?edit=' + id + '&token=' + encodeURIComponent(token);
-  $('#formView').hidden = true;
-  var v = $('#doneView'); v.hidden = false;
-  v.innerHTML = '<h2 class="riso" data-t="' + esc(t('done_title')) + '">' + esc(t('done_title')) + '</h2>' +
-    '<p>' + esc(status === 'approved' ? t('done_approved') : t('done_pending')) + '</p>' +
-    '<p class="hint">' + esc(t('done_link')) + '</p>' +
-    '<div class="linkbox"><input readonly value="' + esc(link) + '" id="ownLink"><button class="btn ghost" type="button" id="copyBtn">' + esc(t('copy')) + '</button></div>' +
-    (status === 'approved' && id !== 'demo' ? boostBox({ status: 'approved' }) : '') +
-    '<div id="afterSp"></div>' +
-    '<div class="row"><button class="btn ghost" type="button" data-close>' + esc(t('close')) + '</button></div>';
-  S.own = { item: { id: id, status: status }, token: token };
-  loadAfterSubmit();
-}
-
-function boost(plan) {
-  if (!S.own) return;
-  fetch(api('/api/checkout'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: S.own.item.id, token: S.own.token, plan: plan }) })
-    .then(function (r) { return r.json(); })
-    .then(function (j) { if (j.url) location.href = j.url; else toast(errMsg(j)); })
-    .catch(function () { toast(t('e_net')); });
-}
-
-function openEdit(id, token, paid) {
-  fetch(api('/api/listing/' + encodeURIComponent(id) + '?token=' + encodeURIComponent(token)))
-    .then(function (r) { return r.json(); })
-    .then(function (j) {
-      if (!j.item) { toast(t('e_auth')); return; }
-      openForm({ item: j.item, token: token });
-      if (paid) toast(t('paid'));
-    }).catch(function () { toast(t('e_net')); });
-}
-
-/* ===== Events ===== */
-document.addEventListener('click', function (e) {
-  var el = e.target.closest('button, a');
-  if (!el) return;
-  if (el.dataset.l) { S.lang = el.dataset.l; applyLang(); syncUrl(); return; }
-  if (el.id === 'addBtn' || el.hasAttribute('data-add')) { openForm(null); return; }
-  if (el.dataset.c !== undefined && el.closest('#cats')) { S.cat = el.dataset.c; renderCats(); syncUrl(); load(); return; }
-  if (el.dataset.v) { S.view = el.dataset.v; render(); return; }
-  if (el.hasAttribute('data-close')) { $('#dlg').close(); return; }
-  if (el.dataset.plan) { boost(el.dataset.plan); return; }
-  if (el.dataset.jump) { S.view = 'list'; S.focusId = el.dataset.jump; e.preventDefault(); render(); return; }
-  if (el.id === 'copyBtn') {
-    var inp = $('#ownLink'); inp.select();
-    (navigator.clipboard ? navigator.clipboard.writeText(inp.value) : Promise.reject()).then(function () { toast(t('copied')); }, function () { document.execCommand('copy'); toast(t('copied')); });
-  }
-});
-$('#kiez').addEventListener('change', function (e) { S.kiez = e.target.value; syncUrl(); load(); });
-
-/* ===== Werbung, Gutscheine, Merkliste, Jobs, Tabs ===== */
-var JT = {
-  de: { vollzeit: 'Vollzeit', teilzeit: 'Teilzeit', minijob: 'Minijob', ausbildung: 'Ausbildung' },
-  tr: { vollzeit: 'Tam zamanlı', teilzeit: 'Yarı zamanlı', minijob: 'Minijob', ausbildung: 'Meslek eğitimi (Ausbildung)' },
-  en: { vollzeit: 'Full-time', teilzeit: 'Part-time', minijob: 'Mini-job', ausbildung: 'Apprenticeship' }
-};
-var DEMO_JOBS = [{ id: 'demojob00001', title: 'Barista (m/w/d)', company: 'Café Görlitzer Eck', kiez: 'kreuzberg', jobtype: 'teilzeit', salary: '14 €/Std.', languages: 'Deutsch, Türkisch', description: 'Beispielanzeige.', whatsapp: '', phone: '', urgent_until: 0 }];
-
-function fmtDate(d) { var x = new Date(d); return isNaN(x) ? d : x.toLocaleDateString(S.lang); }
-function waNum(n) { n = String(n || '').replace(/[^\d+]/g, ''); if (n.indexOf('+') === 0) return n.slice(1); if (n.indexOf('00') === 0) return n.slice(2); if (n.indexOf('0') === 0) return '49' + n.slice(1); return n; }
-function beacon(u, d) {
-  try { if (navigator.sendBeacon && navigator.sendBeacon(api(u), new Blob([JSON.stringify(d)], { type: 'application/json' }))) return; } catch (e) { }
-  fetch(api(u), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d), keepalive: true }).catch(function () { });
-}
-
-/* --- Einträge: WhatsApp, Gutschein, Merken --- */
-function extraActs(it) { return it.whatsapp ? '<a href="https://wa.me/' + esc(waNum(it.whatsapp)) + '?text=' + encodeURIComponent(waMsg((t('wa_hello') || 'Hallo') + ' ' + it.name + ',')) + '" target="_blank" rel="noopener">' + esc(t('wa')) + '</a>' : ''; }
-/* Hinweis unter jeder WhatsApp-Nachricht: zeigt dem Betrieb, dass der Kontakt über uns kam */
-function waMsg(txt) { return (txt ? txt + '\n\n\n' : '') + (t('wa_sig') || '— Berliner Kiez-Check:') + ' ' + CFG.SITE_URL; }
-function waAddSig(link, name) {
-  try {
-    var u = new URL(link);
-    if (!/(^|\.)(wa\.me|whatsapp\.com)$/.test(u.hostname)) return link;
-    var txt = u.searchParams.get('text') || ((t('wa_hello') || 'Hallo') + ' ' + (name || '') + ','); u.searchParams.delete('text');
-    return u.href + (u.search ? '&' : '?') + 'text=' + encodeURIComponent(waMsg(txt));
-  } catch (e) { return link; }
-}
-function couponValid(it) {
-  if (!(it.featured_until > Date.now()) || !it.coupon_code) return false;
-  return !(it.coupon_until && it.coupon_until < new Date().toISOString().slice(0, 10));
-}
-function couponHtml(it) {
-  if (!couponValid(it)) return '';
-  return '<div class="coupon"><span>' + esc(it.coupon_text || '') + '</span><code>' + esc(it.coupon_code) + '</code>' +
-    (it.coupon_until ? '<small>' + esc(t('c_valid')) + ' ' + esc(fmtDate(it.coupon_until)) + '</small>' : '') +
-    '<button type="button" data-copy="' + esc(it.coupon_code) + '">' + esc(t('c_copy')) + '</button></div>';
-}
-function getFavs() { try { return JSON.parse(localStorage.getItem('kc_favs') || '{}') || {}; } catch (e) { return {}; } }
-function setFavs(f) { try { localStorage.setItem('kc_favs', JSON.stringify(f)); } catch (e) { } }
-function favBtn(it) {
-  var on = !!getFavs()[it.id];
-  return '<button class="fav" type="button" data-fav="' + esc(it.id) + '" aria-pressed="' + on + '" aria-label="' + esc(t(on ? 'fav_rm' : 'fav_add')) + '" title="' + esc(t(on ? 'fav_rm' : 'fav_add')) + '">' + (on ? '♥' : '♡') + '</button>';
-}
-function toggleFav(id) {
-  var f = getFavs();
-  if (f[id]) delete f[id];
-  else {
-    var src = (S.items || []).concat(S.couponItems || []).filter(function (x) { return x.id === id; })[0];
-    if (!src) return;
-    var snap = {};
-    ['id', 'name', 'kiez', 'category', 'address', 'lat', 'lng', 'desc_de', 'desc_tr', 'desc_en', 'phone', 'website', 'instagram', 'whatsapp', 'hours', 'photo_key', 'updated_at'].forEach(function (k) { snap[k] = src[k]; });
-    snap.featured_until = 0;
-    f[id] = snap;
-  }
-  setFavs(f);
-  document.querySelectorAll('[data-fav="' + id + '"]').forEach(function (b) {
-    var on = !!f[id]; b.setAttribute('aria-pressed', on); b.textContent = on ? '♥' : '♡'; b.title = t(on ? 'fav_rm' : 'fav_add');
-  });
-  if (S.tab === 'favs') renderFavs();
-}
-function cardHtml(it) {
-  var feat = it.featured_until > Date.now(), d = it['desc_' + S.lang] || it.desc_de || '', acts = '';
-  if (it.phone) acts += '<a href="tel:' + esc(String(it.phone).replace(/\s/g, '')) + '">' + esc(t('call')) + '</a>';
-  if (it.website) acts += '<a href="' + esc(it.website) + '" target="_blank" rel="noopener nofollow ugc">Website</a>';
-  acts += extraActs(it);
-  if (it.lat) acts += '<a href="https://www.google.com/maps/dir/?api=1&destination=' + it.lat + ',' + it.lng + '" target="_blank" rel="noopener">' + esc(t('route')) + '</a>';
-  return '<article class="it' + (feat ? ' feat' : '') + '">' +
-    (it.photo_key ? '<img src="' + api('/img/' + esc(it.photo_key)) + '?v=' + (it.updated_at || 0) + '" alt="" loading="lazy" width="88" height="88">' : '<div class="ph" aria-hidden="true">' + esc(String(it.name).charAt(0)) + '</div>') +
-    '<div><h3>' + esc(it.name) + (feat ? '<span class="tag">' + esc(t('ad')) + '</span>' : '') + '</h3>' +
-    '<p class="m">' + esc(CATS[it.category] ? CATS[it.category][S.lang] : '') + ', ' + esc(KIEZE[it.kiez] ? KIEZE[it.kiez][0] : '') + ' – ' + esc(it.address) + '</p>' +
-    (d ? '<p>' + esc(d) + '</p>' : '') + (it.hours ? '<p class="m">' + esc(it.hours) + '</p>' : '') +
-    (acts ? '<div class="acts">' + acts + '</div>' : '') + couponHtml(it) + '</div>' + favBtn(it) + '</article>';
-}
-function renderFavs() {
-  var f = getFavs(), ids = Object.keys(f);
-  $('#favList').innerHTML = ids.length ? ids.map(function (id) { return cardHtml(f[id]); }).join('') : '<div class="empty"><p>' + esc(t('favs_empty')) + '</p></div>';
-}
-function loadCoupons() {
-  var p = new URLSearchParams({ coupon: '1' }); if (S.kiez) p.set('kiez', S.kiez); if (S.cat) p.set('cat', S.cat);
-  fetch(api('/api/listings?' + p)).then(function (r) { if (!r.ok) throw 0; return r.json(); })
-    .then(function (j) { S.couponItems = j.items || []; })
-    .catch(function () { S.couponItems = DEMO.filter(function (d) { return couponValid(d) && (!S.kiez || d.kiez === S.kiez) && (!S.cat || d.category === S.cat); }); })
-    .then(function () {
-      $('#couponList').innerHTML = S.couponItems.length ? S.couponItems.map(cardHtml).join('') : '<div class="empty"><p>' + esc(t('coupons_empty')) + '</p><button class="btn" data-add>' + esc(t('add')) + '</button></div>';
-    });
-}
-
-/* --- Sponsoren: Slider, Karten im Listenfluss, nach dem Eintragen --- */
-function spText(sp, k) { return sp[k + '_' + S.lang] || sp[k + '_de'] || ''; }
-function sponsorCard(sp, variant) {
-  var tr = ' data-spc="' + esc(sp.id) + '"', links = '', cta = spText(sp, 'cta');
-  if (sp.kind === 'listing') links += '<a href="?id=' + esc(sp.listing_id) + '&kiez=' + esc(sp.kiez) + '"' + tr + '>' + esc(cta) + '</a>';
-  if (sp.link_wa) links += '<a class="wa" href="' + esc(waAddSig(sp.link_wa, sp.name)) + '" target="_blank" rel="sponsored noopener"' + tr + '>' + esc(cta) + '</a>';
-  if (sp.link_web) links += '<a' + (sp.link_wa ? ' class="sec"' : '') + ' href="' + esc(sp.link_web) + '" target="_blank" rel="sponsored noopener"' + tr + '>' + esc(sp.link_wa ? 'Website' : cta) + '</a>';
-  if (sp.link_tel) links += '<a class="sec" href="' + esc(sp.link_tel) + '"' + tr + '>' + esc(t('call')) + '</a>';
-  if (sp.link_ig) links += '<a class="sec" href="' + esc(sp.link_ig) + '" target="_blank" rel="sponsored noopener"' + tr + '>Instagram</a>';
-  return '<article class="spc' + (variant === 'native' ? ' native' : '') + '" data-sp="' + esc(sp.id) + '">' +
-    '<span class="adtag">' + esc(t('sp_title')) + '</span>' +
-    (sp.image ? '<img class="img" src="' + esc(sp.image) + '" alt="' + esc(sp.name) + '" loading="lazy" width="1200" height="630">' : '<div class="img ph-sp" aria-hidden="true">' + esc(String(sp.name || '?').charAt(0)) + '</div>') +
-    '<div class="b"><div class="n">' + esc(sp.name) + '</div><p class="h">' + esc(spText(sp, 'headline')) + '</p><div class="ctas">' + links + '</div></div></article>';
-}
-function nextNative() {
-  var l = (S.sp && S.sp.native) || [];
-  if (!l.length || S.spIdx >= l.length) return null;
-  return l[S.spIdx++];
-}
-function renderSlider() {
-  var items = (S.sp && S.sp.slider) || [];
-  $('#spons').hidden = !items.length;
-  $('#sponsTrack').innerHTML = items.map(function (sp) { return sponsorCard(sp, 'slide'); }).join('');
-  observeSponsors();
-  startAuto();
-}
-function startAuto() {
-  clearInterval(startAuto.t);
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var tr = $('#sponsTrack');
-  if (!startAuto.bound) { startAuto.bound = 1; tr.addEventListener('touchstart', function () { tr.dataset.touch = '1'; }, { passive: true }); }
-  startAuto.t = setInterval(function () {
-    if (tr.matches(':hover') || document.hidden || tr.dataset.touch || !tr.firstElementChild) return;
-    var slides = tr.querySelectorAll('.spc');
-    if (slides.length <= 3) return;
-    var w = slides[0].getBoundingClientRect().width + 14;
-    var currentPos = tr.scrollLeft;
-    var nextPos = currentPos + w;
-    if (nextPos >= tr.scrollWidth - w) { tr.scrollTo({ left: w, behavior: 'smooth' }); }
-    else { tr.scrollBy({ left: w, behavior: 'smooth' }); }
-    slides[0].style.animation = 'none';
-    setTimeout(function() { slides[0].style.animation = 'newsPulse 0.6s ease-out'; }, 10);
-  }, 3000);
-}
-
-function loadSponsors() {
-  var q = '&kiez=' + encodeURIComponent(S.kiez) + '&cat=' + encodeURIComponent(S.cat);
-  var get = function (place) {
-    return fetch(api('/api/sponsors?place=' + place + q)).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (j) { if (!j || !j.items) throw 0; return j.items; });
-  };
-  return Promise.all([get('slider'), get('native')])
-    .then(function (a) { S.sp = { slider: a[0], native: a[1] }; S.spDemo = false; })
-    .catch(function () { S.sp = { slider: DEMO_SP.slice(), native: DEMO_SP.slice().reverse() }; S.spDemo = true; })
-    .then(function () { renderSlider(); if (!S.loading) render(); });
-}
-function loadAfterSubmit() {
-  fetch(api('/api/sponsors?place=after_submit')).then(function (r) { if (!r.ok) throw 0; return r.json(); })
-    .then(function (j) { return j.items || []; })
-    .catch(function () { return DEMO_SP.filter(function (x) { return x.id === 'it-rechtbox'; }); })
-    .then(function (items) { var el = $('#afterSp'); if (el && items[0]) { el.innerHTML = sponsorCard(items[0], 'native'); observeSponsors(); } });
-}
-/* Anonyme Zählung: Einblendung (mind. 50 % sichtbar) und Klick */
-var spSeen = {}, spQueue = [], spObs = null;
-function queueImp(id) {
-  if (!id || spSeen[id] || S.spDemo) return;
-  spSeen[id] = 1; spQueue.push(id);
-  clearTimeout(queueImp.t); queueImp.t = setTimeout(flushImp, 1500);
-}
-function flushImp() { while (spQueue.length) beacon('/api/sp/imp', { ids: spQueue.splice(0, 20) }); }
-function observeSponsors() {
-  var els = document.querySelectorAll('[data-sp]:not([data-obs])');
-  if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.setAttribute('data-obs', '1'); queueImp(el.dataset.sp); }); return; }
-  if (!spObs) spObs = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { queueImp(e.target.dataset.sp); spObs.unobserve(e.target); } });
-  }, { threshold: 0.5 });
-  els.forEach(function (el) { el.setAttribute('data-obs', '1'); spObs.observe(el); });
-}
-
-/* --- Jobs --- */
-function loadJobs() {
-  fetch(api('/api/jobs' + (S.kiez ? '?kiez=' + encodeURIComponent(S.kiez) : ''))).then(function (r) { if (!r.ok) throw 0; return r.json(); })
-    .then(function (j) { S.jobs = j.items || []; S.jobsDemo = false; })
-    .catch(function () { S.jobs = DEMO_JOBS.filter(function (x) { return !S.kiez || x.kiez === S.kiez; }); S.jobsDemo = true; })
-    .then(renderJobs);
-}
-function renderJobs() {
-  var now = Date.now(), jt = JT[S.lang];
-  $('#jobList').innerHTML = (S.jobs || []).length ? S.jobs.map(function (j) {
-    var urgent = j.urgent_until > now, acts = '';
-    if (j.whatsapp) acts += '<a href="https://wa.me/' + esc(waNum(j.whatsapp)) + '?text=' + encodeURIComponent(waMsg(t('j_wa_text') + j.title)) + '" target="_blank" rel="noopener">' + esc(t('j_apply_wa')) + '</a>';
-    if (j.phone) acts += '<a href="tel:' + esc(String(j.phone).replace(/\s/g, '')) + '">' + esc(t('j_call')) + '</a>';
-    return '<article class="job' + (urgent ? ' urgent' : '') + '"><h3>' + esc(j.title) +
-      (urgent ? ' <span class="tag">' + esc(t('j_urgent')) + '</span><span class="tag">' + esc(t('ad')) + '</span>' : '') +
-      (S.jobsDemo ? '<span class="tag">' + esc(t('sample')) + '</span>' : '') + '</h3>' +
-      '<p class="m">' + esc(j.company) + ', ' + esc(KIEZE[j.kiez] ? KIEZE[j.kiez][0] : '') + '</p>' +
-      '<div class="pills"><span>' + esc(jt[j.jobtype] || j.jobtype) + '</span>' + (j.salary ? '<span>' + esc(j.salary) + '</span>' : '') + (j.languages ? '<span>' + esc(j.languages) + '</span>' : '') + '</div>' +
-      (j.description ? '<p>' + esc(j.description) + '</p>' : '') + (acts ? '<div class="acts">' + acts + '</div>' : '') + '</article>';
-  }).join('') : '<div class="empty"><p>' + esc(t('jobs_empty')) + '</p></div>';
-}
-function jobErr(j) {
-  if (j && j.error === 'field') { var f = j.field === 'whatsapp' ? 'f_wa' : (I18N[S.lang]['j_' + j.field] ? 'j_' + j.field : 'f_' + j.field); return t('e_field') + (t(f) || j.field); }
-  return errMsg(j);
-}
-function jobLink(id, token) { return location.origin + location.pathname + '?view=jobs&job=' + id + '&token=' + encodeURIComponent(token); }
-function jobBoostHtml(id, token) {
-  return '<div class="status"><b>' + esc(t('j_boost')) + '</b><div class="plans" style="grid-template-columns:1fr"><button type="button" data-jboost="' + esc(id) + '" data-jtoken="' + esc(token) + '"><strong>' + esc(CFG.PRICE_JOB) + '</strong>30 ' + (S.lang === 'tr' ? 'gün' : S.lang === 'en' ? 'days' : 'Tage') + '</button></div></div>';
-}
-function jobDone(id, token, status) {
-  $('#jobFormView').hidden = true;
-  var v = $('#jobDoneView'); v.hidden = false;
-  v.innerHTML = '<h2 class="riso" data-t="' + esc(t('j_done_title')) + '">' + esc(t('j_done_title')) + '</h2><p>' + esc(status === 'approved' ? t('j_done_ok') : t('j_done')) + '</p>' +
-    '<p class="hint">' + esc(t('j_link')) + '</p><div class="linkbox"><input readonly value="' + esc(jobLink(id, token)) + '"><button class="btn ghost" type="button" data-jcopy>' + esc(t('copy')) + '</button></div>' +
-    (status === 'approved' && id !== 'demojob' ? jobBoostHtml(id, token) : '') +
-    '<div class="row"><button class="btn ghost" type="button" data-jclose>' + esc(t('close')) + '</button></div>';
-  loadJobs();
-}
-function openJobOwn(id, token, paid) {
-  fetch(api('/api/job/' + encodeURIComponent(id) + '?token=' + encodeURIComponent(token))).then(function (r) { return r.json(); })
-    .then(function (j) {
-      if (!j.item) { toast(t('e_auth')); return; }
-      var it = j.item;
-      $('#jobOwn').innerHTML = '<div class="status"><b>' + esc(it.title) + '</b><br>' + esc(t('st')) + ': ' + esc(t('st_' + it.status)) +
-        (it.urgent_until > Date.now() ? '<br><b>' + esc(t('j_urgent')) + ':</b> ' + new Date(it.urgent_until).toLocaleDateString(S.lang) : '') + '</div>' +
-        (it.status === 'approved' ? jobBoostHtml(id, token) : '');
-      if (paid) toast(t('paid'));
-    }).catch(function () { toast(t('e_net')); });
-}
-function openJobForm() {
-  var f = $('#jobForm'); f.reset();
-  $('#jobFormView').hidden = false; $('#jobDoneView').hidden = true;
-  if (S.kiez) f.elements.kiez.value = S.kiez;
-  $('#jobDlg').showModal();
-}
-$('#jobForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  var f = e.target, g = function (k) { return f.elements[k].value.trim(); };
-  if (!f.elements.agg.checked || !f.elements.consent.checked) { toast(t('e_consent')); return; }
-  if (!f.reportValidity()) return;
-  if (!g('whatsapp') && !g('phone')) { toast(t('e_field') + t('f_wa')); return; }
-  if (S.jobsDemo) { jobDone('demojob', 'demo', 'pending'); return; }
-  var d = { title: g('title'), company: g('company'), kiez: g('kiez'), jobtype: g('jobtype'), salary: g('salary'), languages: g('languages'),
-    description: g('description'), whatsapp: g('whatsapp'), phone: g('phone'), email: g('email'), hp: g('hp'), agg: true, consent: true };
-  fetch(api('/api/jobs/submit'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d) })
-    .then(function (r) { return r.json(); })
-    .then(function (j) { if (j && j.ok) jobDone(j.id, j.token, j.status); else toast(jobErr(j)); })
-    .catch(function () { toast(t('e_net')); });
-});
-
-/* --- Tabs --- */
-function showTab(tab) {
-  S.tab = tab;
-  ['places', 'coupons', 'jobs', 'favs', 'sos', 'tips', 'reporter'].forEach(function (x) { (x === 'places' ? $('#wrap') : $('#v-' + x)).hidden = x !== tab; });
-  document.querySelectorAll('#tabs [data-tab]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tab === tab); });
-  if (tab === 'coupons') loadCoupons();
-  if (tab === 'jobs') loadJobs();
-  if (tab === 'favs') renderFavs();
-  if (tab === 'tips') renderTips();
-  if (tab === 'reporter') loadPosts();
-  if (tab === 'places' && map) setTimeout(function () { map.invalidateSize(); }, 60);
-  var p = new URLSearchParams(location.search);
-  if (tab === 'places') p.delete('view'); else p.set('view', tab);
-  history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
-}
-function extrasLang() {
-  var ks = Object.keys(KIEZE).sort(function (a, b) { return (a === 'umgebung') - (b === 'umgebung') || KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
-  var jk = $('#jobForm').elements.kiez, cur = jk.value;
-  jk.innerHTML = '<option value="">–</option>' + ks.map(function (k) { return '<option value="' + k + '">' + esc(KIEZE[k][0]) + '</option>'; }).join('');
-  jk.value = cur;
-  Array.prototype.forEach.call($('#jobForm').elements.jobtype.options, function (o) { o.textContent = JT[S.lang][o.value]; });
-  $('#jobConsentTxt').innerHTML = $('#consentTxt').innerHTML;
-  if (S.sp) renderSlider();
-  if (S.tab === 'coupons') loadCoupons();
-  if (S.tab === 'jobs') renderJobs();
-  if (S.tab === 'favs') renderFavs();
-}
-document.addEventListener('click', function (e) {
-  var el = e.target.closest('[data-spc],[data-tab],[data-fav],[data-copy],[data-jboost],[data-jclose],[data-jcopy],#jobAddBtn');
-  if (!el) return;
-  if (el.dataset.spc) { if (!S.spDemo) beacon('/api/sp/click', { id: el.dataset.spc }); return; }
-  if (el.dataset.tab) { showTab(el.dataset.tab); return; }
-  if (el.dataset.fav) { toggleFav(el.dataset.fav); return; }
-  if (el.dataset.copy) {
-    var c = el.dataset.copy;
-    (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(function () { toast(c + ' ✓'); }, function () { toast(c); });
-    return;
-  }
-  if (el.id === 'jobAddBtn') { openJobForm(); return; }
-  if (el.hasAttribute('data-jclose')) { $('#jobDlg').close(); return; }
-  if (el.hasAttribute('data-jcopy')) {
-    var inp = el.parentNode.querySelector('input'); inp.select();
-    (navigator.clipboard ? navigator.clipboard.writeText(inp.value) : Promise.reject()).then(function () { toast(t('copied')); }, function () { document.execCommand('copy'); toast(t('copied')); });
-    return;
-  }
-  if (el.dataset.jboost) {
-    fetch(api('/api/checkout'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ job: el.dataset.jboost, token: el.dataset.jtoken }) })
-      .then(function (r) { return r.json(); })
-      .then(function (j) { if (j.url) location.href = j.url; else toast(errMsg(j)); })
-      .catch(function () { toast(t('e_net')); });
-  }
-});
-function initExtras() {
-  S.tab = 'places'; S.sp = { slider: [], native: [] };
-  // Vorschau: Beispiel-Gutschein am hervorgehobenen Beispieleintrag
-  Object.assign(DEMO[0], { coupon_code: 'KIEZ10', coupon_text: '10 % auf das Frühstück', coupon_until: '' });
-  var _load = load;
-  load = function () { loadSponsors(); if (S.tab === 'coupons') loadCoupons(); if (S.tab === 'jobs') loadJobs(); return _load(); };
-  var _applyLang = applyLang;
-  applyLang = function () { _applyLang(); extrasLang(); };
-  extrasLang();
-  var v = qs.get('view');
-  if (['coupons', 'jobs', 'favs', 'sos'].indexOf(v) >= 0) showTab(v);
-  if (qs.get('job') && qs.get('token')) { showTab('jobs'); openJobOwn(qs.get('job'), qs.get('token'), qs.get('paid') === '1'); }
-  window.addEventListener('pagehide', flushImp);
-  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flushImp(); });
-}
-
-/* ===== Start ===== */
-applyLang();
-initExtras();
-load().then(function () {
-  if (qs.get('edit') && qs.get('token')) openEdit(qs.get('edit'), qs.get('token'), qs.get('paid') === '1');
-  else if (qs.get('add') === '1') openForm(null);
-});
-/* ===== Android-App (Capacitor): AdMob statt AdSense ===== */
-if (isApp && CFG.ADMOB_BANNER && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) {
-  (function () {
-    var A = window.Capacitor.Plugins.AdMob;
-    A.initialize().then(function () { return A.requestConsentInfo(); })
-      .then(function (i) { if (i && i.isConsentFormAvailable && i.status === 'REQUIRED') return A.showConsentForm(); })
-      .then(function () { return A.showBanner({ adId: CFG.ADMOB_BANNER, adSize: 'ADAPTIVE_BANNER', position: 'BOTTOM_CENTER', margin: 0 }); })
-      .then(function () { document.body.style.paddingBottom = 'calc(70px + env(safe-area-inset-bottom,0px))'; })
-      .catch(function () { });
-  })();
-}
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('/sw.js').catch(function () { });
-
-/* === DEVAM OKU Button + Modal === */
-document.addEventListener('click', function (e) {
-  var btn = e.target.closest('.btn-devam');
-  if (btn) {
-    var postId = btn.getAttribute('data-post-id');
-    var post = POSTS.find(function (p) { return p.id == postId; });
-    if (post) {
-      // Modal mit vollständigem Text füllen
-      $('#postViewTitle').textContent = post.title;
-      var d = new Date(post.created_at).toLocaleDateString(S.lang, { day: 'numeric', month: 'long', year: 'numeric' });
-      var meta = '📍 ' + (KIEZE[post.kiez] ? KIEZE[post.kiez][0] : '') + ' · ' + d;
-      if (post.author) meta += ' · ' + t('p_by') + ' ' + post.author;
-      $('#postViewMeta').textContent = meta;
-      $('#postViewBody').innerHTML = esc(post.body).replace(/\n/g, '<br>');
-      // Modal öffnen
-      var dlg = $('#postViewDlg');
-      if (dlg && dlg.showModal) dlg.showModal();
-    }
-  }
-  // Modal schließen
-  if (e.target.hasAttribute('data-pview-close')) {
-    var dlg = $('#postViewDlg');
-    if (dlg && dlg.close) dlg.close();
-  }
-});
-</script>
-<script>
-/* ===== Neu: „Was tun?“ (Ausflugsziele) + Kiez-Reporter (Beiträge mit Admin-Freigabe) ===== */
 (function () {
-  var X = {
-    de: { t_tips: 'Was tun?', tips_lead: 'Ausflugsziele und Ideen für Berlin – für Gäste und Berliner. Angaben ohne Gewähr, Öffnungszeiten und Preise bitte vorab prüfen.',
-      tc_all: 'Alle', tc_park: 'Parks', tc_museum: 'Museen', tc_view: 'Aussicht', tc_culture: 'Kultur & Geschichte', tc_kids: 'Mit Kindern', tc_free: 'Kostenlos',
-      tip_free: 'Kostenlos', tips_empty: 'Keine Ziele für diese Auswahl.',
-      t_rep: 'Kiez-Reporter', rep_lead: 'Was ist los in deinem Kiez? Teile Fotos und Neuigkeiten aus Berlin. Jeder Beitrag wird vor der Veröffentlichung geprüft.',
-      rep_add: 'Beitrag senden', rep_empty: 'Noch keine Beiträge – sei die oder der Erste!', rep_hint: 'Keine Werbung, keine Beleidigungen, keine privaten Daten anderer. Wir prüfen jeden Beitrag vor der Veröffentlichung.',
-      p_title: 'Überschrift', p_body: 'Was ist passiert?', p_photos: 'Fotos (max. 3, optional)', p_video: 'Video-Link (YouTube, Instagram, TikTok …, optional)',
-      p_author: 'Dein Name oder Spitzname (wird angezeigt)', p_email_hint: 'Wird nicht veröffentlicht – nur für Rückfragen.',
-      p_rights: 'Ich habe die Fotos/Videos selbst gemacht oder darf sie verwenden. Erkennbare Personen sind mit der Veröffentlichung einverstanden.',
-      p_send: 'Zur Prüfung senden', p_done: 'Danke! Dein Beitrag wird geprüft und erscheint nach der Freigabe.', p_video_btn: '▶ Video ansehen', p_report: 'Melden', p_by: 'von',
-      e_video: 'Bitte einen Link von YouTube, Instagram, TikTok, Facebook oder Vimeo angeben.', e_photos: 'Maximal 3 Fotos.', wa_sig: '— Gesendet über Berliner Kiez-Check:', wa_hello: 'Hallo' },
-    tr: { t_tips: 'Ne yapılır?', tips_lead: 'Berlin için gezi yerleri ve fikirler – misafirler ve Berlinliler için. Bilgiler garantisizdir, çalışma saatlerini ve fiyatları önceden kontrol et.',
-      tc_all: 'Tümü', tc_park: 'Parklar', tc_museum: 'Müzeler', tc_view: 'Manzara', tc_culture: 'Kültür & Tarih', tc_kids: 'Çocuklarla', tc_free: 'Ücretsiz',
-      tip_free: 'Ücretsiz', tips_empty: 'Bu seçim için yer yok.',
-      t_rep: 'Kiez Muhabiri', rep_lead: 'Mahallende neler oluyor? Berlin\'den fotoğraf ve haber paylaş. Her gönderi yayınlanmadan önce kontrol edilir.',
-      rep_add: 'Gönderi paylaş', rep_empty: 'Henüz gönderi yok – ilk sen ol!', rep_hint: 'Reklam, hakaret ve başkalarının özel bilgileri yok. Her gönderiyi yayınlamadan önce kontrol ediyoruz.',
-      p_title: 'Başlık', p_body: 'Ne oldu?', p_photos: 'Fotoğraflar (en fazla 3, isteğe bağlı)', p_video: 'Video linki (YouTube, Instagram, TikTok …, isteğe bağlı)',
-      p_author: 'Adın veya takma adın (görünür)', p_email_hint: 'Yayınlanmaz – sadece sorular için.',
-      p_rights: 'Fotoğrafları/videoları kendim çektim veya kullanma hakkım var. Tanınabilir kişiler yayınlanmasına izin verdi.',
-      p_send: 'Kontrole gönder', p_done: 'Teşekkürler! Gönderin kontrol ediliyor ve onaydan sonra yayınlanacak.', p_video_btn: '▶ Videoyu izle', p_report: 'Bildir', p_by: 'gönderen',
-      e_video: 'Lütfen YouTube, Instagram, TikTok, Facebook veya Vimeo linki gir.', e_photos: 'En fazla 3 fotoğraf.', wa_sig: '— Bu mesaj Berliner Kiez-Check üzerinden gönderildi:', wa_hello: 'Merhaba' },
-    en: { t_tips: 'Things to do', tips_lead: 'Places to visit and ideas for Berlin – for visitors and locals. No guarantee; please check opening times and prices in advance.',
-      tc_all: 'All', tc_park: 'Parks', tc_museum: 'Museums', tc_view: 'Views', tc_culture: 'Culture & history', tc_kids: 'With kids', tc_free: 'Free',
-      tip_free: 'Free', tips_empty: 'No places for this selection.',
-      t_rep: 'Kiez reporter', rep_lead: 'What\'s happening in your Kiez? Share photos and news from Berlin. Every post is checked before it is published.',
-      rep_add: 'Send a post', rep_empty: 'No posts yet – be the first!', rep_hint: 'No advertising, no insults, no private data of others. We check every post before publishing.',
-      p_title: 'Headline', p_body: 'What happened?', p_photos: 'Photos (max. 3, optional)', p_video: 'Video link (YouTube, Instagram, TikTok …, optional)',
-      p_author: 'Your name or nickname (shown)', p_email_hint: 'Not published – only for questions.',
-      p_rights: 'I took the photos/videos myself or may use them. Recognisable people agree to the publication.',
-      p_send: 'Send for review', p_done: 'Thank you! Your post will be checked and appear once approved.', p_video_btn: '▶ Watch video', p_report: 'Report', p_by: 'by',
-      e_video: 'Please enter a link from YouTube, Instagram, TikTok, Facebook or Vimeo.', e_photos: 'Max. 3 photos.', wa_sig: '— Sent via Berliner Kiez-Check:', wa_hello: 'Hello' }
-  };
-  ['de', 'tr', 'en'].forEach(function (l) { for (var k in X[l]) if (I18N[l][k] == null) I18N[l][k] = X[l][k]; });
-
-  /* ---------- Ausflugsziele ---------- */
-var TIPS = [
-{id:'brandenburger-tor',n:'Brandenburger Tor',k:'mitte',c:['culture'],f:1,lat:52.5163,lng:13.3777,a:'Pariser Platz, 10117 Berlin',
- de:'Berlins Wahrzeichen und Symbol der Wiedervereinigung – am schönsten am Abend, wenn es beleuchtet ist.',
- tr:'Berlin\'in simgesi ve yeniden birleşmenin sembolü – akşam ışıklandırıldığında en güzel hâlinde.',
- en:'Berlin\'s landmark and symbol of reunification – most beautiful in the evening when it is lit up.'},
-{id:'reichstag',n:'Reichstagskuppel',k:'tiergarten',c:['view','culture'],f:1,lat:52.5186,lng:13.3762,a:'Platz der Republik 1, 11011 Berlin',
- de:'Gläserne Kuppel mit Blick über das Regierungsviertel. Eintritt frei, vorherige Online-Anmeldung nötig.',
- tr:'Hükümet semtine bakan cam kubbe. Giriş ücretsiz, önceden online kayıt gerekli.',
- en:'Glass dome with views over the government district. Free entry, online registration required in advance.'},
-{id:'east-side-gallery',n:'East Side Gallery',k:'friedrichshain',c:['culture'],f:1,lat:52.5050,lng:13.4397,a:'Mühlenstraße, 10243 Berlin',
- de:'Längstes erhaltenes Stück der Berliner Mauer, bemalt von Künstlern aus aller Welt – direkt an der Spree.',
- tr:'Berlin Duvarı\'nın ayakta kalan en uzun parçası, dünyanın her yerinden sanatçılarca boyanmış – Spree kıyısında.',
- en:'Longest surviving section of the Berlin Wall, painted by artists from around the world – right on the Spree.'},
-{id:'museumsinsel',n:'Museumsinsel',k:'mitte',c:['museum','culture'],f:0,lat:52.5211,lng:13.3969,a:'Bodestraße 1–3, 10178 Berlin',
- de:'Fünf weltberühmte Museen auf einer Insel in der Spree – UNESCO-Welterbe.',
- tr:'Spree\'deki bir adada dünyaca ünlü beş müze – UNESCO Dünya Mirası.',
- en:'Five world-famous museums on an island in the Spree – a UNESCO World Heritage Site.'},
-{id:'fernsehturm',n:'Fernsehturm',k:'mitte',c:['view'],f:0,lat:52.5208,lng:13.4094,a:'Panoramastraße 1A, 10178 Berlin',
- de:'Mit über 360 Metern das höchste Bauwerk Deutschlands – Aussicht über ganz Berlin.',
- tr:'360 metreyi aşan yüksekliğiyle Almanya\'nın en yüksek yapısı – tüm Berlin\'e manzara.',
- en:'At over 360 metres the tallest structure in Germany – views across all of Berlin.'},
-{id:'tempelhofer-feld',n:'Tempelhofer Feld',k:'tempelhof',c:['park','kids'],f:1,lat:52.4731,lng:13.4017,a:'Tempelhofer Damm, 12101 Berlin',
- de:'Ehemaliger Flughafen, heute riesiger Park: Radfahren, Skaten und Drachen steigen lassen auf der Rollbahn, Grillen in den Grillbereichen.',
- tr:'Eski havalimanı, bugün devasa bir park: pistte bisiklet, paten ve uçurtma; mangal alanlarında mangal.',
- en:'Former airport, now a huge park: cycling, skating and kite flying on the runway, barbecues in the designated areas.'},
-{id:'tiergarten-park',n:'Großer Tiergarten',k:'tiergarten',c:['park'],f:1,lat:52.5145,lng:13.3501,a:'Straße des 17. Juni, 10785 Berlin',
- de:'Berlins großer Stadtpark mitten in der City – mit Seen, Biergärten und der Siegessäule.',
- tr:'Şehrin tam ortasında Berlin\'in büyük parkı – gölleri, bira bahçeleri ve Zafer Sütunu ile.',
- en:'Berlin\'s big city park right in the centre – with lakes, beer gardens and the Victory Column.'},
-{id:'mauer-gedenkstaette',n:'Gedenkstätte Berliner Mauer',k:'mitte',c:['culture'],f:1,lat:52.5354,lng:13.3903,a:'Bernauer Straße 111, 13355 Berlin',
- de:'Originaler Mauerstreifen mit Wachturm und Aussichtsplattform – hier wird die Teilung Berlins greifbar.',
- tr:'Gözetleme kulesi ve seyir platformuyla orijinal Duvar şeridi – Berlin\'in bölünmüşlüğü burada somutlaşıyor.',
- en:'Original stretch of the Wall with a watchtower and viewing platform – Berlin\'s division made tangible.'},
-{id:'mauerpark',n:'Mauerpark',k:'prenzlauer-berg',c:['park'],f:1,lat:52.5433,lng:13.4023,a:'Gleimstraße 55, 10437 Berlin',
- de:'Sonntags Flohmarkt, im Sommer auch Open-Air-Karaoke – ein Klassiker für einen entspannten Tag.',
- tr:'Pazar günleri bit pazarı, yazın açık hava karaokesi – rahat bir gün için klasik.',
- en:'Flea market on Sundays and open-air karaoke in summer – a classic for a relaxed day.'},
-{id:'treptower-park',n:'Treptower Park',k:'treptow',c:['park','culture'],f:1,lat:52.4889,lng:13.4697,a:'Puschkinallee, 12435 Berlin',
- de:'Weitläufiger Park an der Spree mit dem Sowjetischen Ehrenmal und Anlegestellen für Ausflugsschiffe.',
- tr:'Spree kıyısında geniş park; Sovyet Anıtı ve gezi teknelerinin iskeleleriyle.',
- en:'Spacious park on the Spree with the Soviet War Memorial and piers for excursion boats.'},
-{id:'molecule-man',n:'Molecule Man',k:'treptow',c:['view','culture'],f:1,lat:52.4969,lng:13.4533,a:'An den Treptowers 1, 12435 Berlin',
- de:'30 Meter hohe Metallskulptur in der Spree an der früheren Grenze zwischen Ost und West – toller Fotospot.',
- tr:'Eski Doğu-Batı sınırında, Spree\'nin içinde 30 metrelik metal heykel – harika fotoğraf noktası.',
- en:'30-metre metal sculpture in the Spree at the former East–West border – a great photo spot.'},
-{id:'schloss-charlottenburg',n:'Schloss Charlottenburg',k:'charlottenburg',c:['culture','park'],f:0,lat:52.5209,lng:13.2957,a:'Spandauer Damm 10–22, 14059 Berlin',
- de:'Größtes Schloss Berlins mit barockem Schlossgarten – der Garten ist kostenlos zugänglich.',
- tr:'Berlin\'in en büyük sarayı ve barok bahçesi – bahçeye giriş ücretsiz.',
- en:'Berlin\'s largest palace with a baroque garden – the garden is free to visit.'},
-{id:'zoo-berlin',n:'Zoo Berlin',k:'tiergarten',c:['kids'],f:0,lat:52.5079,lng:13.3377,a:'Hardenbergplatz 8, 10787 Berlin',
- de:'Ältester Zoo Deutschlands, mit Aquarium – ideal für einen Tag mit Kindern.',
- tr:'Akvaryumuyla Almanya\'nın en eski hayvanat bahçesi – çocuklarla bir gün için ideal.',
- en:'Germany\'s oldest zoo, with an aquarium – ideal for a day out with kids.'},
-{id:'tierpark',n:'Tierpark Berlin',k:'lichtenberg',c:['kids','park'],f:0,lat:52.4987,lng:13.5306,a:'Am Tierpark 125, 10319 Berlin',
- de:'Einer der größten Tierparks Europas – viel Platz, große Gehege und ein Schloss im Park.',
- tr:'Avrupa\'nın en büyük hayvan parklarından biri – geniş alanlar, büyük bölmeler ve park içinde bir saray.',
- en:'One of Europe\'s largest zoos – lots of space, large enclosures and a palace in the park.'},
-{id:'gaerten-der-welt',n:'Gärten der Welt',k:'marzahn',c:['park'],f:0,lat:52.5389,lng:13.5760,a:'Blumberger Damm 44, 12685 Berlin',
- de:'Gärten aus verschiedenen Kulturen, z. B. ein Chinesischer und ein Japanischer Garten – dazu eine Seilbahn.',
- tr:'Farklı kültürlerden bahçeler, örneğin Çin ve Japon bahçesi – ayrıca teleferik.',
- en:'Gardens from different cultures, such as a Chinese and a Japanese garden – plus a cable car.'},
-{id:'britzer-garten',n:'Britzer Garten',k:'britz',c:['park','kids'],f:0,lat:52.4323,lng:13.4260,a:'Sangerhauser Weg 1, 12349 Berlin',
- de:'Gepflegter Blumenpark mit See und großen Spielplätzen – im Frühling zur Tulpenblüte besonders schön.',
- tr:'Gölü ve büyük oyun alanlarıyla bakımlı çiçek parkı – ilkbaharda lale mevsiminde çok güzel.',
- en:'Well-kept flower park with a lake and big playgrounds – especially lovely in spring when the tulips bloom.'},
-{id:'viktoriapark',n:'Viktoriapark',k:'kreuzberg',c:['park','view'],f:1,lat:52.4879,lng:13.3811,a:'Kreuzbergstraße, 10965 Berlin',
- de:'Kleiner Berg mit Wasserfall und Nationaldenkmal – oben toller Blick über die Stadt.',
- tr:'Şelaleli ve anıtlı küçük bir tepe – yukarıdan şehrin harika manzarası.',
- en:'Small hill with a waterfall and a national monument – great city views from the top.'},
-{id:'checkpoint-charlie',n:'Checkpoint Charlie',k:'kreuzberg',c:['culture'],f:1,lat:52.5075,lng:13.3904,a:'Friedrichstraße 43–45, 10969 Berlin',
- de:'Der bekannteste Grenzübergang des Kalten Krieges – mitten in der Stadt.',
- tr:'Soğuk Savaş\'ın en bilinen sınır kapısı – şehrin tam ortasında.',
- en:'The best-known border crossing of the Cold War – right in the middle of the city.'},
-{id:'holocaust-mahnmal',n:'Denkmal für die ermordeten Juden Europas',k:'mitte',c:['culture'],f:1,lat:52.5139,lng:13.3786,a:'Cora-Berliner-Straße 1, 10117 Berlin',
- de:'Feld aus über 2.700 Betonstelen zur Erinnerung an die ermordeten Juden Europas, mit unterirdischem Ort der Information.',
- tr:'Avrupa\'da öldürülen Yahudilerin anısına 2.700\'den fazla beton blok; yer altında bir bilgi merkezi de var.',
- en:'A field of more than 2,700 concrete slabs commemorating the murdered Jews of Europe, with an underground information centre.'},
-{id:'gendarmenmarkt',n:'Gendarmenmarkt',k:'mitte',c:['culture'],f:1,lat:52.5137,lng:13.3927,a:'Gendarmenmarkt, 10117 Berlin',
- de:'Einer der schönsten Plätze Berlins mit Konzerthaus und zwei Domen.',
- tr:'Konser salonu ve iki katedraliyle Berlin\'in en güzel meydanlarından biri.',
- en:'One of Berlin\'s most beautiful squares, with a concert hall and two cathedrals.'},
-{id:'technikmuseum',n:'Deutsches Technikmuseum',k:'kreuzberg',c:['museum','kids'],f:0,lat:52.4986,lng:13.3775,a:'Trebbiner Straße 9, 10963 Berlin',
- de:'Lokomotiven, Flugzeuge und Schiffe – begeistert Groß und Klein. Auf dem Dach hängt ein „Rosinenbomber“.',
- tr:'Lokomotifler, uçaklar ve gemiler – büyük küçük herkesi büyüler. Çatıda bir „Rosinenbomber“ uçağı asılı.',
- en:'Locomotives, aircraft and ships – fascinating for all ages. A “Raisin Bomber” plane hangs on the roof.'},
-{id:'naturkundemuseum',n:'Museum für Naturkunde',k:'mitte',c:['museum','kids'],f:0,lat:52.5301,lng:13.3794,a:'Invalidenstraße 43, 10115 Berlin',
- de:'Riesige Dinosaurier-Skelette, darunter eines der größten der Welt – ein Highlight für Kinder.',
- tr:'Dev dinozor iskeletleri, aralarında dünyanın en büyüklerinden biri – çocuklar için büyük bir keyif.',
- en:'Huge dinosaur skeletons, including one of the largest in the world – a highlight for kids.'},
-{id:'botanischer-garten',n:'Botanischer Garten',k:'steglitz',c:['park'],f:0,lat:52.4550,lng:13.3050,a:'Königin-Luise-Straße 6–8, 14195 Berlin',
- de:'Einer der größten botanischen Gärten der Welt, mit großen Gewächshäusern.',
- tr:'Büyük seralarıyla dünyanın en büyük botanik bahçelerinden biri.',
- en:'One of the largest botanical gardens in the world, with large greenhouses.'},
-{id:'zitadelle-spandau',n:'Zitadelle Spandau',k:'spandau',c:['culture','museum'],f:0,lat:52.5410,lng:13.2123,a:'Am Juliusturm 64, 13599 Berlin',
- de:'Eine der am besten erhaltenen Festungen der Renaissance in Europa – mit Juliusturm und Museum.',
- tr:'Avrupa\'nın en iyi korunmuş Rönesans kalelerinden biri – Julius Kulesi ve müzesiyle.',
- en:'One of the best-preserved Renaissance fortresses in Europe – with the Julius Tower and a museum.'},
-{id:'greenwichpromenade',n:'Tegeler See & Greenwichpromenade',k:'reinickendorf',c:['park'],f:1,lat:52.5878,lng:13.2804,a:'Greenwichpromenade, 13507 Berlin',
- de:'Spaziergang am Tegeler See – im Sommer legen hier Ausflugsschiffe ab.',
- tr:'Tegel Gölü kıyısında yürüyüş – yazın gezi tekneleri buradan kalkıyor.',
- en:'A stroll along Lake Tegel – in summer, excursion boats depart from here.'},
-{id:'koepenick',n:'Altstadt & Schloss Köpenick',k:'koepenick',c:['culture'],f:0,lat:52.4436,lng:13.5733,a:'Schlossinsel 1, 12557 Berlin',
- de:'Barockschloss auf einer Insel und gemütliche Altstadt am Wasser – bekannt durch den „Hauptmann von Köpenick“.',
- tr:'Adada barok bir saray ve su kenarında şirin bir eski şehir – „Köpenick Yüzbaşısı“ ile ünlü.',
- en:'Baroque palace on an island and a cosy old town by the water – famous for the “Captain of Köpenick”.'},
-{id:'volkspark-friedrichshain',n:'Volkspark Friedrichshain',k:'friedrichshain',c:['park','kids'],f:1,lat:52.5279,lng:13.4357,a:'Am Friedrichshain 1, 10249 Berlin',
- de:'Ältester Volkspark Berlins mit Märchenbrunnen, Spielplätzen und zwei kleinen Bergen.',
- tr:'Masal Çeşmesi, oyun alanları ve iki küçük tepesiyle Berlin\'in en eski halk parkı.',
- en:'Berlin\'s oldest public park, with the Fairy Tale Fountain, playgrounds and two small hills.'},
-{id:'koernerpark',n:'Körnerpark',k:'neukoelln',c:['park'],f:1,lat:52.4717,lng:13.4376,a:'Schierker Straße 8, 12051 Berlin',
- de:'Kleiner, versteckter Park im neobarocken Stil mit Wasserspielen – eine Oase in Neukölln.',
- tr:'Su oyunlarıyla neobarok tarzda küçük, gizli bir park – Neukölln\'de bir vaha.',
- en:'Small, hidden neo-baroque park with water features – an oasis in Neukölln.'},
-{id:'gleisdreieck',n:'Park am Gleisdreieck',k:'kreuzberg',c:['park','kids'],f:1,lat:52.4960,lng:13.3740,a:'Park am Gleisdreieck, 10963 Berlin',
- de:'Moderner Park auf ehemaligem Bahngelände – mit Skateanlage, Spielplätzen und vielen Sportflächen.',
- tr:'Eski demiryolu alanında modern park – kaykay alanı, oyun alanları ve bol spor sahasıyla.',
- en:'Modern park on former railway land – with a skate area, playgrounds and lots of sports areas.'},
-{id:'humboldthain',n:'Volkspark Humboldthain',k:'gesundbrunnen',c:['park','view'],f:1,lat:52.5446,lng:13.3847,a:'Brunnenstraße, 13355 Berlin',
- de:'Park mit ehemaligem Flakturm – von der Aussichtsplattform weiter Blick über den Norden Berlins.',
- tr:'Eski uçaksavar kulesi olan park – seyir platformundan Berlin\'in kuzeyine geniş manzara.',
- en:'Park with a former flak tower – wide views over northern Berlin from the viewing platform.'},
-{id:'schoenhausen',n:'Schlosspark Schönhausen',k:'pankow',c:['park','culture'],f:1,lat:52.5790,lng:13.4020,a:'Tschaikowskistraße 1, 13156 Berlin',
- de:'Ruhiger Schlosspark in Pankow; das Schloss war zu DDR-Zeiten Amtssitz des Staatsoberhaupts.',
- tr:'Pankow\'da sakin bir saray parkı; saray, Doğu Almanya döneminde devlet başkanının makamıydı.',
- en:'Quiet palace park in Pankow; in GDR times the palace was the official seat of the head of state.'},
-{id:'stasimuseum',n:'Stasimuseum',k:'lichtenberg',c:['museum','culture'],f:0,lat:52.5145,lng:13.4870,a:'Ruschestraße 103, 10365 Berlin',
- de:'In der ehemaligen Zentrale der DDR-Staatssicherheit – mit dem original erhaltenen Büro von Erich Mielke.',
- tr:'Doğu Alman gizli servisi Stasi\'nin eski merkezinde – Erich Mielke\'nin orijinal ofisiyle.',
- en:'In the former headquarters of the East German Stasi – including Erich Mielke\'s original office.'},
-{id:'rathaus-schoeneberg',n:'Rathaus Schöneberg',k:'schoeneberg',c:['culture'],f:1,lat:52.4847,lng:13.3446,a:'John-F.-Kennedy-Platz 1, 10825 Berlin',
- de:'Hier hielt John F. Kennedy 1963 seine berühmte Rede „Ich bin ein Berliner“.',
- tr:'John F. Kennedy 1963\'te ünlü „Ich bin ein Berliner“ konuşmasını burada yaptı.',
- en:'This is where John F. Kennedy gave his famous “Ich bin ein Berliner” speech in 1963.'}
-];
-  var CICON = { park: '🌳', museum: '🏛️', view: '👀', culture: '🏰', kids: '🧸' };
-  var TF = 'all';
-  window.renderTips = function () {
-    var cats = ['all', 'park', 'museum', 'view', 'culture', 'kids', 'free'];
-    $('#tipCats').innerHTML = cats.map(function (c) { return '<button type="button" data-tf="' + c + '" aria-pressed="' + (c === TF) + '">' + esc(t('tc_' + c)) + '</button>'; }).join('');
-    var list = TIPS.filter(function (p) { return TF === 'all' || (TF === 'free' ? p.f : p.c.indexOf(TF) >= 0); });
-    if (S.kiez) list.sort(function (a, b) { return (b.k === S.kiez) - (a.k === S.kiez); });
-    $('#tipList').innerHTML = list.length ? list.map(function (p) {
-      return '<article class="tip"><div class="tip-ic" aria-hidden="true">' + CICON[p.c[0]] + '</div><div><h3>' + esc(p.n) + (p.f ? ' <span class="tfree">' + esc(t('tip_free')) + '</span>' : '') + '</h3>' +
-        '<p class="m">' + esc(KIEZE[p.k] ? KIEZE[p.k][0] : '') + ' – ' + esc(p.a) + '</p><p>' + esc(p[S.lang] || p.de) + '</p>' +
-        '<div class="acts"><a href="https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng + '" target="_blank" rel="noopener">' + esc(t('route')) + '</a></div></div></article>';
-    }).join('') : '<div class="empty"><p>' + esc(t('tips_empty')) + '</p></div>';
-  };
-
-  /* ---------- Kiez-Reporter ---------- */
-  var POSTS = null;
-  window.loadPosts = function () {
-    fetch(api('/api/posts'), { headers: { accept: 'application/json' } })
-      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .then(function (j) { POSTS = j.items || []; renderPosts(); })
-      .catch(function () { POSTS = []; renderPosts(); });
-  };
-  function renderPosts() {
-    if (POSTS == null) return;
-    $('#postList').innerHTML = POSTS.length ? POSTS.map(function (p) {
-      var ph = []; try { ph = JSON.parse(p.photos || '[]'); } catch (e) { }
-      var imgs = ph.length ? '<div class="post-ph n' + ph.length + '">' + ph.map(function (k) { return '<div class="post-img-wrapper"><a href="' + api('/img/' + esc(k)) + '" target="_blank" rel="noopener" data-download="1"><img src="' + api('/img/' + esc(k)) + '" alt="" loading="lazy"></a><button class="post-download" type="button" title="Mit Logo herunterladen">⬇️</button></div>'; }).join('') + '</div>' : '';
-      var d = new Date(p.created_at).toLocaleDateString(S.lang, { day: 'numeric', month: 'long', year: 'numeric' });
-      var bodyPreview = p.body.substring(0, 150) + (p.body.length > 150 ? '...' : '');
-      return '<article class="post" data-post-id="' + p.id + '"><div class="post-logo-badge"><img src="/assets/logo-kiez-check-32x32.png" alt="Kiez-Check" class="post-logo-small"></div>' + imgs + '<div class="post-b"><h3>' + esc(p.title) + '</h3>' +
-        '<p class="m">📍 ' + esc(KIEZE[p.kiez] ? KIEZE[p.kiez][0] : '') + ' · ' + esc(d) + (p.author ? ' · ' + esc(t('p_by')) + ' ' + esc(p.author) : '') + '</p>' +
-        '<p class="post-preview">' + esc(bodyPreview).replace(/\n/g, '<br>') + '</p>' +
-        (p.body.length > 150 ? '<button class="btn-devam" data-post-id="' + p.id + '" type="button">DEVAM OKU</button>' : '') +
-        '<div class="acts">' +
-        (p.video_url ? '<a href="' + esc(p.video_url) + '" target="_blank" rel="noopener nofollow ugc">' + esc(t('p_video_btn')) + '</a>' : '') +
-        '<a href="mailto:info@deindigitalerhelfer.com?subject=' + encodeURIComponent('Meldung Kiez-Reporter ' + p.id) + '">' + esc(t('p_report')) + '</a></div></div></article>';
-    }).join('') : '<div class="empty"><p>' + esc(t('rep_empty')) + '</p></div>';
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return document.querySelectorAll(s); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var toast = function (msg) { var e = document.createElement('div'); e.className = 'toast'; e.textContent = msg; document.body.appendChild(e); setTimeout(function () { e.remove(); }, 3e3); };
+  
+  var KIEZE = {}, CATS = {}, DATA = [], MAP = null, VIEW = 'list';
+  
+  function render() {
+    var html = DATA.map(function (it) {
+      return '<div class="it' + (it.featured_until > Date.now() ? ' feat' : '') + '" data-id="' + esc(it.id) + '">' +
+        (it.photo_key ? '<img src="/img/' + esc(it.photo_key) + '" alt="">' : '<div class="ph"></div>') +
+        '<div><h3>' + esc(it.name) + '</h3>' +
+        '<p class="m">' + esc(KIEZE[it.kiez] ? KIEZE[it.kiez][0] : it.kiez) + ' · ' + esc(CATS[it.category] || it.category) + '</p>' +
+        '<p class="m">' + esc(it.address) + '</p>' +
+        (it.phone ? '<p class="m">📞 ' + esc(it.phone) + '</p>' : '') +
+        (it.website ? '<p class="m"><a href="' + esc(it.website) + '" target="_blank">🌐 Website</a></p>' : '') +
+        '<p>' + esc(it.desc_de) + '</p></div></div>';
+    }).join('');
+    $('#list').innerHTML = html || '<p>Keine Einträge.</p>';
+    $('#count').textContent = t('entries', { n: DATA.length });
   }
-  function repLang() {
-    var pk = $('#postForm').elements.kiez, cur = pk.value;
-    var ks = Object.keys(KIEZE).sort(function (a, b) { return (a === 'umgebung') - (b === 'umgebung') || KIEZE[a][0].localeCompare(KIEZE[b][0], 'de'); });
-    pk.innerHTML = '<option value="">–</option>' + ks.map(function (k) { return '<option value="' + k + '">' + esc(KIEZE[k][0]) + '</option>'; }).join('');
-    pk.value = cur;
-    $('#postConsentTxt').innerHTML = $('#consentTxt').innerHTML;
-    if (S.tab === 'tips') renderTips();
-    if (S.tab === 'reporter') renderPosts();
-  }
+  
   function openPost() {
-    var f = $('#postForm'); f.reset();
-    $('#postFormView').hidden = false; $('#postDoneView').hidden = true;
-    if (S.kiez) f.elements.kiez.value = S.kiez;
-    var d = $('#postDlg'); if (!d.open) d.showModal();
+    $('#postDlg').showModal();
   }
-  function fieldName(k) { return t({ p_title: 'p_title', p_body: 'p_body', p_video: 'p_video', kiez: 'f_kiez', email: 'f_email' }[k] || k) || k; }
-  $('#postForm').addEventListener('submit', function (e) {
+  
+  document.addEventListener('submit', function (e) {
+    if (e.target.id !== 'postForm') return;
     e.preventDefault();
-    var f = e.target, g = function (n) { return f.elements[n]; };
-    if (!g('rights').checked || !g('consent').checked) { toast(t('e_consent')); return; }
-    var files = Array.prototype.slice.call(g('photo').files || []);
-    if (files.length > 3) { toast(t('e_photos')); return; }
-    var btn = f.querySelector('button[type=submit]'); btn.disabled = true;
-    Promise.all(files.map(function (fl) { return compress(fl); })).then(function (blobs) {
-      var fd = new FormData();
-      ['title', 'body', 'kiez', 'video_url', 'author', 'email', 'hp'].forEach(function (n) { fd.append(n, g(n).value); });
-      fd.append('rights', '1'); fd.append('consent', '1');
-      blobs.forEach(function (b, i) { if (b) fd.append('photo', b, 'foto' + i + '.jpg'); });
-      return fetch(api('/api/posts/submit'), { method: 'POST', body: fd }).then(function (r) { return r.json(); });
-    }).then(function (j) {
-      btn.disabled = false;
-      if (j && j.ok) { $('#postFormView').hidden = true; var dv = $('#postDoneView'); dv.hidden = false; dv.innerHTML = '<h2>' + esc(t('done_title')) + '</h2><p>' + esc(t('p_done')) + '</p><div class="row"><button class="btn" type="button" data-pclose>OK</button></div>'; return; }
-      if (j && j.error === 'field') toast(j.field === 'p_video' ? t('e_video') : t('e_field') + fieldName(j.field));
-      else if (j && j.error === 'rate') toast(t('e_rate'));
-      else if (j && j.error === 'photo') toast(t('e_photo'));
-      else toast(t('e_field'));
-    }).catch(function () { btn.disabled = false; toast('Error – bitte später erneut versuchen.'); });
+    var btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    var fd = new FormData(e.target);
+    fetch('/api/posts/add', { method: 'POST', body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        btn.disabled = false;
+        if (j.ok) { $('#postDlg').close(); e.target.reset(); toast(t('msg_thanks')); }
+        else if (j.error === 'field') toast(t('e_field'));
+        else if (j.error === 'rate') toast(t('e_rate'));
+        else if (j.error === 'photo') toast(t('e_photo'));
+        else toast('Error – bitte später erneut versuchen.');
+      })
+      .catch(function () { btn.disabled = false; toast('Error – bitte später erneut versuchen.'); });
   });
+  
   document.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-tf],[data-pclose],#postAddBtn');
-    if (!b) return;
-    if (b.id === 'postAddBtn') { openPost(); return; }
-    if (b.hasAttribute('data-pclose')) { $('#postDlg').close(); return; }
-    if (b.dataset.tf) { TF = b.dataset.tf; renderTips(); }
+    if (e.target.id === 'postAddBtn') { openPost(); return; }
+    if (e.target.hasAttribute('data-pclose')) { $('#postDlg').close(); return; }
   });
-
-  var _al = applyLang;
-  applyLang = function () { _al(); repLang(); };
+  
   applyLang();
-  var v = new URLSearchParams(location.search).get('view');
-  if (v === 'tips' || v === 'reporter') showTab(v);
 })();
 </script>
+
 <script>
-/* ===== Design: Kiez-Bild im Hero + Hell/Dunkel-Schalter (nur Darstellung) ===== */
+/* ===== Kiez-Bild im Hero + Hell/Dunkel-Schalter ===== */
 (function () {
   var IMG = { neukoelln: 'neukoelln', kreuzberg: 'kreuzberg', wedding: 'wedding', moabit: 'moabit', tiergarten: 'tiergarten', mitte: 'mitte', friedrichshain: 'friedrichshain', 'prenzlauer-berg': 'prenzlauer', schoeneberg: 'schoeneberg', tempelhof: 'tempelhof', charlottenburg: 'charlottenburg', steglitz: 'steglitz' };
   var sel = document.getElementById('kiez'), img = document.getElementById('kiezImg'), cap = document.getElementById('kiezCap');
@@ -1544,8 +297,6 @@ var TIPS = [
     var name = (k && typeof KIEZE !== 'undefined' && KIEZE[k]) ? KIEZE[k][0] : 'Berlin';
     cap.textContent = '📍 ' + name;
   }
-  var fm = document.getElementById('form');
-  if (fm) { fm.kiez.addEventListener('change', syncNotes); fm.category.addEventListener('change', syncNotes); }
   if (sel) { sel.addEventListener('change', setPic); if (window.MutationObserver) new MutationObserver(setPic).observe(sel, { childList: true }); setPic(); }
   var btn = document.getElementById('themeBtn'), root = document.documentElement;
   var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
@@ -1561,9 +312,9 @@ var TIPS = [
   paint();
 })();
 </script>
-<script src="/stories.js" defer></script>
 
 <script>
+/* ===== Slider (Werbung) ===== */
 (function(){
   let currentSlide = 0;
   const sliders = document.querySelectorAll('.slider');
@@ -1583,52 +334,48 @@ var TIPS = [
   }
 })();
 </script>
+
+<script>
+/* ===== Download mit Logo-Wassereichen ===== */
+document.addEventListener('click', function (e) {
+  if (e.target.closest('.post-ph a')) {
+    var imgLink = e.target.closest('a');
+    var downloadBtn = imgLink.getAttribute('data-download');
+    if (downloadBtn === '1') {
+      e.preventDefault();
+      var imgSrc = imgLink.getAttribute('href');
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = imgSrc;
+      img.onload = function () {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var logo = new Image();
+        logo.crossOrigin = 'anonymous';
+        logo.src = '/assets/logo-kiez-check-256x256.png';
+        logo.onload = function () {
+          var logoSize = Math.min(canvas.width, canvas.height) * 0.18;
+          var logoX = canvas.width - logoSize - 20;
+          var logoY = 20;
+          ctx.globalAlpha = 0.3;
+          ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
+          ctx.globalAlpha = 1;
+          canvas.toBlob(function (blob) {
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'kiez-check-' + Date.now() + '.jpg';
+            link.click();
+            URL.revokeObjectURL(link.href);
+          }, 'image/jpeg', 0.9);
+        };
+      };
+    }
+  }
+});
+</script>
+
 </body>
 </html>
-
-  /* === DOWNLOAD MIT LOGO-WASSEREICHEN (Oben-Rechts) === */
-  document.addEventListener('click', function (e) {
-    // Download-Button in Bildern
-    if (e.target.closest('.post-ph a')) {
-      var imgLink = e.target.closest('a');
-      var downloadBtn = imgLink.getAttribute('data-download');
-      if (downloadBtn === '1') {
-        e.preventDefault();
-        var imgSrc = imgLink.getAttribute('href');
-        var img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = imgSrc;
-        img.onload = function () {
-          var canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          var ctx = canvas.getContext('2d');
-          // Original-Bild zeichnen
-          ctx.drawImage(img, 0, 0);
-          // Logo laden für Wassereichen
-          var logo = new Image();
-          logo.crossOrigin = 'anonymous';
-          logo.src = '/assets/logo-kiez-check-256x256.png';
-          logo.onload = function () {
-            // Logo-Größe: 15-20% des Bildes
-            var logoSize = Math.min(canvas.width, canvas.height) * 0.18;
-            // Position: Oben-Rechts
-            var logoX = canvas.width - logoSize - 20;
-            var logoY = 20;
-            // Logo halbtransparent zeichnen
-            ctx.globalAlpha = 0.3;
-            ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
-            ctx.globalAlpha = 1;
-            // Download als JPEG
-            canvas.toBlob(function (blob) {
-              var link = document.createElement('a');
-              link.href = URL.createObjectURL(blob);
-              link.download = 'kiez-check-' + Date.now() + '.jpg';
-              link.click();
-              URL.revokeObjectURL(link.href);
-            }, 'image/jpeg', 0.9);
-          };
-        };
-      }
-    }
-  });
