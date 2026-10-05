@@ -11,6 +11,7 @@
 @media (prefers-color-scheme:dark){:root{--paper:#141B22;--ink:#E9ECE6;--muted:#A9B3BC;--card:#1C252E}}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;border-bottom:2px solid var(--ink)}
+header img{flex-shrink:0}
 h1{margin:0 auto 0 0;font-size:20px;color:var(--blue)}
 button,input{font:inherit;color:inherit}
 button{border:2px solid var(--ink);background:var(--card);padding:6px 12px;font-weight:700;cursor:pointer}
@@ -48,6 +49,7 @@ main{max-width:980px;margin:0 auto;padding:16px}
 </div>
 <div id="app" hidden>
   <header>
+    <img src="/assets/logo-kiez-check-48x48.png" alt="Kiez-Check" style="width:48px;height:48px;margin-right:12px;">
     <h1>Berliner Kiez-Check Admin</h1>
     <button data-s="pending" aria-pressed="true">Zu prüfen</button>
     <button data-s="approved">Online</button>

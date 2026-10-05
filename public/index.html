@@ -252,6 +252,12 @@ footer a{color:var(--muted)}
 .btn-devam{background:var(--pink);color:#fff;border:2px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:800;font-size:12px;cursor:pointer;margin:8px 0;transition:filter .15s}
 .btn-devam:hover{filter:brightness(1.07)}
 .btn-devam:active{transform:scale(.96)}
+.post-img-wrapper{position:relative;display:inline-block;width:100%;height:100%}
+.post-download{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.75);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:16px;cursor:pointer;transition:background .2s,transform .1s;z-index:5}
+.post-download:hover{background:rgba(0,0,0,.95)}
+.post-download:active{transform:scale(.95)}
+.post-logo-badge{position:absolute;top:8px;right:8px;z-index:10;background:rgba(255,255,255,.95);border-radius:8px;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.post-logo-small{width:24px;height:24px;display:block;opacity:0.9}
 
 /* Textfarbe-Optionen im Formular */
 .text-color-picker{display:flex;gap:8px;margin:12px 0}
@@ -493,7 +499,11 @@ footer a{color:var(--muted)}
 <!-- Modal für vollständigen Post-Text (DEVAM OKU) -->
 <dialog id="postViewDlg">
   <div class="dlg">
-    <h2 id="postViewTitle"></h2>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+      <img src="/assets/logo-kiez-check-48x48.png" alt="Kiez-Check" style="width:48px;height:48px;flex-shrink:0;">
+      <h2 id="postViewTitle" style="margin:0;flex:1;font-size:20px;"></h2>
+      <button data-pview-close style="background:var(--soft);border:none;border-radius:8px;padding:8px;cursor:pointer;font-size:18px;flex-shrink:0;">✕</button>
+    </div>
     <p class="m" id="postViewMeta" style="color:var(--muted);font-size:13.5px;margin:0 0 12px"></p>
     <div id="postViewBody" style="max-height:60vh;overflow-y:auto;padding:12px;background:var(--sv);border-radius:8px;margin:0 0 16px"></div>
     <div class="row">
@@ -1457,10 +1467,10 @@ var TIPS = [
     if (POSTS == null) return;
     $('#postList').innerHTML = POSTS.length ? POSTS.map(function (p) {
       var ph = []; try { ph = JSON.parse(p.photos || '[]'); } catch (e) { }
-      var imgs = ph.length ? '<div class="post-ph n' + ph.length + '">' + ph.map(function (k) { return '<a href="' + api('/img/' + esc(k)) + '" target="_blank" rel="noopener"><img src="' + api('/img/' + esc(k)) + '" alt="" loading="lazy"></a>'; }).join('') + '</div>' : '';
+      var imgs = ph.length ? '<div class="post-ph n' + ph.length + '">' + ph.map(function (k) { return '<div class="post-img-wrapper"><a href="' + api('/img/' + esc(k)) + '" target="_blank" rel="noopener" data-download="1"><img src="' + api('/img/' + esc(k)) + '" alt="" loading="lazy"></a><button class="post-download" type="button" title="Mit Logo herunterladen">⬇️</button></div>'; }).join('') + '</div>' : '';
       var d = new Date(p.created_at).toLocaleDateString(S.lang, { day: 'numeric', month: 'long', year: 'numeric' });
       var bodyPreview = p.body.substring(0, 150) + (p.body.length > 150 ? '...' : '');
-      return '<article class="post" data-post-id="' + p.id + '">' + imgs + '<div class="post-b"><h3>' + esc(p.title) + '</h3>' +
+      return '<article class="post" data-post-id="' + p.id + '"><div class="post-logo-badge"><img src="/assets/logo-kiez-check-32x32.png" alt="Kiez-Check" class="post-logo-small"></div>' + imgs + '<div class="post-b"><h3>' + esc(p.title) + '</h3>' +
         '<p class="m">📍 ' + esc(KIEZE[p.kiez] ? KIEZE[p.kiez][0] : '') + ' · ' + esc(d) + (p.author ? ' · ' + esc(t('p_by')) + ' ' + esc(p.author) : '') + '</p>' +
         '<p class="post-preview">' + esc(bodyPreview).replace(/\n/g, '<br>') + '</p>' +
         (p.body.length > 150 ? '<button class="btn-devam" data-post-id="' + p.id + '" type="button">DEVAM OKU</button>' : '') +
