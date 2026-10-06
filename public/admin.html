@@ -31,13 +31,19 @@ main{max-width:980px;margin:0 auto;padding:16px}
 .big{font-size:20px;font-weight:800}
 .ed{display:grid;gap:10px;max-width:760px;border:2px solid var(--ink);background:var(--card);padding:14px;margin:10px 0}
 .ed label{display:grid;gap:3px;font-weight:700;font-size:13px}
-.ed input,.ed select{border:2px solid var(--ink);background:var(--paper);padding:7px;font:inherit;color:inherit;width:100%}
+.ed input,.ed select,.ed textarea{border:2px solid var(--ink);background:var(--paper);padding:7px;font:inherit;color:inherit;width:100%}
+.ed textarea{resize:vertical;min-height:80px}
+.ed .g2{display:grid;gap:10px;grid-template-columns:1fr 1fr}
 .ed .g3{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
-@media (max-width:640px){.ed .g3{grid-template-columns:1fr}.sp{grid-template-columns:1fr}.sp img{width:100%}}
+@media (max-width:640px){.ed .g2,.ed .g3{grid-template-columns:1fr}.sp{grid-template-columns:1fr}.sp img{width:100%}}
 .ed .chkrow{display:flex;gap:16px;flex-wrap:wrap}
 .ed .chkrow label{display:flex;gap:6px;align-items:center;font-weight:400}
 .ed .chkrow input{width:auto}
 #login{max-width:420px;margin:60px auto;padding:0 16px}#login input{width:100%;padding:10px;border:2px solid var(--ink);background:var(--card);margin:8px 0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999}
+.modal-box{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:20px;max-width:90%;max-height:90vh;overflow-y:auto;width:100%;max-width:700px}
+.modal-box h2{margin-top:0}
+.modal-close{position:absolute;top:10px;right:10px;background:transparent;border:none;font-size:20px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -49,7 +55,6 @@ main{max-width:980px;margin:0 auto;padding:16px}
 </div>
 <div id="app" hidden>
   <header>
-    <!-- LOGO: Verwendet neuestes SVG-Logo oder größtes verfügbares PNG -->
     <img id="adminLogo" src="https://raw.githubusercontent.com/Ersenbox/berliner-kiez-check/main/public/assets/logo.svg" alt="Kiez-Check" onerror="this.src='https://raw.githubusercontent.com/Ersenbox/berliner-kiez-check/main/public/assets/logo-kiez-check-128x128.png'">
     <h1>Berliner Kiez-Check Admin</h1>
     <button data-s="pending" aria-pressed="true">Zu prüfen</button>
@@ -66,13 +71,21 @@ main{max-width:980px;margin:0 auto;padding:16px}
     <div class="stats" id="stats"></div>
     <div id="list"></div>
     <div id="sec" hidden></div>
-    <div id="edBox"></div>
   </main>
 </div>
+
+<!-- Edit Modal für alle Sektionen -->
+<div id="editModal" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <button class="modal-close" data-close>&times;</button>
+    <div id="editForm"></div>
+  </div>
+</div>
+
 <script>
 var TOKEN = sessionStorage.getItem('kc_admin') || '', ST = 'pending';
 var $ = function (s) { return document.querySelector(s); };
-function el(s) { return $(('#' + s)); }
+function el(s) { return $('#' + s); }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function call(p, body) {
   return fetch(p, { method: body ? 'POST' : 'GET', headers: Object.assign({ authorization: 'Bearer ' + TOKEN }, body ? { 'content-type': 'application/json' } : {}), body: body ? JSON.stringify(body) : undefined })
@@ -80,6 +93,8 @@ function call(p, body) {
 }
 function logout() { TOKEN = ''; sessionStorage.removeItem('kc_admin'); $('#app').hidden = true; $('#login').hidden = false; }
 function showSec(name) { if (!name) { el('sec').hidden = true; el('list').hidden = false; } else { el('sec').hidden = false; el('list').hidden = true; if (name === 'sponsors') loadSp(); else if (name === 'jobs') loadJobs(); else if (name === 'requests') loadReq(); else if (name === 'posts') loadPosts(); else if (name === 'stories') loadStories(); } }
+function openEditModal(html) { el('editForm').innerHTML = html; el('editModal').hidden = false; }
+function closeEditModal() { el('editModal').hidden = true; el('editForm').innerHTML = ''; }
 function start() {
   $('#login').hidden = true; $('#app').hidden = false;
   call('/api/admin/stats').then(function (s) {
@@ -98,74 +113,46 @@ function list() {
         '<p>' + esc(it.desc_de) + '</p><p class="m">TR: ' + esc(it.desc_tr) + '</p>' +
         (it.featured_until > Date.now() ? '<p class="m"><b>Hervorgehoben bis ' + new Date(it.featured_until).toLocaleDateString('de') + '</b></p>' : '') +
         '<div class="row">' + (ST !== 'approved' ? '<button class="ok" data-a="approved">Freigeben</button>' : '') + (ST !== 'rejected' ? '<button class="no" data-a="rejected">Ablehnen</button>' : '') +
-        (ST === 'approved' ? '<button data-a="edit">Bearbeiten</button>' : '') +
+        (ST === 'approved' ? '<button data-a="edit" data-id="' + esc(it.id) + '">Bearbeiten</button>' : '') +
         '<button class="del" data-a="delete">Löschen</button></div></div></div>';
     }).join('') : '<p>Nichts zu tun. 🎉</p>';
   });
 }
 function fmtD(ms) { return ms ? new Date(ms).toLocaleDateString('de', { year: 'numeric', month: '2-digit', day: '2-digit' }) : ''; }
-var SPS = [];
-function loadSp() {
-  call('/api/admin/sponsors').then(function (j) {
-    SPS = j.items || [];
-    var h = '<div class="row" style="margin-bottom:10px"><button class="ok" data-sa="new">+ Sponsor</button></div>';
-    h += (SPS.length ? SPS.map(function (s) {
-      return '<div class="sp' + (s.active ? '' : '.off') + '" data-id="' + esc(s.id) + '"><img src="' + esc(s.image) + '" alt=""><div><h3>' + esc(s.name) + '</h3>' +
-        '<p class="kv">Priorität: ' + (s.priority || 0) + ' | ' + (s.active ? 'Aktiv' : 'Inaktiv') + (s.own ? ' | Eigenwerbung' : '') + '</p>' +
-        '<p class="kv">Laufzeit: ' + fmtD(s.start_at) + ' bis ' + fmtD(s.end_at) + '</p>' +
-        '<p>' + esc(s.headline_de || '') + '</p>' +
-        '<div class="row"><button data-sa="edit" data-id="' + esc(s.id) + '">Bearbeiten</button><button data-sa="toggle" data-id="' + esc(s.id) + '">' + (s.active ? 'Deaktivieren' : 'Aktivieren') + '</button><button data-sa="report" data-id="' + esc(s.id) + '">Report</button><button class="del" data-sa="del" data-id="' + esc(s.id) + '">Löschen</button></div></div></div>';
-    }).join('') : '<p>Keine Sponsoren.</p>');
-    el('sec').innerHTML = h;
-  });
-}
-function spForm(s) {
-  var f = function (t, l, p) { return '<label>' + l + '<input type="text" name="' + t + '" placeholder="' + p + '"></label>'; };
-  var cb = function (n, l) { return '<label><input type="checkbox" name="' + n + '" value="1"> ' + l + '</label>'; };
-  var places = { slider: 'Startseite-Leiste', native: 'Zwischen Einträgen', after_submit: 'Nach dem Eintragen', quiz: 'Kiez-Quiz' };
-  var ko = ['neukoelln', 'kreuzberg', 'wedding', 'gesundbrunnen', 'moabit', 'tiergarten', 'mitte', 'friedrichshain', 'prenzlauer-berg', 'schoeneberg', 'tempelhof', 'charlottenburg', 'spandau', 'reinickendorf', 'steglitz', 'lichtenberg', 'pankow', 'treptow', 'britz', 'koepenick', 'marzahn', 'umgebung'];
-  var cats = ['Restaurant', 'Café', 'Bar', 'Shop', 'Service', 'Kultur', 'Schule', 'Sport', 'Sonstiges'];
-  el('edBox').innerHTML = '<form class="ed" id="spEd">' +
-    '<h3>' + (s ? 'Sponsor bearbeiten' : 'Neuer Sponsor') + '</h3>' +
-    '<div class="g3">' + f('name', 'Name', 'Sponsor Name') + f('contact', 'Kontakt', 'Name / E-Mail') + '<label>Priorität (0–10)<input type="number" name="priority" min="0" max="10" value="' + (s && s.priority || 0) + '"></label></div>' +
-    '<div class="g3"><label>Kieze (Komma-getrennt)<input type="text" name="kieze" value="' + (s && s.kieze || '') + '"></label><label>Kategorien<input type="text" name="cats" value="' + (s && s.cats || '') + '"></label><label>Plan<input type="text" name="plan" value="' + (s && s.plan || '') + '"></label></div>' +
-    '<label>Headline DE<input type="text" name="headline_de" value="' + (s && s.headline_de || '') + '"></label>' +
-    '<label>Headline TR<input type="text" name="headline_tr" value="' + (s && s.headline_tr || '') + '"></label>' +
-    '<label>Headline EN<input type="text" name="headline_en" value="' + (s && s.headline_en || '') + '"></label>' +
-    '<label>CTA DE<input type="text" name="cta_de" value="' + (s && s.cta_de || '') + '"></label>' +
-    '<label>CTA TR<input type="text" name="cta_tr" value="' + (s && s.cta_tr || '') + '"></label>' +
-    '<label>CTA EN<input type="text" name="cta_en" value="' + (s && s.cta_en || '') + '"></label>' +
-    '<div class="g3">' + f('link_web', 'Website-Link', 'https://...') + f('link_wa', 'WhatsApp-Link', 'https://wa.me/...') + f('link_tel', 'Telefon-Link', 'tel:+49...') + '</div>' +
-    '<label>Instagram Link<input type="text" name="link_ig" value="' + (s && s.link_ig || '') + '"></label>' +
-    '<div class="g3"><label>Start (Datum)<input type="date" name="start" value="' + (s ? fmtD(s.start_at) : '') + '"></label><label>Ende (Datum)<input type="date" name="end" value="' + (s ? fmtD(s.end_at) : '') + '"></label>' +
-    '<label>Priorität (0–10)<input type="number" name="priority" min="0" max="10" value="' + (s && s.priority || 0) + '"></label></div>' +
-    '<div class="g3">' + f('image', 'Bild-Pfad', '/assets/sponsors/…webp') + '<label>oder Bild hochladen (1200×630)<input type="file" name="image_file" accept="image/jpeg,image/png,image/webp"></label><div></div></div>' +
-    '<div class="chkrow">' + cb('slider', 'Startseite-Leiste') + cb('native', 'Zwischen Einträgen') + cb('after_submit', 'Nach dem Eintragen') + cb('quiz', 'Kiez-Quiz') +
-    '<label><input type="checkbox" name="own" value="1"' + (s && s.own ? ' checked' : '') + '>Eigenwerbung</label><label><input type="checkbox" name="active" value="1"' + (s && s.active ? ' checked' : '') + '>Aktiv</label></div>' +
-    '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-sa="cancel">Abbrechen</button></div></form>';
-  el('spEd').onsubmit = function (e) {
-    e.preventDefault();
-    var fd = new FormData(e.target);
-    fd.set('places', fd.getAll('pl').join(',')); fd.delete('pl');
-    if (!fd.get('own')) fd.set('own', '0'); if (!fd.get('active')) fd.set('active', '0');
-    fetch('/api/admin/sponsor/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd })
-      .then(function (r) { return r.json(); })
-      .then(function (j) { if (j.ok) { el('edBox').innerHTML = ''; loadSp(); } else alert('Bitte prüfen: ' + (j.field || j.error)); });
-  };
-  el('edBox').scrollIntoView({ behavior: 'smooth' });
-}
-function spReport(s) {
-  var from = new Date(Date.now() - 30 * 864e5).toLocaleDateString('de'), to = new Date().toLocaleDateString('de');
-  var ctr = s.imp30 ? (100 * s.clk30 / s.imp30).toFixed(1).replace('.', ',') : '0';
-  return 'Berliner Kiez-Check – Werbebericht ' + s.name + '\nZeitraum: ' + from + ' bis ' + to + '\n\nEinblendungen: ' + s.imp30 + '\nKlicks: ' + s.clk30 + '\nKlickrate: ' + ctr + ' %\n\n' +
-    'Gezählt wird anonym und ohne Cookies: eine Einblendung, wenn mindestens die Hälfte der Anzeige sichtbar war.\nBerliner Kiez-Check – DeindigitalerhelferCenter';
-}
+
+// ===== MAIN LIST EDIT =====
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b || !b.dataset.a) return;
+  var itEl = b.closest('.it');
+  var id = itEl.dataset.id;
+  if (b.dataset.a === 'edit') {
+    call('/api/admin/item/' + id).then(function (it) {
+      var html = '<h2>Eintrag bearbeiten: ' + esc(it.name) + '</h2>' +
+        '<form class="ed" data-type="item" data-id="' + esc(it.id) + '">' +
+        '<label>Name<input type="text" name="name" value="' + esc(it.name) + '"></label>' +
+        '<div class="g2"><label>Kiez<input type="text" name="kiez" value="' + esc(it.kiez) + '"></label><label>Kategorie<input type="text" name="category" value="' + esc(it.category) + '"></label></div>' +
+        '<label>Adresse<input type="text" name="address" value="' + esc(it.address) + '"></label>' +
+        '<div class="g2"><label>Email<input type="email" name="email" value="' + esc(it.email) + '"></label><label>Telefon<input type="tel" name="phone" value="' + esc(it.phone || '') + '"></label></div>' +
+        '<div class="g2"><label>Website<input type="url" name="website" value="' + esc(it.website || '') + '"></label><label>Instagram<input type="text" name="instagram" value="' + esc(it.instagram || '') + '"></label></div>' +
+        '<label>Beschreibung DE<textarea name="desc_de">' + esc(it.desc_de) + '</textarea></label>' +
+        '<label>Beschreibung TR<textarea name="desc_tr">' + esc(it.desc_tr) + '</textarea></label>' +
+        '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-close>Abbrechen</button></div>' +
+        '</form>';
+      openEditModal(html);
+    });
+    return;
+  }
+  if (b.dataset.a === 'delete' && !confirm('Eintrag wirklich löschen?')) return;
+  call('/api/admin/item/set', { id: id, status: b.dataset.a }).then(list);
+});
+
+// ===== JOBS EDIT =====
 var JST = 'pending';
 function loadJobs() {
   call('/api/admin/jobs?status=' + JST).then(function (j) {
     var tabs = ['pending', 'approved', 'rejected'].map(function (s) { return '<button data-js="' + s + '" aria-pressed="' + (s === JST) + '">' + { pending: 'Zu prüfen', approved: 'Online', rejected: 'Abgelehnt' }[s] + '</button>'; }).join('');
     el('sec').innerHTML = '<div class="row" style="margin-bottom:10px">' + tabs + '</div>' + ((j.items || []).length ? j.items.map(function (x) {
-      return '<div class="it" style="grid-template-columns:1fr"><div><h3>' + esc(x.title) + ' – ' + esc(x.company) + '</h3>' +
+      return '<div class="it" style="grid-template-columns:1fr;data-id="' + esc(x.id) + '"><div><h3>' + esc(x.title) + ' – ' + esc(x.company) + '</h3>' +
         '<p class="m">' + esc(x.kiez) + ' · ' + esc(x.jobtype) + ' · ' + esc(x.salary || '') + ' · ' + esc(x.languages || '') + '</p>' +
         '<p class="m">' + esc(x.email) + ' · WA ' + esc(x.whatsapp || '-') + ' · Tel ' + esc(x.phone || '-') + ' · läuft bis ' + fmtD(x.expires_at) + (x.urgent_until > Date.now() ? ' · <b>Dringend bis ' + fmtD(x.urgent_until) + '</b>' : '') + '</p>' +
         (x.mod_note ? '<div class="note">KI: ' + esc(x.mod_note) + '</div>' : '') + '<p>' + esc(x.description || '') + '</p>' +
@@ -176,45 +163,32 @@ function loadJobs() {
     }).join('') : '<p>Keine Jobs in dieser Ansicht.</p>');
   });
 }
-function loadReq() {
-  call('/api/admin/requests').then(function (j) {
-    el('sec').innerHTML = (j.items || []).length ? j.items.map(function (r) {
-      return '<div class="it" style="grid-template-columns:1fr' + (r.done ? ';opacity:.55' : '') + '"><div><h3>' + esc(r.company) + ' <small>(' + esc(r.size) + ')</small></h3>' +
-        '<p class="m">' + esc(r.person || '') + ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a> · ' + esc(r.phone || '') + ' · ' + new Date(r.created_at).toLocaleString('de') + '</p>' +
-        '<p>' + esc(r.message || '') + '</p><div class="row"><button data-rq="edit" data-id="' + esc(r.id) + '">Bearbeiten</button>' + (r.done ? '' : '<button class="ok" data-rd="' + esc(r.id) + '">Erledigt</button>') + '<button class="del" data-rq="delete" data-id="' + esc(r.id) + '">Löschen</button></div></div></div>';
-    }).join('') : '<p>Keine Anfragen.</p>';
-  });
-}
 document.addEventListener('click', function (e) {
-  var b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.s) { showSec(null); return; }
-  if (b.dataset.sec) { showSec(b.dataset.sec); return; }
-  if (b.dataset.js) { JST = b.dataset.js; loadJobs(); return; }
-  if (b.dataset.ja) { if (b.dataset.ja === 'delete' && !confirm('Job löschen?')) return; call('/api/admin/job/set', { id: b.dataset.id, status: b.dataset.ja }).then(loadJobs); return; }
-  if (b.dataset.rd) { call('/api/admin/request/done', { id: b.dataset.rd }).then(loadReq); return; }
-  if (b.dataset.rq) { if (b.dataset.rq === 'delete' && !confirm('Anfrage löschen?')) return; call('/api/admin/request/set', { id: b.dataset.id, action: b.dataset.rq }).then(loadReq); return; }
-  var sa = b.dataset.sa; if (!sa) return;
-  var s = SPS.filter(function (x) { return x.id === b.dataset.id; })[0];
-  if (sa === 'new') spForm(null);
-  else if (sa === 'cancel') el('edBox').innerHTML = '';
-  else if (sa === 'edit') spForm(s);
-  else if (sa === 'del') { if (confirm('Sponsor „' + s.name + '" löschen?')) call('/api/admin/sponsor/delete', { id: s.id }).then(loadSp); }
-  else if (sa === 'report') { var txt = spReport(s); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { alert('Bericht kopiert:\n\n' + txt); }, function () { prompt('Bericht:', txt); }); }
-  else if (sa === 'toggle') {
-    var fd = new FormData();
-    ['id', 'name', 'image', 'headline_de', 'headline_tr', 'headline_en', 'cta_de', 'cta_tr', 'cta_en', 'link_web', 'link_wa', 'link_tel', 'link_ig', 'places', 'kieze', 'cats', 'plan', 'contact', 'priority'].forEach(function (k) { fd.set(k, s[k] == null ? '' : s[k]); });
-    fd.set('start', fmtD(s.start_at)); fd.set('end', fmtD(s.end_at)); fd.set('own', s.own ? '1' : '0'); fd.set('active', s.active ? '0' : '1');
-    fetch('/api/admin/sponsor/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd }).then(function () { loadSp(); });
+  var b = e.target.closest('button'); if (!b || !b.dataset.ja) return;
+  var id = b.dataset.id;
+  if (b.dataset.ja === 'edit') {
+    call('/api/admin/job/' + id).then(function (x) {
+      var html = '<h2>Job bearbeiten: ' + esc(x.title) + '</h2>' +
+        '<form class="ed" data-type="job" data-id="' + esc(x.id) + '">' +
+        '<label>Titel<input type="text" name="title" value="' + esc(x.title) + '"></label>' +
+        '<label>Unternehmen<input type="text" name="company" value="' + esc(x.company) + '"></label>' +
+        '<div class="g2"><label>Kiez<input type="text" name="kiez" value="' + esc(x.kiez) + '"></label><label>Job Type<input type="text" name="jobtype" value="' + esc(x.jobtype) + '"></label></div>' +
+        '<div class="g2"><label>Gehalt<input type="text" name="salary" value="' + esc(x.salary || '') + '"></label><label>Sprachen<input type="text" name="languages" value="' + esc(x.languages || '') + '"></label></div>' +
+        '<div class="g2"><label>Email<input type="email" name="email" value="' + esc(x.email) + '"></label><label>Telefon<input type="tel" name="phone" value="' + esc(x.phone || '') + '"></label></div>' +
+        '<label>WhatsApp<input type="tel" name="whatsapp" value="' + esc(x.whatsapp || '') + '"></label>' +
+        '<label>Beschreibung<textarea name="description">' + esc(x.description || '') + '</textarea></label>' +
+        '<div class="g2"><label>Läuft bis<input type="date" name="expires_at" value="' + fmtD(x.expires_at) + '"></label><label>Dringend bis<input type="date" name="urgent_until" value="' + fmtD(x.urgent_until) + '"></label></div>' +
+        '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-close>Abbrechen</button></div>' +
+        '</form>';
+      openEditModal(html);
+    });
+    return;
   }
+  if (b.dataset.ja === 'delete' && !confirm('Job löschen?')) return;
+  call('/api/admin/job/set', { id: id, status: b.dataset.ja }).then(loadJobs);
 });
-document.addEventListener('click', function (e) {
-  var b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.ps) { PST = b.dataset.ps; loadPosts(); return; }
-  if (b.dataset.pa) {
-    if (b.dataset.pa === 'delete' && !confirm('Beitrag und Fotos endgültig löschen?')) return;
-    call('/api/admin/post/set', { id: b.dataset.id, status: b.dataset.pa }).then(loadPosts);
-  }
-});
+
+// ===== POSTS / KIEZ-REPORTER EDIT =====
 var PST = 'pending';
 function loadPosts() {
   call('/api/admin/posts?status=' + PST).then(function (j) {
@@ -222,7 +196,7 @@ function loadPosts() {
     var tabs = ['pending', 'approved', 'rejected'].map(function (s) { return '<button data-ps="' + s + '" aria-pressed="' + (s === PST) + '">' + { pending: 'Zu prüfen', approved: 'Online', rejected: 'Abgelehnt' }[s] + ' (' + (cnt[s] || 0) + ')</button>'; }).join('');
     el('sec').innerHTML = '<div class="row" style="margin-bottom:10px">' + tabs + '</div>' + ((j.items || []).length ? j.items.map(function (x) {
       var ph = []; try { ph = JSON.parse(x.photos || '[]'); } catch (e) { }
-      return '<div class="it" style="grid-template-columns:1fr"><div><h3>' + esc(x.title) + '</h3>' +
+      return '<div class="it" style="grid-template-columns:1fr" data-id="' + esc(x.id) + '"><div><h3>' + esc(x.title) + '</h3>' +
         '<p class="m">' + esc(x.kiez) + ' · ' + new Date(x.created_at).toLocaleString('de') + ' · ' + esc(x.author || '(ohne Namen)') + ' · <a href="mailto:' + esc(x.email) + '">' + esc(x.email) + '</a></p>' +
         (ph.length ? '<div class="row">' + ph.map(function (k) { return '<a href="/img/' + esc(k) + '" target="_blank"><img src="/img/' + esc(k) + '" alt="" style="width:140px;height:100px;object-fit:cover;border:2px solid #121212;border-radius:8px"></a>'; }).join('') + '</div>' : '') +
         '<p style="white-space:pre-wrap">' + esc(x.body) + '</p>' +
@@ -236,11 +210,106 @@ function loadPosts() {
 }
 document.addEventListener('click', function (e) {
   var b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.a) {
-    if (b.dataset.a === 'delete' && !confirm('Eintrag wirklich löschen?')) return;
-    call('/api/admin/item/set', { id: e.target.closest('.it').dataset.id, status: b.dataset.a }).then(list);
+  if (b.dataset.ps) { PST = b.dataset.ps; loadPosts(); return; }
+  if (b.dataset.pa) {
+    var id = b.dataset.id;
+    if (b.dataset.pa === 'edit') {
+      call('/api/admin/post/' + id).then(function (x) {
+        var html = '<h2>Post bearbeiten: ' + esc(x.title) + '</h2>' +
+          '<form class="ed" data-type="post" data-id="' + esc(x.id) + '">' +
+          '<label>Titel<input type="text" name="title" value="' + esc(x.title) + '"></label>' +
+          '<div class="g2"><label>Kiez<input type="text" name="kiez" value="' + esc(x.kiez) + '"></label><label>Autor<input type="text" name="author" value="' + esc(x.author || '') + '"></label></div>' +
+          '<label>Email<input type="email" name="email" value="' + esc(x.email) + '"></label>' +
+          '<label>Text<textarea name="body">' + esc(x.body) + '</textarea></label>' +
+          '<label>Video URL<input type="url" name="video_url" value="' + esc(x.video_url || '') + '"></label>' +
+          '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-close>Abbrechen</button></div>' +
+          '</form>';
+        openEditModal(html);
+      });
+      return;
+    }
+    if (b.dataset.pa === 'delete' && !confirm('Beitrag und Fotos endgültig löschen?')) return;
+    call('/api/admin/post/set', { id: id, status: b.dataset.pa }).then(loadPosts);
   }
 });
+
+// ===== WERBEANFRAGEN EDIT =====
+function loadReq() {
+  call('/api/admin/requests').then(function (j) {
+    el('sec').innerHTML = (j.items || []).length ? j.items.map(function (r) {
+      return '<div class="it" style="grid-template-columns:1fr' + (r.done ? ';opacity:.55' : '') + '" data-id="' + esc(r.id) + '"><div><h3>' + esc(r.company) + ' <small>(' + esc(r.size) + ')</small></h3>' +
+        '<p class="m">' + esc(r.person || '') + ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a> · ' + esc(r.phone || '') + ' · ' + new Date(r.created_at).toLocaleString('de') + '</p>' +
+        '<p>' + esc(r.message || '') + '</p><div class="row"><button data-rq="edit" data-id="' + esc(r.id) + '">Bearbeiten</button>' + (r.done ? '' : '<button class="ok" data-rd="' + esc(r.id) + '">Erledigt</button>') + '<button class="del" data-rq="delete" data-id="' + esc(r.id) + '">Löschen</button></div></div></div>';
+    }).join('') : '<p>Keine Anfragen.</p>';
+  });
+}
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.rq) {
+    var id = b.dataset.id;
+    if (b.dataset.rq === 'edit') {
+      call('/api/admin/request/' + id).then(function (r) {
+        var html = '<h2>Anfrage bearbeiten: ' + esc(r.company) + '</h2>' +
+          '<form class="ed" data-type="request" data-id="' + esc(r.id) + '">' +
+          '<label>Firma<input type="text" name="company" value="' + esc(r.company) + '"></label>' +
+          '<label>Größe<input type="text" name="size" value="' + esc(r.size) + '"></label>' +
+          '<div class="g2"><label>Kontaktperson<input type="text" name="person" value="' + esc(r.person || '') + '"></label><label>Email<input type="email" name="email" value="' + esc(r.email) + '"></label></div>' +
+          '<label>Telefon<input type="tel" name="phone" value="' + esc(r.phone || '') + '"></label>' +
+          '<label>Nachricht<textarea name="message">' + esc(r.message || '') + '</textarea></label>' +
+          '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-close>Abbrechen</button></div>' +
+          '</form>';
+        openEditModal(html);
+      });
+      return;
+    }
+    if (b.dataset.rq === 'delete' && !confirm('Anfrage löschen?')) return;
+    call('/api/admin/request/set', { id: id, action: b.dataset.rq }).then(loadReq);
+  }
+  if (b.dataset.rd) { call('/api/admin/request/done', { id: b.dataset.rd }).then(loadReq); }
+});
+
+// ===== FORM SUBMISSION FÜR ALLE EDIT-FORMS =====
+document.addEventListener('submit', function (e) {
+  if (!e.target.classList.contains('ed')) return;
+  e.preventDefault();
+  var form = e.target, type = form.dataset.type, id = form.dataset.id;
+  var data = new FormData(form);
+  var body = {};
+  data.forEach(function (val, key) { body[key] = val; });
+  body.id = id;
+  
+  var endpoint = '/api/admin/' + type + '/set';
+  fetch(endpoint, { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN, 'content-type': 'application/json' }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (j.ok || j.success) {
+        closeEditModal();
+        if (type === 'item') list();
+        else if (type === 'job') loadJobs();
+        else if (type === 'post') loadPosts();
+        else if (type === 'request') loadReq();
+        else if (type === 'story') loadStories();
+      } else {
+        alert('Fehler: ' + (j.error || j.message || 'Unbekannter Fehler'));
+      }
+    })
+    .catch(function (err) { alert('Speichern fehlgeschlagen: ' + err.message); });
+});
+
+// ===== MODAL CLOSE =====
+el('editModal').addEventListener('click', function (e) {
+  if (e.target === el('editModal') || e.target.closest('[data-close]')) closeEditModal();
+});
+
+// ===== HEADER TABS =====
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.s) { showSec(null); ST = b.dataset.s; list(); return; }
+  if (b.dataset.sec) { showSec(b.dataset.sec); return; }
+  if (b.dataset.js) { JST = b.dataset.js; loadJobs(); return; }
+});
+
+// ===== LOGIN =====
 $('#loginBtn').onclick = function () {
   TOKEN = el('tok').value;
   if (!TOKEN) { alert('Token erforderlich'); return; }

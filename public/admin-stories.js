@@ -1,7 +1,7 @@
 /* Berliner Kiez-Check Admin – Kiez-Stories prüfen und selbst veröffentlichen
    Wird von admin.html geladen. Nutzt call(), esc(), el(), showSec(), TOKEN aus admin.html. */
 (function () {
-  var STS = 'pending', FORM = false;
+  var STS = 'pending', FORM = false, EDITID = null;
   var KL = { news: '📰 Neuigkeit', traffic: '🚦 Verkehr', event: '🎉 Veranstaltung', warn: '⚠️ Warnung', info: 'ℹ️ Info', politics: '🏛️ Politik' };
   var KIEZ = ['neukoelln', 'kreuzberg', 'wedding', 'gesundbrunnen', 'moabit', 'tiergarten', 'mitte', 'friedrichshain', 'prenzlauer-berg', 'schoeneberg', 'tempelhof', 'charlottenburg', 'spandau', 'reinickendorf', 'steglitz', 'lichtenberg', 'pankow', 'treptow', 'britz', 'koepenick', 'marzahn', 'umgebung'];
 
@@ -19,12 +19,14 @@
     var _ss = window.showSec;
     window.showSec = function (name) { _ss(name); if (name === 'stories') loadStories(); };
   }
+  
   function mediaThumb(x) {
     if (x.media_type === 'image') return '<a class="pv" href="/media/' + esc(x.media_key) + '" target="_blank" style="background-image:url(\'/media/' + esc(x.media_key) + '\')"></a>';
     if (x.media_type === 'video') return '<div class="pv"><video src="/media/' + esc(x.media_key) + '"' + (x.poster_key ? ' poster="/media/' + esc(x.poster_key) + '"' : '') + ' controls playsinline preload="none"></video></div>';
     return '<div class="pv">' + (KL[x.kind] || '').split(' ')[0] + '</div>';
   }
   function fmt(ms) { return ms ? new Date(ms).toLocaleString('de', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '–'; }
+  function fmtD(ms) { return ms ? new Date(ms).toLocaleDateString('de', { year: 'numeric', month: '2-digit', day: '2-digit' }) : ''; }
 
   window.loadStories = function () {
     call('/api/admin/stories?status=' + STS).then(function (j) {
@@ -35,9 +37,10 @@
       var h = '<div class="row" style="margin-bottom:10px">' + tabs + '<button class="ok" data-st-form>+ Neue Story (Admin)</button></div>';
       if (FORM) h += formHtml();
       h += (j.items || []).length ? j.items.map(item).join('') : '<p>Keine Stories in dieser Ansicht. 🎉</p>';
-      el('sec').innerHTML = h;
+      document.getElementById('sec').innerHTML = h;
     });
   };
+  
   function item(x) {
     var note = x.mod_note || '';
     var noteH = note ? '<div class="' + (/^OK/.test(note) || note === 'Admin' ? 'okn' : 'flag') + '">KI: ' + esc(note) + '</div>' : '<div class="m">KI-Prüfung aus (kein ANTHROPIC_API_KEY)</div>';
@@ -65,6 +68,7 @@
       (STS !== 'pending' ? '<p class="m"><b>Aufrufe: ' + (x.views || 0) + '</b> · online bis ' + fmt(x.expires_at) + '</p>' : '') +
       noteH + '<div class="row">' + acts + '</div></div></div>';
   }
+  
   function formHtml() {
     var ko = KIEZ.map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
     var kinds = Object.keys(KL).map(function (k) { return '<option value="' + k + '">' + KL[k] + '</option>'; }).join('');
@@ -85,19 +89,53 @@
       '<div class="row"><button class="ok" type="submit">Sofort veröffentlichen</button><button type="button" data-st-form>Schließen</button></div></form>';
   }
 
+  // ===== EDIT FORM =====
+  function editFormHtml(x) {
+    var ko = KIEZ.map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
+    var kinds = Object.keys(KL).map(function (k) { return '<option value="' + k + '">' + KL[k] + '</option>'; }).join('');
+    return '<form class="ed" id="stEditForm" data-type="story" data-id="' + esc(x.id) + '">' +
+      '<h3>Story bearbeiten: ' + esc(x.headline) + '</h3>' +
+      '<div class="chkrow"><label><input type="checkbox" name="ad" value="1" ' + (x.ad ? 'checked' : '') + '> Sponsor-Story</label></div>' +
+      '<div class="g3">' +
+      '<label>Art<input type="text" list="editKindList" name="kind" value="' + esc(x.kind) + '" placeholder="Neuigkeit, Angebot, etc."><datalist id="editKindList">' + kinds + '</datalist></label>' +
+      '<label>Kiez<input type="text" list="editKiezList" name="kiez" value="' + esc(x.kiez) + '" placeholder="Kreuzberg, Berlin, etc."><datalist id="editKiezList">' + ko + '</datalist></label>' +
+      '<label>Farbe<select name="bg"><option value="blau"' + (x.bg === 'blau' ? ' selected' : '') + '>blau</option><option value="weiss"' + (x.bg === 'weiss' ? ' selected' : '') + '>weiss</option><option value="rot"' + (x.bg === 'rot' ? ' selected' : '') + '>rot</option><option value="gelb"' + (x.bg === 'gelb' ? ' selected' : '') + '>gelb</option></select></label></div>' +
+      '<label>Überschrift<input type="text" name="headline" value="' + esc(x.headline) + '" maxlength="90"></label>' +
+      '<label>Zusatztext<input type="text" name="sub" value="' + esc(x.sub || '') + '" maxlength="180"></label>' +
+      '<div class="g2"><label>Quelle<input type="text" name="source" value="' + esc(x.source || '') + '"></label><label>Link<input type="url" name="link_url" value="' + esc(x.link_url || '') + '"></label></div>' +
+      '<label>Event-Datum<input type="date" name="event_date" value="' + (x.event_date ? fmtD(new Date(x.event_date)) : '') + '"></label>' +
+      '<label>WhatsApp<input type="tel" name="wa" value="' + esc(x.wa || '') + '"></label>' +
+      '<label>Sponsor-Name<input type="text" name="sponsor" value="' + esc(x.sponsor || '') + '"></label>' +
+      '<div class="row"><button class="ok" type="submit">Speichern</button><button type="button" data-close>Abbrechen</button></div>' +
+      '</form>';
+  }
+
   document.addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
     if (b.dataset.sts) { STS = b.dataset.sts; loadStories(); return; }
     if (b.hasAttribute('data-st-form')) { FORM = !FORM; loadStories(); return; }
-    if (b.dataset.ste === 'edit') { FORM = true; loadStories(); return; }
+    if (b.dataset.ste === 'edit') {
+      var id = b.dataset.id;
+      call('/api/admin/story/' + id).then(function (x) {
+        var html = editFormHtml(x);
+        if (document.getElementById('editModal')) {
+          document.getElementById('editForm').innerHTML = html;
+          document.getElementById('editModal').hidden = false;
+        } else {
+          alert('Edit-Modal nicht gefunden! Kontakt zum Admin.');
+        }
+      });
+      return;
+    }
     if (b.dataset.sta) {
-      var a = b.dataset.sta, body = { id: b.dataset.id, status: a };
+      var a = b.dataset.sta, id = b.dataset.id, body = { id: id, status: a };
       if (a === 'delete' && !confirm('Story und Datei endgültig löschen?')) return;
       if (a === 'approved') { var s = b.parentNode.querySelector('[data-hours]'); body.hours = s && s.value ? +s.value : (STS === 'old' ? 48 : 0); }
       if (a === 'extend') body.hours = +b.dataset.h;
       call('/api/admin/story/set', body).then(loadStories);
     }
   });
+  
   function poster(file) {
     return new Promise(function (res) {
       var v = document.createElement('video'), u = URL.createObjectURL(file), done = false;
@@ -114,22 +152,48 @@
       v.src = u;
     });
   }
+  
   document.addEventListener('submit', function (e) {
-    if (e.target.id !== 'stAdmForm') return;
-    e.preventDefault();
-    var f = e.target, fd = new FormData(f), file = f.elements.media.files[0];
-    if (file && /^video\//.test(file.type) && file.size > 15e6) { alert('Video zu groß (max. 15 MB).'); return; }
-    if (!f.elements.ad.checked) fd.delete('ad');
-    var btn = f.querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = 'Wird hochgeladen …';
-    (file && /^video\//.test(file.type) ? poster(file) : Promise.resolve(null)).then(function (pb) {
-      if (pb) fd.append('poster', pb, 'poster.jpg');
-      return fetch('/api/admin/story/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd });
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        btn.disabled = false; btn.textContent = 'Sofort veröffentlichen';
-        if (j && j.ok) { FORM = false; STS = 'approved'; loadStories(); return; }
-        alert('Fehler: ' + (j && (j.field || j.error) || 'unbekannt'));
-      }).catch(function () { btn.disabled = false; btn.textContent = 'Sofort veröffentlichen'; alert('Netzwerkfehler'); });
+    var form = e.target;
+    
+    // NEW STORY FORM
+    if (form.id === 'stAdmForm') {
+      e.preventDefault();
+      var fd = new FormData(form), file = form.elements.media.files[0];
+      if (file && /^video\//.test(file.type) && file.size > 15e6) { alert('Video zu groß (max. 15 MB).'); return; }
+      if (!form.elements.ad.checked) fd.delete('ad');
+      var btn = form.querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = 'Wird hochgeladen …';
+      (file && /^video\//.test(file.type) ? poster(file) : Promise.resolve(null)).then(function (pb) {
+        if (pb) fd.append('poster', pb, 'poster.jpg');
+        return fetch('/api/admin/story/save', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN }, body: fd });
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          btn.disabled = false; btn.textContent = 'Sofort veröffentlichen';
+          if (j && j.ok) { FORM = false; STS = 'approved'; loadStories(); return; }
+          alert('Fehler: ' + (j && (j.field || j.error) || 'unbekannt'));
+        }).catch(function () { btn.disabled = false; btn.textContent = 'Sofort veröffentlichen'; alert('Netzwerkfehler'); });
+    }
+    
+    // EDIT STORY FORM
+    if (form.id === 'stEditForm') {
+      e.preventDefault();
+      var data = new FormData(form);
+      var body = {};
+      data.forEach(function (val, key) { body[key] = val; });
+      body.id = form.dataset.id;
+      
+      fetch('/api/admin/story/set', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN, 'content-type': 'application/json' }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j.ok || j.success) {
+            if (document.getElementById('editModal')) document.getElementById('editModal').hidden = true;
+            loadStories();
+          } else {
+            alert('Fehler: ' + (j.error || j.message || 'Unbekannter Fehler'));
+          }
+        })
+        .catch(function (err) { alert('Speichern fehlgeschlagen: ' + err.message); });
+    }
   });
 })();
