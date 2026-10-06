@@ -1,7 +1,7 @@
 /* Berliner Kiez-Check Admin – Kiez-Stories prüfen und selbst veröffentlichen
    Wird von admin.html geladen. Nutzt call(), esc(), el(), showSec(), TOKEN aus admin.html. */
 (function () {
-  var STS = 'pending', FORM = false, EDITID = null;
+  var STS = 'pending', FORM = false;
   var KL = { news: '📰 Neuigkeit', traffic: '🚦 Verkehr', event: '🎉 Veranstaltung', warn: '⚠️ Warnung', info: 'ℹ️ Info', politics: '🏛️ Politik' };
   var KIEZ = ['neukoelln', 'kreuzberg', 'wedding', 'gesundbrunnen', 'moabit', 'tiergarten', 'mitte', 'friedrichshain', 'prenzlauer-berg', 'schoeneberg', 'tempelhof', 'charlottenburg', 'spandau', 'reinickendorf', 'steglitz', 'lichtenberg', 'pankow', 'treptow', 'britz', 'koepenick', 'marzahn', 'umgebung'];
 
@@ -37,8 +37,8 @@
       var h = '<div class="row" style="margin-bottom:10px">' + tabs + '<button class="ok" data-st-form>+ Neue Story (Admin)</button></div>';
       if (FORM) h += formHtml();
       h += (j.items || []).length ? j.items.map(item).join('') : '<p>Keine Stories in dieser Ansicht. 🎉</p>';
-      document.getElementById('sec').innerHTML = h;
-    });
+      el('sec').innerHTML = h;
+    }).catch(function (err) { alert('Fehler beim Laden: ' + err.message); });
   };
   
   function item(x) {
@@ -93,8 +93,8 @@
   function editFormHtml(x) {
     var ko = KIEZ.map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
     var kinds = Object.keys(KL).map(function (k) { return '<option value="' + k + '">' + KL[k] + '</option>'; }).join('');
-    return '<form class="ed" id="stEditForm" data-type="story" data-id="' + esc(x.id) + '">' +
-      '<h3>Story bearbeiten: ' + esc(x.headline) + '</h3>' +
+    return '<h2>Story bearbeiten: ' + esc(x.headline) + '</h2>' +
+      '<form class="ed" id="stEditForm" data-type="story" data-id="' + esc(x.id) + '">' +
       '<div class="chkrow"><label><input type="checkbox" name="ad" value="1" ' + (x.ad ? 'checked' : '') + '> Sponsor-Story</label></div>' +
       '<div class="g3">' +
       '<label>Art<input type="text" list="editKindList" name="kind" value="' + esc(x.kind) + '" placeholder="Neuigkeit, Angebot, etc."><datalist id="editKindList">' + kinds + '</datalist></label>' +
@@ -118,13 +118,13 @@
       var id = b.dataset.id;
       call('/api/admin/story/' + id).then(function (x) {
         var html = editFormHtml(x);
-        if (document.getElementById('editModal')) {
-          document.getElementById('editForm').innerHTML = html;
-          document.getElementById('editModal').hidden = false;
+        if (el('editModal')) {
+          el('editForm').innerHTML = html;
+          el('editModal').hidden = false;
         } else {
-          alert('Edit-Modal nicht gefunden! Kontakt zum Admin.');
+          alert('Edit-Modal nicht gefunden! Bitte admin.html aktualisieren.');
         }
-      });
+      }).catch(function (err) { alert('Fehler beim Laden: ' + err.message); });
       return;
     }
     if (b.dataset.sta) {
@@ -132,7 +132,7 @@
       if (a === 'delete' && !confirm('Story und Datei endgültig löschen?')) return;
       if (a === 'approved') { var s = b.parentNode.querySelector('[data-hours]'); body.hours = s && s.value ? +s.value : (STS === 'old' ? 48 : 0); }
       if (a === 'extend') body.hours = +b.dataset.h;
-      call('/api/admin/story/set', body).then(loadStories);
+      call('/api/admin/story/set', body).then(loadStories).catch(function (err) { alert('Fehler: ' + err.message); });
     }
   });
   
@@ -172,7 +172,7 @@
           btn.disabled = false; btn.textContent = 'Sofort veröffentlichen';
           if (j && j.ok) { FORM = false; STS = 'approved'; loadStories(); return; }
           alert('Fehler: ' + (j && (j.field || j.error) || 'unbekannt'));
-        }).catch(function () { btn.disabled = false; btn.textContent = 'Sofort veröffentlichen'; alert('Netzwerkfehler'); });
+        }).catch(function (err) { btn.disabled = false; btn.textContent = 'Sofort veröffentlichen'; alert('Netzwerkfehler: ' + err.message); });
     }
     
     // EDIT STORY FORM
@@ -183,17 +183,28 @@
       data.forEach(function (val, key) { body[key] = val; });
       body.id = form.dataset.id;
       
+      var btn = form.querySelector('button[type=submit]');
+      btn.disabled = true;
+      var orig = btn.textContent;
+      btn.textContent = 'Speichert...';
+      
       fetch('/api/admin/story/set', { method: 'POST', headers: { authorization: 'Bearer ' + TOKEN, 'content-type': 'application/json' }, body: JSON.stringify(body) })
         .then(function (r) { return r.json(); })
         .then(function (j) {
+          btn.disabled = false;
+          btn.textContent = orig;
           if (j.ok || j.success) {
-            if (document.getElementById('editModal')) document.getElementById('editModal').hidden = true;
+            if (el('editModal')) el('editModal').hidden = true;
             loadStories();
           } else {
             alert('Fehler: ' + (j.error || j.message || 'Unbekannter Fehler'));
           }
         })
-        .catch(function (err) { alert('Speichern fehlgeschlagen: ' + err.message); });
+        .catch(function (err) { 
+          btn.disabled = false;
+          btn.textContent = orig;
+          alert('Speichern fehlgeschlagen: ' + err.message); 
+        });
     }
   });
 })();
